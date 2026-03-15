@@ -40,36 +40,36 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
         onClick={() => onSelect?.(lead)}
         {...listeners}
         className={cn(
-          'group relative rounded-xl border bg-white/[0.03] backdrop-blur-md',
+          'group relative rounded-xl border bg-bg-primary/30 backdrop-blur-md',
           'transition-all duration-300 cursor-grab active:cursor-grabbing',
           dragging
             ? 'border-neon-500/40 bg-neon-500/[0.06] shadow-neon scale-[1.02] z-50'
-            : 'border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.05]'
+            : 'border-border-subtle hover:border-text-muted/30 hover:bg-bg-primary/50'
         )}
       >
         <div className="flex items-start gap-2 p-3 pb-2">
-          <div className="mt-0.5 flex-shrink-0 text-white/20 group-hover:text-white/40 transition-colors">
+          <div className="mt-0.5 flex-shrink-0 text-text-muted/40 group-hover:text-text-muted/70 transition-colors">
             <GripVertical className="h-4 w-4" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/[0.06]">
-                  <User className="h-3 w-3 text-white/50" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-bg-primary/50">
+                  <User className="h-3 w-3 text-text-muted" />
                 </div>
-                <h4 className="text-[13px] font-display font-semibold text-white truncate">
+                <h4 className="text-[13px] font-display font-semibold text-text-primary truncate">
                   {lead.nombre || 'Sin nombre'}
                 </h4>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); setShowMoveMenu(!showMoveMenu); }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="p-1 sm:hidden text-white/20 hover:text-white/50 transition-colors"
+                className="p-1 sm:hidden text-text-muted hover:text-text-secondary transition-colors"
               >
                 <MoreVertical className="h-4 w-4" />
               </button>
             </div>
-            <div className="mt-1.5 flex items-center gap-3 text-[11px] text-white/35 font-body">
+            <div className="mt-1.5 flex items-center gap-3 text-[11px] text-text-muted font-body">
               {lead.fuente && <span className="truncate max-w-[100px]">{lead.fuente}</span>}
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />{formatDate(lead.fechaEntrada)}
@@ -84,17 +84,17 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="mx-3 mb-2 flex items-center gap-1 overflow-x-auto rounded-lg bg-white/[0.04] p-1.5 no-scrollbar"
+              className="mx-3 mb-2 flex items-center gap-1 overflow-x-auto rounded-lg bg-bg-primary/40 border border-border-subtle p-1.5 no-scrollbar"
               onClick={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
             >
-              <span className="text-[9px] font-mono text-white/20 px-1 uppercase whitespace-nowrap">Mover a:</span>
+              <span className="text-[9px] font-mono text-text-muted px-1 uppercase whitespace-nowrap">Mover a:</span>
               {STAGES.filter(s => s.id !== lead.etapa).map((s) => (
                 <button
                   key={s.id}
                   onClick={(e) => { e.stopPropagation(); onMove?.(lead, s.id); setShowMoveMenu(false); }}
                   onPointerDown={(e) => e.stopPropagation()}
-                  className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-white/[0.06] hover:bg-white/[0.12] transition-colors"
+                  className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-bg-primary/30 border border-border-subtle hover:bg-bg-primary/60 transition-colors"
                   title={s.label}
                 >
                   <span className="text-xs">{s.emoji}</span>
@@ -119,8 +119,8 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
         </div>
 
         {lead.notas && (
-          <div className="mx-3 mb-2 rounded-lg bg-white/[0.02] border border-white/[0.04] px-2.5 py-1.5">
-            <p className="text-[11px] text-white/30 leading-relaxed line-clamp-2 font-body">{lead.notas}</p>
+          <div className="mx-3 mb-2 rounded-lg bg-bg-primary/10 border border-border-subtle px-2.5 py-1.5">
+            <p className="text-[11px] text-text-secondary leading-relaxed line-clamp-2 font-body">{lead.notas}</p>
           </div>
         )}
 
@@ -132,7 +132,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
           </div>
         )}
 
-        <div className="flex items-center gap-1.5 border-t border-white/[0.04] px-3 py-2">
+        <div className="flex items-center gap-1.5 border-t border-border-subtle px-3 py-2">
           {lead.telefono && (
             <>
               <a href={whatsappLink(lead.telefono)} target="_blank" rel="noopener noreferrer"
@@ -150,7 +150,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
             </>
           )}
           {lead.gestionadoPor && (
-            <span className="ml-auto text-[10px] text-white/25 font-body truncate max-w-[80px]">
+            <span className="ml-auto text-[10px] text-text-muted font-body truncate max-w-[80px]">
               @{lead.gestionadoPor}
             </span>
           )}

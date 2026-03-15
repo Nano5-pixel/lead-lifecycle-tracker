@@ -41,8 +41,8 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
   };
 
   const inputClass = cn(
-    'w-full rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2',
-    'text-sm text-white placeholder:text-white/20 font-body',
+    'w-full rounded-lg bg-bg-primary/30 border border-border-subtle px-3 py-2',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all disabled:opacity-40'
   );
 
@@ -57,20 +57,20 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
           <motion.aside
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 z-[81] h-full w-full max-w-md border-l border-white/[0.06] bg-navy-900/95 backdrop-blur-xl overflow-y-auto"
+            className="fixed right-0 top-0 z-[81] h-full w-full max-w-md border-l border-border-subtle bg-bg-primary/95 backdrop-blur-xl overflow-y-auto"
           >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.06] bg-navy-900/80 backdrop-blur-xl px-5 py-4">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-bg-primary/80 backdrop-blur-xl px-5 py-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06]">
-                  <User className="h-5 w-5 text-white/50" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-bg-primary/50 border border-border-subtle">
+                  <User className="h-5 w-5 text-text-muted" />
                 </div>
                 <div>
-                  <h2 className="text-[15px] font-display font-semibold text-white">{lead.nombre || 'Sin nombre'}</h2>
+                  <h2 className="text-[15px] font-display font-semibold text-text-primary">{lead.nombre || 'Sin nombre'}</h2>
                   <StatusBadge stageId={lead.etapa} size="sm" />
                 </div>
               </div>
-              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
+              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-primary/50 transition-all">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -120,12 +120,12 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-mono uppercase tracking-wider text-white/30">Información</h4>
+                  <h4 className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Información</h4>
                   {!editing ? (
-                    <button onClick={() => setEditing(true)} className="text-[11px] text-neon-400 hover:text-neon-300 font-medium transition-colors">Editar</button>
+                    <button onClick={() => setEditing(true)} className="text-[11px] text-neon-500 hover:text-neon-400 font-medium transition-colors">Editar</button>
                   ) : (
                     <button onClick={handleSave} disabled={saving}
-                      className="flex items-center gap-1.5 text-[11px] text-emerald-400 hover:text-emerald-300 font-medium transition-colors disabled:opacity-50">
+                      className="flex items-center gap-1.5 text-[11px] text-emerald-500 hover:text-emerald-400 font-medium transition-colors disabled:opacity-50">
                       <Save className="h-3 w-3" />{saving ? 'Guardando...' : 'Guardar'}
                     </button>
                   )}
@@ -139,7 +139,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
                   { icon: User, label: 'Gestionado por', key: 'gestionadoPor' },
                 ].map(({ icon: Icon, label, key, type }) => (
                   <div key={key}>
-                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-white/30">
+                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-text-muted">
                       <Icon className="h-3 w-3" />{label}
                     </label>
                     <input className={inputClass} value={(form as any)[key] || ''} disabled={!editing}
@@ -150,7 +150,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
 
                 {(lead.etapa === 'Perdido' || lead.motivoCaida) && (
                   <div>
-                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-white/30">
+                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-text-muted">
                       <AlertTriangle className="h-3 w-3" />Motivo de Caída
                     </label>
                     <textarea className={cn(inputClass, 'resize-none h-16')} value={form.motivoCaida || ''}
@@ -160,7 +160,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
                 )}
 
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/30">Notas</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted">Notas</label>
                   <textarea className={cn(inputClass, 'resize-none h-24')} value={form.notas || ''}
                     disabled={!editing}
                     onChange={(e) => setForm((f) => ({ ...f, notas: e.target.value }))} />
@@ -168,8 +168,8 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
               </div>
 
               {/* Metadatos */}
-              <div className="rounded-xl border border-white/[0.04] bg-white/[0.01] p-4 space-y-2">
-                <h4 className="text-[10px] font-mono uppercase tracking-wider text-white/20 mb-2">Metadatos</h4>
+              <div className="rounded-xl border border-border-subtle bg-bg-primary/20 p-4 space-y-2">
+                <h4 className="text-[10px] font-mono uppercase tracking-wider text-text-muted/40 mb-2">Metadatos</h4>
                 {[
                   { label: 'ID Lead', value: lead.id },
                   { label: 'Fecha Entrada', value: formatDate(lead.fechaEntrada) },
@@ -177,8 +177,8 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
                   { label: 'Días en Etapa', value: `${lead.diasEnEtapa} días` },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex items-center justify-between">
-                    <span className="text-[11px] text-white/20 font-body">{label}</span>
-                    <span className="text-[11px] text-white/40 font-mono">{value}</span>
+                    <span className="text-[11px] text-text-muted/60 font-body">{label}</span>
+                    <span className="text-[11px] text-text-muted font-mono">{value}</span>
                   </div>
                 ))}
               </div>

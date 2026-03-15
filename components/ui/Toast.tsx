@@ -67,13 +67,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 exit={{ opacity: 0, x: 80, scale: 0.95 }}
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-4 py-3 min-w-[320px]',
-                  'border border-white/10 bg-navy-800/90 backdrop-blur-xl',
-                  'shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+                  'border border-border-subtle bg-bg-primary/95 backdrop-blur-xl',
+                  'shadow-glass'
                 )}
               >
                 <Icon className="h-5 w-5 flex-shrink-0" style={{ color: colorMap[t.type] }} />
-                <span className="flex-1 text-sm text-white/90 font-body">{t.message}</span>
-                <button onClick={() => removeToast(t.id)} className="text-white/40 hover:text-white/70 transition-colors">
+                <span className="flex-1 text-sm text-text-primary font-body">{t.message}</span>
+                <button onClick={() => removeToast(t.id)} className="text-text-muted hover:text-text-secondary transition-colors">
                   <X className="h-4 w-4" />
                 </button>
               </motion.div>

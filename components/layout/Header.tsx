@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BarChart3, Kanban, Plus, RefreshCw, LogOut, User } from 'lucide-react';
+import { BarChart3, Kanban, Plus, RefreshCw, LogOut, User, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useTheme } from '@/context/ThemeContext';
 
 type ViewMode = 'kanban' | 'stats';
 
@@ -20,24 +21,25 @@ const THEME_COLOR = process.env.NEXT_PUBLIC_THEME_COLOR || '#0A84FF';
 
 export function Header({ view, onViewChange, onRefresh, onNewLead, loading, title }: HeaderProps) {
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-50 border-b border-white/[0.06] bg-navy-950/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-border-subtle bg-bg-primary/80 backdrop-blur-xl"
     >
       <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 lg:px-6">
         {/* Izquierda: Marca */}
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ backgroundColor: `${THEME_COLOR}20` }}>
-            <div className="h-3.5 w-3.5 rounded-md" style={{ backgroundColor: THEME_COLOR }} />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${THEME_COLOR}20` }}>
+            <div className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-md" style={{ backgroundColor: THEME_COLOR }} />
           </div>
-          <div>
-            <h1 className="text-[15px] font-display font-semibold text-white tracking-tight">
+          <div className="min-w-0">
+            <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate">
               {title || 'Lead Lifecycle Tracker'}
             </h1>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/30">
+            <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-text-muted truncate">
               {user?.rol === 'super_admin' ? 'Super Admin' : user?.rol === 'agencia' ? 'Agencia' : 'Pipeline'}
             </p>
           </div>
@@ -45,7 +47,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
 
         {/* Centro: View Switcher (solo para vista de leads y no super admin) */}
         {onViewChange && user?.rol !== 'super_admin' && (
-          <div className="hidden sm:flex items-center gap-1 rounded-xl bg-white/[0.04] border border-white/[0.06] p-1">
+          <div className="hidden sm:flex items-center gap-1 rounded-xl bg-bg-primary/30 border border-border-subtle p-1">
             {[
               { id: 'kanban' as ViewMode, icon: Kanban, label: 'Pipeline' },
               { id: 'stats' as ViewMode, icon: BarChart3, label: 'Analítica' },
@@ -55,13 +57,13 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
                 onClick={() => onViewChange(tab.id)}
                 className={cn(
                   'relative flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200',
-                  view === tab.id ? 'text-white' : 'text-white/40 hover:text-white/60'
+                  view === tab.id ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
                 )}
               >
                 {view === tab.id && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 rounded-lg bg-white/[0.08] border border-white/[0.08]"
+                    className="absolute inset-0 rounded-lg bg-bg-primary/50 border border-border-subtle shadow-sm"
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                   />
                 )}
@@ -79,7 +81,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
               onClick={onRefresh}
               disabled={loading}
               className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/70 hover:bg-white/[0.06] transition-all',
+                'flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all',
                 loading && 'animate-spin'
               )}
             >
@@ -101,15 +103,22 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
             </button>
           )}
 
-          {/* Info usuario + Logout */}
-          <div className="flex items-center gap-2 ml-2 pl-2 border-l border-white/[0.06]">
+          {/* Info usuario + Temas + Logout */}
+          <div className="flex items-center gap-2 ml-2 pl-2 border-l border-border-subtle">
+            <button
+              onClick={toggleTheme}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
+              title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
+            >
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </button>
             <div className="hidden sm:block text-right">
-              <p className="text-[11px] text-white/50 font-body">{user?.nombre || user?.email}</p>
-              <p className="text-[9px] text-white/25 font-mono uppercase">{user?.rol}</p>
+              <p className="text-[11px] text-text-secondary font-body">{user?.nombre || user?.email}</p>
+              <p className="text-[9px] text-text-muted font-mono uppercase">{user?.rol}</p>
             </div>
             <button
               onClick={signOut}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/30 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-muted hover:text-red-500 hover:bg-red-500/10 hover:border-red-500/20 transition-all"
               title="Cerrar sesión"
             >
               <LogOut className="h-4 w-4" />

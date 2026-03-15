@@ -48,7 +48,8 @@ export function useLeads() {
 
     setLoading(true);
     const leadsRef = collection(db, path);
-    const q = query(leadsRef, orderBy('fechaEntrada', 'desc'));
+    // Remove orderBy to avoid silently skipping documents where the field is missing
+    const q = query(leadsRef);
 
     const unsubscribe = onSnapshot(
       q,
@@ -57,6 +58,14 @@ export function useLeads() {
           id: doc.id,
           ...doc.data(),
         })) as Lead[];
+        
+        // Sort client-side instead
+        leadsData.sort((a, b) => {
+          const dateA = new Date(a.fechaEntrada || 0).getTime();
+          const dateB = new Date(b.fechaEntrada || 0).getTime();
+          return dateB - dateA;
+        });
+
         setLeads(leadsData);
         setLoading(false);
         setError(null);
@@ -192,13 +201,21 @@ export function useLeadsForClient(agenciaId: string, clienteId: string) {
 
     const path = `agencias/${agenciaId}/clientes/${clienteId}/leads`;
     const leadsRef = collection(db, path);
-    const q = query(leadsRef, orderBy('fechaEntrada', 'desc'));
+    const q = query(leadsRef);
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data: Lead[] = snapshot.docs.map((d) => ({
         id: d.id,
         ...d.data(),
       })) as Lead[];
+
+      // Sort client-side
+      data.sort((a, b) => {
+        const dateA = new Date(a.fechaEntrada || 0).getTime();
+        const dateB = new Date(b.fechaEntrada || 0).getTime();
+        return dateB - dateA;
+      });
+
       setLeads(data);
       setLoading(false);
     });

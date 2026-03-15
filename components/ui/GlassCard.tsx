@@ -23,20 +23,20 @@ export function GlassCard({
   return (
     <motion.div
       className={cn(
-        'relative rounded-2xl border border-white/[0.08]',
-        'bg-white/[0.04] backdrop-blur-xl',
-        'shadow-[0_8px_32px_rgba(0,0,0,0.25)]',
+        'relative rounded-2xl border border-glass-border',
+        'bg-glass-bg backdrop-blur-xl',
+        'shadow-glass',
         !noPadding && 'p-5',
         className
       )}
       whileHover={
         hoverGlow
-          ? { boxShadow: `0 8px 32px rgba(0,0,0,0.25), 0 0 30px ${glowColor}` }
+          ? { boxShadow: `0 8px 32px rgba(0,0,0,0.15), 0 0 30px ${glowColor}` }
           : undefined
       }
       {...motionProps}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-t-2xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-text-primary/10 to-transparent rounded-t-2xl" />
       {children}
     </motion.div>
   );

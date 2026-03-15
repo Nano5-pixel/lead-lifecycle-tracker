@@ -29,8 +29,8 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.04] border border-white/[0.08] px-4 py-2.5',
-    'text-sm text-white placeholder:text-white/25 font-body',
+    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle px-4 py-2.5',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -45,10 +45,10 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border border-white/[0.08] bg-navy-900/95 backdrop-blur-xl p-6 shadow-glass"
+            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border border-border-subtle bg-bg-primary/95 backdrop-blur-xl p-6 shadow-glass"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-500/30 to-transparent rounded-t-2xl" />
-            <button onClick={onClose} className="absolute right-4 top-4 text-white/30 hover:text-white/60 transition-colors">
+            <button onClick={onClose} className="absolute right-4 top-4 text-text-muted hover:text-text-secondary transition-colors">
               <X className="h-5 w-5" />
             </button>
 
@@ -57,43 +57,43 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
                 <UserPlus className="h-5 w-5 text-neon-400" />
               </div>
               <div>
-                <h2 className="text-lg font-display font-semibold text-white">Nuevo Lead</h2>
-                <p className="text-[11px] text-white/35 font-body">Se creará en etapa &quot;Nuevo&quot;</p>
+                <h2 className="text-lg font-display font-semibold text-text-primary">Nuevo Lead</h2>
+                <p className="text-[11px] text-text-muted font-body">Se creará en etapa &quot;Nuevo&quot;</p>
               </div>
             </div>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Nombre *</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted">Nombre *</label>
                   <input className={inputClass} placeholder="Juan Pérez" value={form.nombre}
                     onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Teléfono</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted">Teléfono</label>
                   <input className={inputClass} placeholder="+52 555 123 4567" value={form.telefono}
                     onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))} />
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-[11px] font-medium text-white/40">Email</label>
+                <label className="mb-1 block text-[11px] font-medium text-text-muted">Email</label>
                 <input className={inputClass} placeholder="juan@ejemplo.com" type="email" value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Fuente</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted">Fuente</label>
                   <input className={inputClass} placeholder="Facebook Ads, Referido..." value={form.fuente}
                     onChange={(e) => setForm((f) => ({ ...f, fuente: e.target.value }))} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Gestionado por</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted">Gestionado por</label>
                   <input className={inputClass} placeholder="Nombre del agente" value={form.gestionadoPor}
                     onChange={(e) => setForm((f) => ({ ...f, gestionadoPor: e.target.value }))} />
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-[11px] font-medium text-white/40">Notas</label>
+                <label className="mb-1 block text-[11px] font-medium text-text-muted">Notas</label>
                 <textarea className={cn(inputClass, 'resize-none h-20')} placeholder="Notas adicionales..."
                   value={form.notas} onChange={(e) => setForm((f) => ({ ...f, notas: e.target.value }))} />
               </div>
@@ -101,7 +101,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
 
             <div className="mt-6 flex gap-3">
               <button onClick={onClose}
-                className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 text-sm font-medium text-white/50 hover:bg-white/[0.06] transition-colors">
+                className="flex-1 rounded-xl border border-border-subtle bg-bg-primary/20 py-2.5 text-sm font-medium text-text-muted hover:bg-bg-primary/40 transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSubmit} disabled={loading || !form.nombre.trim()}

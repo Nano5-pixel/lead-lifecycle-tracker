@@ -1,13 +1,46 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  /* Dark Theme (Default) */
+  --bg-primary: #04080F;
+  --bg-secondary: #0A1128;
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.3);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-glow: rgba(10, 132, 255, 0.03);
+  --accent-neon: #0A84FF;
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(10, 132, 255, 0.06) 0%, transparent 60%),
+                 radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+                 radial-gradient(ellipse 50% 60% at 50% 90%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+}
+
+.light {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #F1F5F9;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --glass-glow: rgba(10, 132, 255, 0.02);
+  --accent-neon: #0284C7;
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(14, 165, 233, 0.04) 0%, transparent 60%),
+                 radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-::selection { background: rgba(10, 132, 255, 0.3); color: white; }
+::selection { background: rgba(10, 132, 255, 0.3); color: var(--text-primary); }
 
 body::after {
   content: '';
@@ -26,18 +59,15 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(10, 132, 255, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 60% at 50% 90%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+  background: var(--bg-gradient);
 }
 
 @layer utilities {
   .glass-subtle {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
   }
 }
 

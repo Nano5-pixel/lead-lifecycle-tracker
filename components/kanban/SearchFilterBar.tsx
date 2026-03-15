@@ -33,21 +33,21 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
     <div className="mb-4 space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center gap-2">
         <div className="relative w-full sm:flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/25" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             value={filters.search}
             onChange={(e) => onChange({ ...filters, search: e.target.value })}
             placeholder="Buscar por nombre, teléfono, email..."
             className={cn(
-              'w-full rounded-xl bg-white/[0.03] border border-white/[0.06] pl-10 pr-4 py-2.5',
-              'text-sm text-white placeholder:text-white/20 font-body',
+              'w-full rounded-xl bg-bg-primary/30 border border-border-subtle pl-10 pr-4 py-2.5',
+              'text-sm text-text-primary placeholder:text-text-muted font-body',
               'focus:outline-none focus:border-neon-500/30 focus:ring-1 focus:ring-neon-500/15 transition-all'
             )}
           />
           {filters.search && (
             <button onClick={() => onChange({ ...filters, search: '' })}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50">
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary">
               <X className="h-3.5 w-3.5" />
             </button>
           )}
@@ -60,7 +60,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
               'flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-medium transition-all',
               showFilters || activeCount > 0
                 ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
-                : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/60'
+                : 'border-border-subtle bg-bg-primary/30 text-text-muted hover:text-text-primary'
             )}
           >
             <Filter className="h-3.5 w-3.5" />
@@ -75,7 +75,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
 
           {activeCount > 0 && (
             <button onClick={() => onChange(DEFAULT_FILTERS)}
-              className="px-2 text-[11px] text-white/30 hover:text-white/50 transition-colors whitespace-nowrap">
+              className="px-2 text-[11px] text-text-muted hover:text-text-primary transition-colors whitespace-nowrap">
               Limpiar
             </button>
           )}
@@ -91,9 +91,9 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 space-y-4">
+            <div className="rounded-xl border border-border-subtle bg-bg-primary/10 p-4 space-y-4 shadow-sm">
               <div>
-                <label className="mb-2 block text-[10px] font-mono uppercase tracking-wider text-white/25">Etapas</label>
+                <label className="mb-2 block text-[10px] font-mono uppercase tracking-wider text-text-muted">Etapas</label>
                 <div className="flex flex-wrap gap-1.5">
                   {STAGES.map((stage) => {
                     const active = filters.stages.includes(stage.id);
@@ -108,7 +108,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
                         }}
                         className={cn(
                           'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-medium border transition-all',
-                          active ? 'border-transparent text-white' : 'border-white/[0.06] bg-white/[0.02] text-white/35 hover:text-white/50'
+                          active ? 'border-transparent text-text-primary' : 'border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-secondary'
                         )}
                         style={active ? { backgroundColor: `${stage.color}20`, color: stage.color, borderColor: `${stage.color}30` } : undefined}
                       >
@@ -121,14 +121,14 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
 
               {agents.length > 0 && (
                 <div>
-                  <label className="mb-2 block text-[10px] font-mono uppercase tracking-wider text-white/25">Gestionado por</label>
+                  <label className="mb-2 block text-[10px] font-mono uppercase tracking-wider text-text-muted">Gestionado por</label>
                   <select
                     value={filters.assignedTo}
                     onChange={(e) => onChange({ ...filters, assignedTo: e.target.value })}
-                    className="rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2 text-sm text-white font-body focus:outline-none focus:border-neon-500/30"
+                    className="rounded-lg bg-bg-primary/30 border border-border-subtle px-3 py-2 text-sm text-text-primary font-body focus:outline-none focus:border-neon-500/30"
                   >
-                    <option value="">Todos</option>
-                    {agents.map((a) => (<option key={a} value={a}>{a}</option>))}
+                    <option value="" className="bg-bg-primary">Todos</option>
+                    {agents.map((a) => (<option key={a} value={a} className="bg-bg-primary">{a}</option>))}
                   </select>
                 </div>
               )}

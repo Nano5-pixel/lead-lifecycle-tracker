@@ -27,9 +27,9 @@ export function RuleViolationModal({ open, onClose, message, ruleId }: RuleViola
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-md rounded-2xl border border-red-500/20 bg-navy-800/95 backdrop-blur-xl p-6 shadow-[0_16px_48px_rgba(239,68,68,0.15)]"
+            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-md rounded-2xl border border-red-500/20 bg-bg-primary/95 backdrop-blur-xl p-6 shadow-[0_16px_48px_rgba(239,68,68,0.15)]"
           >
-            <button onClick={onClose} className="absolute right-4 top-4 text-white/40 hover:text-white/70 transition-colors">
+            <button onClick={onClose} className="absolute right-4 top-4 text-text-muted hover:text-text-secondary transition-colors">
               <X className="h-5 w-5" />
             </button>
             <div className="flex flex-col items-center text-center">
@@ -41,11 +41,11 @@ export function RuleViolationModal({ open, onClose, message, ruleId }: RuleViola
                   {ruleId}
                 </span>
               )}
-              <h3 className="mb-2 text-lg font-display font-semibold text-white">Transición Bloqueada</h3>
-              <p className="mb-6 text-sm text-white/60 leading-relaxed font-body">{message}</p>
+              <h3 className="mb-2 text-lg font-display font-semibold text-text-primary">Transición Bloqueada</h3>
+              <p className="mb-6 text-sm text-text-muted leading-relaxed font-body">{message}</p>
               <button
                 onClick={onClose}
-                className="w-full rounded-xl bg-white/10 border border-white/10 py-2.5 text-sm font-medium text-white hover:bg-white/15 transition-colors"
+                className="w-full rounded-xl bg-bg-primary/20 border border-border-subtle py-2.5 text-sm font-medium text-text-primary hover:bg-bg-primary/40 transition-colors"
               >
                 Entendido
               </button>

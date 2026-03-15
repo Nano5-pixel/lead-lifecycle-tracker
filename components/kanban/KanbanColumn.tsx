@@ -29,7 +29,7 @@ export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: 
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="text-base">{stage.emoji}</span>
-          <h3 className="text-[13px] font-display font-semibold text-white/80">{stage.label}</h3>
+          <h3 className="text-[13px] font-display font-semibold text-text-primary">{stage.label}</h3>
         </div>
         <span
           className="flex h-6 min-w-[24px] items-center justify-center rounded-lg px-2 text-[11px] font-mono font-bold"
@@ -43,7 +43,7 @@ export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: 
         ref={setNodeRef}
         className={cn(
           'flex-1 rounded-2xl border-2 border-dashed p-2 transition-all duration-300 overflow-y-auto',
-          isOver ? 'border-neon-500/40 bg-neon-500/[0.04]' : 'border-transparent bg-white/[0.01]'
+          isOver ? 'border-neon-500/40 bg-neon-500/[0.04]' : 'border-transparent bg-bg-primary/20'
         )}
         style={{ minHeight: '200px' }}
       >
@@ -56,7 +56,7 @@ export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: 
         </SortableContext>
         {leads.length === 0 && (
           <div className="flex h-32 items-center justify-center">
-            <p className="text-[11px] text-white/15 font-body">Arrastra leads aquí</p>
+            <p className="text-[11px] text-text-muted/40 font-body">Arrastra leads aquí</p>
           </div>
         )}
       </div>

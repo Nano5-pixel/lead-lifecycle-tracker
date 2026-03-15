@@ -26,8 +26,8 @@ export default function LoginPage() {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.04] border border-white/[0.08] pl-11 pr-4 py-3',
-    'text-sm text-white placeholder:text-white/25 font-body',
+    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle pl-11 pr-4 py-3',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20',
     'transition-all duration-200'
   );
@@ -53,7 +53,7 @@ export default function LoginPage() {
         className="relative w-full max-w-md"
       >
         {/* Card */}
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-8 shadow-[0_16px_64px_rgba(0,0,0,0.4)]">
+        <div className="rounded-2xl border border-border-subtle bg-bg-primary/95 backdrop-blur-xl p-8 shadow-glass">
           {/* Línea decorativa superior */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-500/30 to-transparent rounded-t-2xl" />
 
@@ -67,10 +67,10 @@ export default function LoginPage() {
             >
               <div className="h-5 w-5 rounded-lg bg-neon-500" />
             </motion.div>
-            <h1 className="text-xl font-display font-bold text-white">
+            <h1 className="text-xl font-display font-bold text-text-primary">
               Lead Lifecycle Tracker
             </h1>
-            <p className="mt-1 text-sm text-white/40 font-body">
+            <p className="mt-1 text-sm text-text-muted font-body">
               Ingresa con tus credenciales
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/25" />
+              <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted/40" />
               <input
                 type="email"
                 placeholder="Email"
@@ -103,7 +103,7 @@ export default function LoginPage() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/25" />
+              <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted/40" />
               <input
                 type="password"
                 placeholder="Contraseña"
@@ -136,7 +136,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-[11px] text-white/20 font-body">
+        <p className="mt-6 text-center text-[11px] text-text-muted/30 font-body">
           Lead Lifecycle Tracker v2.0
         </p>
       </motion.div>

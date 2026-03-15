@@ -47,8 +47,8 @@ function AdminContent() {
   const [creatingUs, setCreatingUs] = useState(false);
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.04] border border-white/[0.08] px-4 py-2.5',
-    'text-sm text-white placeholder:text-white/25 font-body',
+    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle px-4 py-2.5',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -181,8 +181,8 @@ function AdminContent() {
                   <Building2 className="h-5 w-5 text-violet-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-display font-bold text-white">{agencias.length}</p>
-                  <p className="text-[11px] text-white/40 font-body">Agencias</p>
+                  <p className="text-2xl font-display font-bold text-text-primary">{agencias.length}</p>
+                  <p className="text-[11px] text-text-muted font-body">Agencias</p>
                 </div>
               </div>
             </GlassCard>
@@ -192,8 +192,8 @@ function AdminContent() {
                   <Users className="h-5 w-5 text-neon-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-display font-bold text-white">{usuarios.length}</p>
-                  <p className="text-[11px] text-white/40 font-body">Usuarios</p>
+                  <p className="text-2xl font-display font-bold text-text-primary">{usuarios.length}</p>
+                  <p className="text-[11px] text-text-muted font-body">Usuarios</p>
                 </div>
               </div>
             </GlassCard>
@@ -203,10 +203,10 @@ function AdminContent() {
                   <Shield className="h-5 w-5 text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-display font-bold text-white">
+                  <p className="text-2xl font-display font-bold text-text-primary">
                     {agencias.filter((a) => a.estadoLicencia === 'activo').length}
                   </p>
-                  <p className="text-[11px] text-white/40 font-body">Licencias activas</p>
+                  <p className="text-[11px] text-text-muted font-body">Licencias activas</p>
                 </div>
               </div>
             </GlassCard>
@@ -226,7 +226,7 @@ function AdminContent() {
                     'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition-all border',
                     tab === t.id
                       ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
-                      : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/60'
+                      : 'border-border-subtle bg-bg-primary/30 text-text-muted hover:text-text-primary'
                   )}
                 >
                   <t.icon className="h-3.5 w-3.5" />{t.label}
@@ -259,23 +259,23 @@ function AdminContent() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <GlassCard className="space-y-3 border-amber-500/20">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-display font-semibold text-white">
+                        <h3 className="text-sm font-display font-semibold text-text-primary">
                           {editingAg ? `Editando: ${editingAg.nombre}` : 'Nueva Agencia'}
                         </h3>
-                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
+                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="text-text-muted hover:text-text-secondary"><X className="h-4 w-4" /></button>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Nombre *</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted">Nombre *</label>
                           <input className={inputClass} placeholder="Marketing Pro" value={agNombre} onChange={(e) => setAgNombre(e.target.value)} />
                         </div>
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Email *</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted">Email *</label>
                           <input className={inputClass} placeholder="admin@agencia.com" value={agEmail} onChange={(e) => setAgEmail(e.target.value)} />
                         </div>
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Plan</label>
-                          <select className={inputClass} value={agPlan} onChange={(e) => setAgPlan(e.target.value)}>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted">Plan</label>
+                          <select className={cn(inputClass, 'bg-bg-primary')} value={agPlan} onChange={(e) => setAgPlan(e.target.value)}>
                             <option value="basic">Basic</option>
                             <option value="premium">Premium</option>
                             <option value="enterprise">Enterprise</option>
@@ -283,7 +283,7 @@ function AdminContent() {
                         </div>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
+                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="rounded-xl border border-border-subtle bg-bg-primary/20 px-4 py-2 text-xs text-text-muted hover:bg-bg-primary/40">Cancelar</button>
                         <button 
                           onClick={editingAg ? handleUpdateAgencia : handleCreateAgencia} 
                           disabled={creatingAg || !agNombre.trim()} 
@@ -309,23 +309,23 @@ function AdminContent() {
                             <Building2 className="h-5 w-5 text-violet-400" />
                           </div>
                           <div>
-                            <h4 className="text-[14px] font-display font-semibold text-white">{ag.nombre}</h4>
-                            <p className="text-[11px] text-white/35 font-body">{ag.email} · {ag.plan}</p>
+                            <h4 className="text-[14px] font-display font-semibold text-text-primary">{ag.nombre}</h4>
+                            <p className="text-[11px] text-text-muted font-body">{ag.email} · {ag.plan}</p>
                           </div>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                           {/* API Key */}
-                          <div className="flex items-center gap-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] px-2.5 py-1.5">
+                          <div className="flex items-center gap-1.5 rounded-lg bg-bg-primary/40 border border-border-subtle px-2.5 py-1.5">
                             <Key className="h-3 w-3 text-amber-400" />
-                            <span className="text-[10px] font-mono text-white/40 max-w-[120px] truncate">{ag.apiKey}</span>
-                            <button onClick={() => copyToClipboard(ag.apiKey, `key-${ag.id}`)} className="text-white/30 hover:text-white/60">
+                            <span className="text-[10px] font-mono text-text-muted max-w-[120px] truncate">{ag.apiKey}</span>
+                            <button onClick={() => copyToClipboard(ag.apiKey, `key-${ag.id}`)} className="text-text-muted hover:text-text-secondary">
                               {copiedId === `key-${ag.id}` ? <CheckCircle2 className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
                             </button>
                           </div>
                           {/* ID */}
-                          <div className="flex items-center gap-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] px-2.5 py-1.5">
-                            <span className="text-[10px] font-mono text-white/40 max-w-[100px] truncate">{ag.id}</span>
-                            <button onClick={() => copyToClipboard(ag.id, `id-${ag.id}`)} className="text-white/30 hover:text-white/60">
+                          <div className="flex items-center gap-1.5 rounded-lg bg-bg-primary/40 border border-border-subtle px-2.5 py-1.5">
+                            <span className="text-[10px] font-mono text-text-muted max-w-[100px] truncate">{ag.id}</span>
+                            <button onClick={() => copyToClipboard(ag.id, `id-${ag.id}`)} className="text-text-muted hover:text-text-secondary">
                               {copiedId === `id-${ag.id}` ? <CheckCircle2 className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
                             </button>
                           </div>
@@ -347,7 +347,7 @@ function AdminContent() {
                           </button>
 
                           {/* Acciones CRUD */}
-                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-white/[0.06] pt-3 sm:pt-0 sm:pl-3 justify-end">
+                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-border-subtle pt-3 sm:pt-0 sm:pl-3 justify-end">
                             <button
                               onClick={() => {
                                 setEditingAg(ag);
@@ -356,7 +356,7 @@ function AdminContent() {
                                 setAgPlan(ag.plan);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
-                              className="p-2 text-white/30 hover:text-white/70 hover:bg-white/[0.05] rounded-xl transition-all"
+                              className="p-2 text-text-muted hover:text-text-primary hover:bg-bg-primary/50 rounded-xl transition-all"
                               title="Editar"
                             >
                               <Pencil className="h-4 w-4" />
@@ -395,47 +395,47 @@ function AdminContent() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <GlassCard className="space-y-3 border-amber-500/20">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-display font-semibold text-white">
+                        <h3 className="text-sm font-display font-semibold text-text-primary">
                           {editingUs ? `Editando: ${editingUs.nombre}` : 'Nuevo Usuario'}
                         </h3>
-                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
+                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="text-text-muted hover:text-text-secondary"><X className="h-4 w-4" /></button>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="col-span-2 sm:col-span-1">
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Nombre *</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Nombre *</label>
                           <input className={inputClass} placeholder="Juan Pérez" value={usNombre} onChange={(e) => setUsNombre(e.target.value)} />
                         </div>
                         <div className="col-span-2 sm:col-span-1">
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Email *</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Email *</label>
                           <input className={inputClass} placeholder="juan@agencia.com" type="email" value={usEmail} onChange={(e) => setUsEmail(e.target.value)} disabled={!!editingUs} />
                         </div>
                         
                         {!editingUs && (
                           <div className="col-span-2">
-                             <label className="mb-1 block text-[11px] font-medium text-white/40">Contraseña *</label>
+                             <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Contraseña *</label>
                              <input className={inputClass} placeholder="Min. 6 caracteres" type="password" value={usPassword} onChange={(e) => setUsPassword(e.target.value)} />
                           </div>
                         )}
 
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Rol *</label>
-                          <select className={inputClass} value={usRol} onChange={(e) => setUsRol(e.target.value)}>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Rol *</label>
+                          <select className={cn(inputClass, 'bg-bg-primary')} value={usRol} onChange={(e) => setUsRol(e.target.value)}>
                             <option value="agencia">Agencia</option>
                             <option value="cliente">Cliente</option>
                             <option value="super_admin">Super Admin</option>
                           </select>
                         </div>
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">ID Agencia</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted/60">ID Agencia</label>
                           <input className={inputClass} placeholder="ID de la agencia" value={usAgenciaId} onChange={(e) => setUsAgenciaId(e.target.value)} />
                         </div>
                         <div className="col-span-2">
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">ID Cliente (solo rol cliente)</label>
+                          <label className="mb-1 block text-[11px] font-medium text-text-muted/60">ID Cliente (solo rol cliente)</label>
                           <input className={inputClass} placeholder="ID del cliente" value={usClienteId} onChange={(e) => setUsClienteId(e.target.value)} />
                         </div>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
+                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="rounded-xl border border-border-subtle bg-bg-primary/20 px-4 py-2 text-xs text-text-muted hover:bg-bg-primary/40">Cancelar</button>
                         <button 
                           onClick={editingUs ? handleUpdateUsuario : handleCreateUsuario} 
                           disabled={creatingUs || !usEmail.trim() || !usNombre.trim() || (!editingUs && !usPassword.trim())} 
@@ -469,8 +469,8 @@ function AdminContent() {
                             )} />
                           </div>
                           <div>
-                            <p className="text-[13px] font-display font-semibold text-white">{u.nombre || u.email}</p>
-                            <p className="text-[11px] text-white/30 font-body">{u.email}</p>
+                            <p className="text-[13px] font-display font-semibold text-text-primary">{u.nombre || u.email}</p>
+                            <p className="text-[11px] text-text-muted font-body">{u.email}</p>
                           </div>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -483,13 +483,13 @@ function AdminContent() {
                             {u.rol}
                           </span>
                           {u.agenciaId && (
-                            <span className="text-[10px] font-mono text-white/25 max-w-[100px] truncate">
+                            <span className="text-[10px] font-mono text-text-muted/50 max-w-[100px] truncate">
                               Ag: {u.agenciaId.slice(0, 8)}...
                             </span>
                           )}
 
                           {/* Acciones CRUD */}
-                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-white/[0.06] pt-3 sm:pt-0 sm:pl-3 ml-0 sm:ml-1 justify-end">
+                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-border-subtle pt-3 sm:pt-0 sm:pl-3 ml-0 sm:ml-1 justify-end">
                             <button
                               onClick={() => {
                                 setEditingUs(u);
@@ -500,7 +500,7 @@ function AdminContent() {
                                 setUsClienteId(u.clienteId || '');
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
-                              className="p-1.5 text-white/30 hover:text-white/70 hover:bg-white/[0.05] rounded-lg transition-all"
+                              className="p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-primary/50 rounded-lg transition-all"
                               title="Editar"
                             >
                               <Pencil className="h-3.5 w-3.5" />

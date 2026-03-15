@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Sun, Moon } from 'lucide-react';
 import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import { NewLeadModal } from '@/components/kanban/NewLeadModal';
@@ -15,6 +15,7 @@ import { validateStageTransition } from '@/lib/rules';
 import { VALID_STAGES } from '@/lib/stages';
 import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useTheme } from '@/context/ThemeContext';
 
 type ViewMode = 'kanban' | 'stats';
 
@@ -31,6 +32,10 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const { leads, loading } = useLeadsForClient(agenciaId, cliente.id);
   const { toast } = useToast();
+  const { theme, toggleTheme } = useTheme();
+
+  // Debugging log to see all leads fetched from Firestore
+  console.log(`[AgenciaLeadsView] Fetched ${leads.length} leads for ${cliente.nombre}:`, leads);
 
   const basePath = `agencias/${agenciaId}/clientes/${cliente.id}/leads`;
 
@@ -134,14 +139,23 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
       <div className="mb-4 flex items-center gap-3">
         <button
           onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/70 hover:bg-white/[0.06] transition-all"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h2 className="text-[15px] font-display font-semibold text-white">{cliente.nombre}</h2>
-          <p className="text-[11px] text-white/30 font-body">{leads.length} leads · {cliente.fuente || 'Sin fuente'}</p>
+          <h2 className="text-[15px] font-display font-semibold text-text-primary">{cliente.nombre}</h2>
+          <p className="text-[11px] text-text-muted font-body">{leads.length} leads · {cliente.fuente || 'Sin fuente'}</p>
         </div>
+        
+        <button
+          onClick={toggleTheme}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all ml-2"
+          title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
+        >
+          {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        </button>
+
         <div className="ml-auto">
           <button
             onClick={() => setShowNewLead(true)}

@@ -36,8 +36,27 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
       'Nuevo': [], 'En Contacto': [], 'Calificado': [],
       'Propuesta': [], 'Ganado': [], 'Perdido': [],
     };
+    
+    const validIds = STAGES.map(s => s.id);
+
     for (const lead of leads) {
-      if (grouped[lead.etapa]) grouped[lead.etapa].push(lead);
+      // Normalize stage string: trim whitespace
+      const rawEtapa = (lead.etapa || '').toString().trim();
+      
+      // Find matching stage ID (case-insensitive fallback)
+      let stageId: StageId = 'Nuevo';
+      
+      const exactMatch = validIds.find(id => id === rawEtapa);
+      if (exactMatch) {
+        stageId = exactMatch as StageId;
+      } else {
+        const caseInsensitiveMatch = validIds.find(id => id.toLowerCase() === rawEtapa.toLowerCase());
+        if (caseInsensitiveMatch) {
+          stageId = caseInsensitiveMatch as StageId;
+        }
+      }
+      
+      grouped[stageId].push(lead);
     }
     return grouped;
   }, [leads]);
@@ -83,12 +102,12 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
               'flex flex-shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all',
               activeStageId === s.id
                 ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
-                : 'border-white/[0.06] bg-white/[0.03] text-white/40'
+                : 'border-border-subtle bg-bg-primary/30 text-text-muted'
             )}
           >
             <span>{s.emoji}</span>
             {s.label}
-            <span className="ml-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-white/5 px-1 text-[9px]">
+            <span className="ml-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-border-subtle px-1 text-[9px]">
               {leadsByStage[s.id].length}
             </span>
           </button>

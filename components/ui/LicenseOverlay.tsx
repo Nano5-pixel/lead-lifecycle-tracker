@@ -12,7 +12,7 @@ export function LicenseOverlay({ clientName }: LicenseOverlayProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-navy-950/95 backdrop-blur-xl"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-bg-primary/98 backdrop-blur-xl"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -26,7 +26,7 @@ export function LicenseOverlay({ clientName }: LicenseOverlayProps) {
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ type: 'spring', damping: 20, stiffness: 200, delay: 0.2 }}
-        className="relative w-full max-w-lg rounded-3xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl p-10 text-center shadow-[0_16px_64px_rgba(0,0,0,0.5)]"
+        className="relative w-full max-w-lg rounded-3xl border border-border-subtle bg-bg-primary/40 backdrop-blur-xl p-10 text-center shadow-[0_16px_64px_rgba(0,0,0,0.5)]"
       >
         <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
         <motion.div
@@ -38,9 +38,9 @@ export function LicenseOverlay({ clientName }: LicenseOverlayProps) {
           <ShieldOff className="h-10 w-10 text-red-400" />
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <h1 className="mb-2 text-2xl font-display font-bold text-white">Servicio Suspendido</h1>
-          <p className="mb-1 text-sm text-white/40 font-body">{clientName}</p>
-          <p className="mb-8 text-sm text-white/50 leading-relaxed font-body">
+          <h1 className="mb-2 text-2xl font-display font-bold text-text-primary">Servicio Suspendido</h1>
+          <p className="mb-1 text-sm text-text-muted font-body">{clientName}</p>
+          <p className="mb-8 text-sm text-text-muted leading-relaxed font-body">
             La licencia de este panel ha expirado o ha sido desactivada.
             <br />
             Contacta a tu proveedor para reactivar el servicio.

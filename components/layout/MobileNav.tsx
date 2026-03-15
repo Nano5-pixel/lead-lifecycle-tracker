@@ -17,30 +17,33 @@ export function MobileNav({ view, onViewChange, onNewLead }: MobileNavProps) {
     <motion.nav
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-white/[0.06] bg-navy-950/90 backdrop-blur-xl"
+      className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-border-subtle bg-bg-primary/90 backdrop-blur-xl"
     >
       <div className="flex items-center justify-around px-4 py-2">
         <button
           onClick={() => onViewChange('kanban')}
           className={cn(
             'flex flex-col items-center gap-1 py-1.5 px-4 rounded-xl transition-all',
-            view === 'kanban' ? 'text-neon-400' : 'text-white/30'
+            view === 'kanban' ? 'text-text-primary' : 'text-text-tertiary'
           )}
         >
           <Kanban className="h-5 w-5" />
           <span className="text-[10px] font-medium">Pipeline</span>
         </button>
         <button
-          onClick={onNewLead}
-          className="flex h-12 w-12 -mt-5 items-center justify-center rounded-2xl bg-neon-500 text-white shadow-neon transition-transform active:scale-95"
+          onClick={() => (window as any).openNewLeadModal && (window as any).openNewLeadModal()}
+          className="flex flex-col items-center gap-1 text-white"
         >
-          <Plus className="h-5 w-5" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neon-500 shadow-neon">
+            <Plus className="h-5 w-5" />
+          </div>
+          <span className="text-[10px] font-medium">Nuevo</span>
         </button>
         <button
           onClick={() => onViewChange('stats')}
           className={cn(
             'flex flex-col items-center gap-1 py-1.5 px-4 rounded-xl transition-all',
-            view === 'stats' ? 'text-neon-400' : 'text-white/30'
+            view === 'stats' ? 'text-neon-400' : 'text-text-muted'
           )}
         >
           <BarChart3 className="h-5 w-5" />

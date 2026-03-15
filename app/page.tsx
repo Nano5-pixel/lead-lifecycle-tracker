@@ -34,14 +34,14 @@ export default function HomePage() {
   }, [user, loading]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-navy-950">
+    <div className="flex h-screen items-center justify-center bg-bg-primary">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="flex flex-col items-center gap-4"
       >
         <Loader2 className="h-8 w-8 text-neon-500 animate-spin" />
-        <p className="text-sm font-body text-white/30">Redirigiendo...</p>
+        <p className="text-sm font-body text-text-muted">Redirigiendo...</p>
       </motion.div>
     </div>
   );

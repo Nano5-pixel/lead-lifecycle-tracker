@@ -93,16 +93,16 @@ function AgenciaContent() {
               <GlassCard>
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div>
-                    <h3 className="text-sm font-display font-semibold text-white mb-1">Información de tu Agencia</h3>
-                    <p className="text-[11px] text-white/35 font-body">Usa estos datos para configurar Make.com</p>
+                    <h3 className="text-sm font-display font-semibold text-text-primary mb-1">Información de tu Agencia</h3>
+                    <p className="text-[11px] text-text-muted font-body">Usa estos datos para configurar Make.com</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2">
+                    <div className="flex items-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle px-3 py-2">
                       <Key className="h-3.5 w-3.5 text-amber-400" />
-                      <span className="text-[11px] font-mono text-white/50">API Key: {agencyApiKey}</span>
+                      <span className="text-[11px] font-mono text-text-muted">API Key: {agencyApiKey}</span>
                       <button
                         onClick={() => copyToClipboard(agencyApiKey, 'apikey')}
-                        className="text-white/30 hover:text-white/60 transition-colors"
+                        className="text-text-muted hover:text-text-secondary transition-colors"
                       >
                         {copiedId === 'apikey' ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
@@ -111,11 +111,11 @@ function AgenciaContent() {
                         )}
                       </button>
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2">
-                      <span className="text-[11px] font-mono text-white/50">Agencia ID: {user?.agenciaId}</span>
+                    <div className="flex items-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle px-3 py-2">
+                      <span className="text-[11px] font-mono text-text-muted">Agencia ID: {user?.agenciaId}</span>
                       <button
                         onClick={() => copyToClipboard(user?.agenciaId || '', 'agid')}
-                        className="text-white/30 hover:text-white/60 transition-colors"
+                        className="text-text-muted hover:text-text-secondary transition-colors"
                       >
                         {copiedId === 'agid' ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />

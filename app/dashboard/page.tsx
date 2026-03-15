@@ -92,7 +92,7 @@ function DashboardContent() {
                   <div className="flex h-[60vh] items-center justify-center">
                     <div className="flex flex-col items-center gap-4">
                       <Loader2 className="h-8 w-8 text-neon-500 animate-spin" />
-                      <p className="text-sm text-white/30 font-body">Cargando pipeline...</p>
+                      <p className="text-sm text-text-muted font-body">Cargando pipeline...</p>
                     </div>
                   </div>
                 ) : (

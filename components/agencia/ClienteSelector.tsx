@@ -47,8 +47,8 @@ export function ClienteSelector({
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.04] border border-white/[0.08] px-4 py-2.5',
-    'text-sm text-white placeholder:text-white/25 font-body',
+    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle px-4 py-2.5',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -61,8 +61,8 @@ export function ClienteSelector({
             <Building2 className="h-5 w-5 text-violet-400" />
           </div>
           <div>
-            <h2 className="text-lg font-display font-semibold text-white">Tus Clientes</h2>
-            <p className="text-[11px] text-white/35 font-body">{clientes.length} cliente{clientes.length !== 1 ? 's' : ''} activo{clientes.length !== 1 ? 's' : ''}</p>
+            <h2 className="text-lg font-display font-semibold text-text-primary">Tus Clientes</h2>
+            <p className="text-[11px] text-text-muted font-body">{clientes.length} cliente{clientes.length !== 1 ? 's' : ''} activo{clientes.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
         <button
@@ -85,14 +85,14 @@ export function ClienteSelector({
           >
             <GlassCard className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-display font-semibold text-white">Nuevo Cliente</h3>
-                <button onClick={() => setShowCreate(false)} className="text-white/30 hover:text-white/60">
+                <h3 className="text-sm font-display font-semibold text-text-primary">Nuevo Cliente</h3>
+                <button onClick={() => setShowCreate(false)} className="text-text-muted hover:text-text-secondary transition-colors">
                   <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Nombre del cliente *</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Nombre del cliente *</label>
                   <input
                     className={inputClass}
                     placeholder="Inmobiliaria ABC"
@@ -101,7 +101,7 @@ export function ClienteSelector({
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[11px] font-medium text-white/40">Fuente principal</label>
+                  <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Fuente principal</label>
                   <input
                     className={inputClass}
                     placeholder="Facebook Ads"
@@ -113,7 +113,7 @@ export function ClienteSelector({
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowCreate(false)}
-                  className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/50 hover:bg-white/[0.06] transition-colors"
+                  className="rounded-xl border border-border-subtle bg-bg-primary/20 px-4 py-2 text-xs font-medium text-text-muted hover:bg-bg-primary/40 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -133,9 +133,9 @@ export function ClienteSelector({
       {/* Lista de clientes */}
       {clientes.length === 0 ? (
         <GlassCard className="text-center py-10">
-          <Building2 className="h-10 w-10 text-white/15 mx-auto mb-3" />
-          <p className="text-sm text-white/30 font-body">No tienes clientes todavía</p>
-          <p className="text-[11px] text-white/20 font-body mt-1">Crea uno con el botón de arriba</p>
+          <Building2 className="h-10 w-10 text-text-muted/20 mx-auto mb-3" />
+          <p className="text-sm text-text-muted font-body">No tienes clientes todavía</p>
+          <p className="text-[11px] text-text-muted/40 font-body mt-1">Crea uno con el botón de arriba</p>
         </GlassCard>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -149,10 +149,10 @@ export function ClienteSelector({
               <div
                 className={cn(
                   'group relative w-full text-left rounded-2xl border p-4 transition-all duration-300',
-                  'bg-white/[0.03] backdrop-blur-md hover:bg-white/[0.06]',
+                  'bg-bg-primary/20 backdrop-blur-md hover:bg-bg-primary/40',
                   selectedId === cliente.id
                     ? 'border-neon-500/40 shadow-neon'
-                    : 'border-white/[0.06] hover:border-white/[0.12]'
+                    : 'border-border-subtle hover:border-text-muted/30'
                 )}
               >
                 <button
@@ -165,27 +165,27 @@ export function ClienteSelector({
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
                       <Building2 className="h-4 w-4 text-violet-400" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-white/20" />
+                    <ChevronRight className="h-4 w-4 text-text-muted/40" />
                   </div>
-                  <h3 className="text-[14px] font-display font-semibold text-white mb-1 truncate">
+                  <h3 className="text-[14px] font-display font-semibold text-text-primary mb-1 truncate">
                     {cliente.nombre}
                   </h3>
                   {cliente.fuente && (
-                    <p className="text-[11px] text-white/30 font-body mb-2">{cliente.fuente}</p>
+                    <p className="text-[11px] text-text-muted font-body mb-2">{cliente.fuente}</p>
                   )}
-                  <div className="flex items-center gap-1.5 text-[11px] text-white/25 font-mono">
+                  <div className="flex items-center gap-1.5 text-[11px] text-text-muted/50 font-mono">
                     <Users className="h-3 w-3" />
                     {leadsCount[cliente.id] || 0} leads
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 gap-2">
-                    <p className="text-[9px] text-white/15 font-mono truncate">ID: {cliente.id}</p>
+                    <p className="text-[9px] text-text-muted/20 font-mono truncate">ID: {cliente.id}</p>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         copyToClipboard(cliente.id, cliente.id);
                       }}
-                      className="text-white/20 hover:text-neon-400 transition-colors"
+                      className="text-text-muted/40 hover:text-neon-400 transition-colors"
                     >
                       {copiedId === cliente.id ? (
                         <CheckCircle2 className="h-3 w-3 text-emerald-400" />

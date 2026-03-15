@@ -16,7 +16,7 @@ export function StatusBadge({ stageId, size = 'sm' }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full font-medium border border-white/10',
+        'inline-flex items-center gap-1.5 rounded-full font-medium border border-text-primary/10',
         size === 'sm' && 'px-2.5 py-0.5 text-[11px]',
         size === 'md' && 'px-3 py-1 text-xs'
       )}

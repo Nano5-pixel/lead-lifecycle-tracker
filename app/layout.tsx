@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from '@/hooks/useAuth';
+import { ThemeProvider } from '@/context/ThemeContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -35,8 +36,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-navy-950 font-body text-white antialiased">
-        <AuthProvider>{children}</AuthProvider>
+      <body className="min-h-screen font-body antialiased">
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
