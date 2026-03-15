@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BarChart3, Kanban, Plus, RefreshCw, LogOut, User, Sun, Moon } from 'lucide-react';
+import { BarChart3, Kanban, Plus, RefreshCw, LogOut, User, Sun, Moon, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/context/ThemeContext';
@@ -13,13 +13,14 @@ interface HeaderProps {
   onViewChange?: (v: ViewMode) => void;
   onRefresh?: () => void;
   onNewLead?: () => void;
+  onShowHelp?: () => void;
   loading?: boolean;
   title?: string;
 }
 
 const THEME_COLOR = process.env.NEXT_PUBLIC_THEME_COLOR || '#0A84FF';
 
-export function Header({ view, onViewChange, onRefresh, onNewLead, loading, title }: HeaderProps) {
+export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, loading, title }: HeaderProps) {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -105,6 +106,15 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
 
           {/* Info usuario + Temas + Logout */}
           <div className="flex items-center gap-2 ml-2 pl-2 border-l border-border-subtle">
+            {onShowHelp && (
+              <button
+                onClick={onShowHelp}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
+                title="Centro de Ayuda"
+              >
+                <HelpCircle className="h-4 w-4" />
+              </button>
+            )}
             <button
               onClick={toggleTheme}
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"

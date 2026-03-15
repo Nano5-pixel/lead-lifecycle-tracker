@@ -2,12 +2,13 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Loader2, Sun, Moon } from 'lucide-react';
+import { ArrowLeft, Loader2, Sun, Moon, HelpCircle } from 'lucide-react';
 import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import { NewLeadModal } from '@/components/kanban/NewLeadModal';
 import { LeadDetailPanel } from '@/components/kanban/LeadDetailPanel';
 import { SearchFilterBar, FilterState, DEFAULT_FILTERS } from '@/components/kanban/SearchFilterBar';
+import { HelpGuide } from '@/components/ui/HelpGuide';
 import { useToast } from '@/components/ui/Toast';
 import { useLeadsForClient } from '@/hooks/useLeads';
 import { Cliente, Lead, StageId } from '@/types';
@@ -28,6 +29,7 @@ interface AgenciaLeadsViewProps {
 
 export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLeadsViewProps) {
   const [showNewLead, setShowNewLead] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const { leads, loading } = useLeadsForClient(agenciaId, cliente.id);
@@ -180,6 +182,14 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
         </div>
         
         <button
+          onClick={() => setShowHelp(true)}
+          className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all ml-2"
+          title="Centro de Ayuda"
+        >
+          <HelpCircle className="h-4 w-4" />
+        </button>
+
+        <button
           onClick={toggleTheme}
           className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all ml-2"
           title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
@@ -217,6 +227,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
       </AnimatePresence>
 
       <NewLeadModal open={showNewLead} onClose={() => setShowNewLead(false)} onCreate={createLead} />
+      <HelpGuide open={showHelp} onClose={() => setShowHelp(false)} />
       <LeadDetailPanel 
         lead={selectedLead} 
         onClose={() => setSelectedLead(null)} 

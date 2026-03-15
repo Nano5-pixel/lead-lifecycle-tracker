@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { Header } from '@/components/layout/Header';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { HelpGuide } from '@/components/ui/HelpGuide';
 import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import { NewLeadModal } from '@/components/kanban/NewLeadModal';
@@ -21,6 +22,7 @@ type ViewMode = 'kanban' | 'stats';
 function DashboardContent() {
   const [view, setView] = useState<ViewMode>('kanban');
   const [showNewLead, setShowNewLead] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
@@ -83,6 +85,7 @@ function DashboardContent() {
         view={view}
         onViewChange={setView}
         onNewLead={() => setShowNewLead(true)}
+        onShowHelp={() => setShowHelp(true)}
         title={user?.nombre || 'Pipeline'}
         loading={loading}
       />
@@ -127,6 +130,7 @@ function DashboardContent() {
       <MobileNav view={view} onViewChange={setView} onNewLead={() => setShowNewLead(true)} />
 
       <NewLeadModal open={showNewLead} onClose={() => setShowNewLead(false)} onCreate={handleCreateLead} />
+      <HelpGuide open={showHelp} onClose={() => setShowHelp(false)} />
       <LeadDetailPanel
         lead={selectedLead}
         onClose={() => setSelectedLead(null)}
