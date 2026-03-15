@@ -26,25 +26,18 @@ export default function LoginPage() {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle pl-11 pr-4 py-3',
+    'w-full rounded-xl bg-white/[0.03] border border-white/10 pl-11 pr-4 py-3',
     'text-sm text-text-primary placeholder:text-text-muted/50 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20',
-    'transition-all duration-200',
-    'autofill:bg-transparent autofill:text-text-primary'
+    'transition-all duration-200 shadow-inner'
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      {/* Fondo decorativo */}
+    <div className="flex min-h-screen items-center justify-center px-4 bg-[#050510] relative overflow-hidden">
+      {/* Fondo decorativo Premium */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full opacity-[0.04]"
-          style={{ background: 'radial-gradient(circle, #0A84FF, transparent 70%)' }}
-        />
-        <div
-          className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full opacity-[0.03]"
-          style={{ background: 'radial-gradient(circle, #10B981, transparent 70%)' }}
-        />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
       </div>
 
       <motion.div
@@ -54,9 +47,9 @@ export default function LoginPage() {
         className="relative w-full max-w-md"
       >
         {/* Card */}
-        <div className="rounded-2xl border border-border-subtle bg-bg-primary/95 backdrop-blur-xl p-8 shadow-glass">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-3xl p-8 shadow-2xl relative overflow-hidden">
           {/* Línea decorativa superior */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-500/30 to-transparent rounded-t-2xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-500/40 to-transparent" />
 
           {/* Logo / Header */}
           <div className="mb-8 text-center">

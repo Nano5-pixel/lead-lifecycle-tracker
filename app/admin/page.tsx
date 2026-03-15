@@ -177,18 +177,52 @@ function AdminContent() {
               className="space-y-6"
             >
               {!selectedCliente ? (
-                /* VISTA 2: CLIENTES DE LA AGENCIA SELECCIONADA */
+                /* VISTA 2: CLIENTES DE LA AGENCIA SELECCIONADA + PERSONAL DE AGENCIA */
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  {/* Sección: Personal Administrativo de la Agencia */}
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black text-text-muted uppercase tracking-widest pl-1">Personal Administrativo</h3>
+                      <button
+                        onClick={() => { setSelectedCliente({ id: '', nombre: 'Administración' }); setShowCreateUser(true); }}
+                        className="flex items-center gap-2 text-[10px] font-bold text-violet-400 hover:text-violet-300 transition-colors"
+                      >
+                        <UserPlus className="h-3 w-3" />Añadir Admin
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {usuarios.filter(u => u.agenciaId === selectedAgencia.id && !u.clienteId).map((u) => (
+                        <div key={u.uid} className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-white/5 group hover:bg-white/[0.04] transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 flex items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                              <Shield className="h-4 w-4" />
+                            </div>
+                            <div>
+                               <p className="text-xs font-bold text-text-primary">{u.nombre}</p>
+                               <p className="text-[10px] text-text-muted">{u.email}</p>
+                            </div>
+                          </div>
+                          <button onClick={() => handleDeleteUsuario(u.uid)} className="p-2 text-text-muted/20 hover:text-red-400 transition-colors">
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                      {usuarios.filter(u => u.agenciaId === selectedAgencia.id && !u.clienteId).length === 0 && (
+                        <p className="text-[10px] text-text-muted italic pl-1 opacity-50">No hay administradores directos asignados.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
                     <div>
                       <h2 className="text-xl font-display font-bold text-text-primary">
-                        Clientes de <span className="text-violet-400">{selectedAgencia.nombre}</span>
+                        Clientes Registrados
                       </h2>
-                      <p className="text-xs text-text-muted">Gestiona las cuentas finales dentro de esta agencia</p>
+                      <p className="text-xs text-text-muted">Pipelines y flujos de leads activos</p>
                     </div>
                     <button
                       onClick={() => setShowCreateCl(true)}
-                      className="flex items-center gap-2 rounded-xl bg-neon-500/15 border border-neon-500/20 px-5 py-3 text-xs font-bold text-neon-400 hover:bg-neon-500/25 transition-all shadow-lg shadow-neon-500/5 active:scale-95"
+                      className="flex items-center gap-2 rounded-xl bg-neon-500/15 border border-neon-500/20 px-5 py-3 text-xs font-bold text-neon-400 hover:bg-neon-500/25 transition-all shadow-lg active:scale-95"
                     >
                       <Plus className="h-4 w-4" />Nuevo Cliente
                     </button>

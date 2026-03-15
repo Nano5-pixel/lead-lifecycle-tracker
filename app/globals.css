@@ -87,18 +87,19 @@ body::before {
   border-radius: 8px;
 }
 
-/* Fix para inputs con autofill - asegura visibilidad del texto */
+/* Fix robusto para inputs con autofill - asegura visibilidad del texto */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
+input:-internal-autofill-selected {
   -webkit-text-fill-color: var(--text-primary) !important;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px #050510 inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
   background-color: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+/* Forzar color de texto en inputs para evitar que se hereden opacidades bajas */
+input {
+  color: var(--text-primary) !important;
 }
