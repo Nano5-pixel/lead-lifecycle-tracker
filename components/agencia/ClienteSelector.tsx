@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Plus, Users, ChevronRight, X, Copy, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Building2, Plus, Users, ChevronRight, X, Copy, CheckCircle2 } from 'lucide-react';
 import { Cliente } from '@/types';
 import { GlassCard } from '../ui/GlassCard';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,6 @@ interface ClienteSelectorProps {
   selectedId: string | null;
   onSelect: (cliente: Cliente) => void;
   onCreate: (nombre: string, fuente: string) => Promise<string | null>;
-  onManageAccess: (cliente: Cliente) => void;
   leadsCount?: Record<string, number>;
 }
 
@@ -21,7 +20,6 @@ export function ClienteSelector({
   selectedId,
   onSelect,
   onCreate,
-  onManageAccess,
   leadsCount = {},
 }: ClienteSelectorProps) {
   const [showCreate, setShowCreate] = useState(false);
@@ -164,19 +162,7 @@ export function ClienteSelector({
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
                       <Building2 className="h-4 w-4 text-violet-400" />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onManageAccess(cliente);
-                        }}
-                        className="p-1.5 rounded-lg bg-bg-primary/50 text-text-muted/60 hover:text-neon-400 hover:bg-neon-500/10 transition-all"
-                        title="Gestionar Accesos"
-                      >
-                        <ShieldCheck className="h-4 w-4" />
-                      </button>
-                      <ChevronRight className="h-4 w-4 text-text-muted/40" />
-                    </div>
+                    <ChevronRight className="h-4 w-4 text-text-muted/40" />
                   </div>
                   <h3 className="text-[14px] font-display font-semibold text-text-primary mb-1 truncate">
                     {cliente.nombre}
