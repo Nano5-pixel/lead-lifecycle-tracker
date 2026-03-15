@@ -47,7 +47,7 @@ export function useClientes(agenciaIdOverride?: string) {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, agenciaIdOverride]);
 
   const createCliente = useCallback(
     async (nombre: string, fuente: string): Promise<string | null> => {
