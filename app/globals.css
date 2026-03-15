@@ -120,6 +120,18 @@ input:-internal-autofill-selected {
 input, textarea, select {
   color: var(--text-primary) !important;
   caret-color: var(--text-primary) !important;
+  color-scheme: dark light;
+}
+
+/* Visibilidad forzada para iconos de fecha */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(var(--calendar-invert, 1));
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.light input[type="date"]::-webkit-calendar-picker-indicator {
+  --calendar-invert: 0;
 }
 
 /* Visibilidad forzada para placeholders */
