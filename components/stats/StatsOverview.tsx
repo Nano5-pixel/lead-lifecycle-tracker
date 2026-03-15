@@ -36,7 +36,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20">
       {/* Date Filters */}
       <div className="flex flex-wrap items-center gap-4 rounded-2xl bg-bg-primary/20 border border-border-subtle p-4 glass-subtle">
         <div className="flex items-center gap-2">
@@ -242,14 +242,14 @@ function AgentPerformance({ leads, stats }: { leads: Lead[]; stats: PipelineStat
       if (!map[agent]) map[agent] = { total: 0, won: 0, active: 0 };
       map[agent].total++;
       if (l.etapa === 'Ganado') map[agent].won++;
-      if (l.etapa !== 'Ganado' && l.etapa !== 'Perdido') map[agent].active++;
+      if (l.etapa !== 'Ganado' && l.etapa !== 'Perdido' && l.etapa !== 'Basura') map[agent].active++;
     });
     return Object.entries(map).sort((a, b) => (b[1].won || 0) - (a[1].won || 0));
   }, [leads]);
 
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento por Agente</h3>
+      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento Total</h3>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
