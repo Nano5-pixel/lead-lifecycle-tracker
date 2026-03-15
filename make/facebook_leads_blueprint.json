@@ -1,0 +1,81 @@
+{
+  "name": "LLT - Facebook Leads to App + Email",
+  "flow": [
+    {
+      "id": 1,
+      "module": "facebook:watchLeads",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {},
+        "expect": []
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "url": "https://lead-lifecycle-tracker.vercel.app/api/leads/ingest",
+        "method": "post",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\"apiKey\":\"demo-api-key-12345\",\"clienteId\":\"CuezNYTW2AVcNsATDamD\",\"nombre\":\"{{1.data.FULL_NAME}}\",\"telefono\":\"{{1.data.PHONE}}\",\"email\":\"{{1.data.EMAIL}}\",\"fuente\":\"Facebook Ads\"}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {},
+        "expect": []
+      }
+    },
+    {
+      "id": 3,
+      "module": "google-email:ActionSendEmail",
+      "version": 2,
+      "parameters": {},
+      "mapper": {
+        "to": "{{1.data.EMAIL}}",
+        "subject": "¡Gracias por tu interés!",
+        "content": "<h2>Hola {{1.data.FULL_NAME}},</h2><p>Hemos recibido tu solicitud y un asesor se pondrá en contacto contigo pronto.</p><p>Si necesitas atención inmediata, puedes llamarnos o escribirnos por WhatsApp.</p><br><p>Saludos cordiales,<br>El equipo</p>",
+        "contentType": "html"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        },
+        "restore": {},
+        "expect": []
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

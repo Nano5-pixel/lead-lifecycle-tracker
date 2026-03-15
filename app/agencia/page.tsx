@@ -1,44 +1,120 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { Header } from '@/components/layout/Header';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { ToastProvider } from '@/components/ui/Toast';
+import { ClienteSelector } from '@/components/agencia/ClienteSelector';
+import { AgenciaLeadsView } from '@/components/agencia/AgenciaLeadsView';
 import { useAuth } from '@/hooks/useAuth';
-import { Building2, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useClientes } from '@/hooks/useClientes';
+import { Cliente } from '@/types';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Key, Copy, CheckCircle2 } from 'lucide-react';
+
+type ViewMode = 'kanban' | 'stats';
 
 function AgenciaContent() {
   const { user } = useAuth();
+  const { clientes, loading, createCliente } = useClientes();
+  const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null);
+  const [view, setView] = useState<ViewMode>('kanban');
+  const [leadsCount, setLeadsCount] = useState<Record<string, number>>({});
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.agenciaId || clientes.length === 0) return;
+
+    const unsubscribes: (() => void)[] = [];
+
+    clientes.forEach((cliente) => {
+      const path = `agencias/${user.agenciaId}/clientes/${cliente.id}/leads`;
+      const leadsRef = collection(db, path);
+      const unsubscribe = onSnapshot(query(leadsRef), (snapshot) => {
+        setLeadsCount((prev) => ({ ...prev, [cliente.id]: snapshot.size }));
+      });
+      unsubscribes.push(unsubscribe);
+    });
+
+    return () => unsubscribes.forEach((u) => u());
+  }, [user, clientes]);
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header
-        view="kanban"
-        onViewChange={() => {}}
+        view={view}
+        onViewChange={selectedCliente ? setView : () => {}}
         title={user?.nombre || 'Panel Agencia'}
+        loading={loading}
       />
-      <main className="flex-1 flex items-center justify-center p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <GlassCard className="max-w-md text-center">
-            <div className="mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10">
-              <Building2 className="h-8 w-8 text-violet-400" />
+
+      <main className="flex-1">
+        <div className="mx-auto max-w-[1600px] p-4 lg:p-6">
+          {selectedCliente ? (
+            <AgenciaLeadsView
+              agenciaId={user?.agenciaId || ''}
+              cliente={selectedCliente}
+              onBack={() => setSelectedCliente(null)}
+              view={view}
+            />
+          ) : (
+            <div className="space-y-6">
+              <GlassCard>
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-sm font-display font-semibold text-white mb-1">Información de tu Agencia</h3>
+                    <p className="text-[11px] text-white/35 font-body">Usa estos datos para configurar Make.com</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2">
+                      <Key className="h-3.5 w-3.5 text-amber-400" />
+                      <span className="text-[11px] font-mono text-white/50">API Key: demo-api-key-12345</span>
+                      <button
+                        onClick={() => copyToClipboard('demo-api-key-12345', 'apikey')}
+                        className="text-white/30 hover:text-white/60 transition-colors"
+                      >
+                        {copiedId === 'apikey' ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2">
+                      <span className="text-[11px] font-mono text-white/50">Agencia ID: {user?.agenciaId}</span>
+                      <button
+                        onClick={() => copyToClipboard(user?.agenciaId || '', 'agid')}
+                        className="text-white/30 hover:text-white/60 transition-colors"
+                      >
+                        {copiedId === 'agid' ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              <ClienteSelector
+                clientes={clientes}
+                selectedId={(selectedCliente as Cliente | null)?.id || null}
+                onSelect={setSelectedCliente}
+                onCreate={createCliente}
+                leadsCount={leadsCount}
+              />
             </div>
-            <h2 className="text-lg font-display font-semibold text-white mb-2">
-              Panel de Agencia
-            </h2>
-            <p className="text-sm text-white/40 font-body mb-4">
-              Aquí verás el selector de clientes, métricas y supervisión de leads.
-              Este panel se activa en la Fase 3.
-            </p>
-            <div className="flex items-center justify-center gap-2 text-[12px] text-neon-400 font-medium">
-              <span>Fase 3 — Próximamente</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </div>
-          </GlassCard>
-        </motion.div>
+          )}
+        </div>
       </main>
     </div>
   );
@@ -47,7 +123,9 @@ function AgenciaContent() {
 export default function AgenciaPage() {
   return (
     <AuthGuard allowedRoles={['agencia']}>
-      <AgenciaContent />
+      <ToastProvider>
+        <AgenciaContent />
+      </ToastProvider>
     </AuthGuard>
   );
 }
