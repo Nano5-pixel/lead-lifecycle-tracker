@@ -5,11 +5,13 @@
 /** Las 6 etapas universales del pipeline */
 export type StageId =
   | 'Nuevo'
-  | 'En Contacto'
-  | 'Calificado'
+  | 'Intento'
+  | 'Contactado'
+  | 'Cita'
   | 'Propuesta'
   | 'Ganado'
-  | 'Perdido';
+  | 'Perdido'
+  | 'Basura';
 
 export interface Stage {
   id: StageId;

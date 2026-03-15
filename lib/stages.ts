@@ -5,12 +5,14 @@ import { Stage, StageId } from '@/types';
 // ==============================================
 
 export const STAGES: Stage[] = [
-  { id: 'Nuevo', label: 'Nuevo', emoji: '⚡', color: '#0A84FF' },
-  { id: 'En Contacto', label: 'En Contacto', emoji: '⏳', color: '#F59E0B' },
-  { id: 'Calificado', label: 'Calificado', emoji: '📞', color: '#8B5CF6' },
-  { id: 'Propuesta', label: 'Propuesta / Cita', emoji: '📄', color: '#06B6D4' },
-  { id: 'Ganado', label: 'Ganado', emoji: '🏆', color: '#10B981' },
-  { id: 'Perdido', label: 'Perdido', emoji: '❌', color: '#EF4444' },
+  { id: 'Nuevo', label: 'Nuevo', emoji: '📥', color: '#0A84FF' },
+  { id: 'Intento', label: 'En Intento', emoji: '📞', color: '#8B5CF6' },
+  { id: 'Contactado', label: 'Contactado / Cualificado', emoji: '💬', color: '#F59E0B' },
+  { id: 'Cita', label: 'Cita / Demostración', emoji: '📅', color: '#10B981' },
+  { id: 'Propuesta', label: 'Propuesta / Negociación', emoji: '💼', color: '#06B6D4' },
+  { id: 'Ganado', label: 'Cierre Ganado', emoji: '🏆', color: '#10B981' },
+  { id: 'Perdido', label: 'Cierre Perdido', emoji: '❌', color: '#EF4444' },
+  { id: 'Basura', label: 'No Calificado / Basura', emoji: '🗑️', color: '#6B7280' },
 ];
 
 export const STAGE_MAP: Record<StageId, Stage> = Object.fromEntries(

@@ -1,8 +1,6 @@
-'use client';
-
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, Trophy, XCircle, Zap, Target, ArrowUpRight, Clock } from 'lucide-react';
+import { Users, TrendingUp, Trophy, XCircle, Zap, Target, ArrowUpRight, Clock, Calendar, FilterX } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { Lead, PipelineStats, StageId } from '@/types';
 import { STAGES } from '@/lib/stages';
@@ -13,11 +11,72 @@ interface StatsOverviewProps {
 }
 
 export function StatsOverview({ leads }: StatsOverviewProps) {
-  const stats = useMemo(() => calculateStats(leads), [leads]);
-  console.log('StatsOverview recibe leads:', leads.length, 'stats:', JSON.stringify(stats));
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+
+  const filteredLeads = useMemo(() => {
+    return leads.filter(l => {
+      const entry = l.fechaEntrada ? new Date(l.fechaEntrada).getTime() : 0;
+      if (dateFrom && entry < new Date(dateFrom).getTime()) return false;
+      if (dateTo) {
+        // Set dateTo to end of day
+        const endDay = new Date(dateTo);
+        endDay.setHours(23, 59, 59, 999);
+        if (entry > endDay.getTime()) return false;
+      }
+      return true;
+    });
+  }, [leads, dateFrom, dateTo]);
+
+  const stats = useMemo(() => calculateStats(filteredLeads), [filteredLeads]);
+
+  const clearFilters = () => {
+    setDateFrom('');
+    setDateTo('');
+  };
 
   return (
     <div className="space-y-6">
+      {/* Date Filters */}
+      <div className="flex flex-wrap items-center gap-4 rounded-2xl bg-bg-primary/20 border border-border-subtle p-4 glass-subtle">
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-neon-500" />
+          <span className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Rango de Fecha:</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-text-muted font-body">Desde:</span>
+            <input 
+              type="date" 
+              value={dateFrom} 
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="bg-bg-primary/40 border border-border-subtle rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-text-muted font-body">Hasta:</span>
+            <input 
+              type="date" 
+              value={dateTo} 
+              onChange={(e) => setDateTo(e.target.value)}
+              className="bg-bg-primary/40 border border-border-subtle rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50"
+            />
+          </div>
+          {(dateFrom || dateTo) && (
+            <button 
+              onClick={clearFilters}
+              className="flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-1.5 text-[10px] font-semibold text-red-400 hover:bg-red-500/20 transition-colors"
+            >
+              <FilterX className="h-3.5 w-3.5" />
+              Limpiar
+            </button>
+          )}
+        </div>
+        <div className="ml-auto text-[11px] text-text-muted font-body">
+          Mostrando <span className="text-neon-400 font-mono font-bold">{filteredLeads.length}</span> de <span className="font-mono">{leads.length}</span> leads
+        </div>
+      </div>
+
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
         <KPICard icon={Users} label="Leads Totales" value={String(stats.totalLeads)}
@@ -65,7 +124,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
           <div className="space-y-4">
             <QuickStat icon={Zap} label="Nuevos esta semana" value={String(stats.newThisWeek)} color="#0A84FF" />
             <QuickStat icon={Target} label="En calificación"
-              value={String((stats.byStage['En Contacto'] || 0) + (stats.byStage['Calificado'] || 0))} color="#8B5CF6" />
+              value={String((stats.byStage['Intento'] || 0) + (stats.byStage['Contactado'] || 0))} color="#8B5CF6" />
             <QuickStat icon={Trophy} label="Ganados" value={String(stats.byStage['Ganado'] || 0)} color="#10B981" />
             <QuickStat icon={XCircle} label="Perdidos" value={String(stats.lostCount)} color="#EF4444" />
             <div className="mt-4 pt-4 border-t border-border-subtle">

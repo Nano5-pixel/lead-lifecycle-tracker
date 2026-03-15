@@ -20,11 +20,13 @@ export function validateStageTransition(req: StageTransitionRequest): StageTrans
 export function calculateStats(leads: Lead[]): PipelineStats {
   const byStage: Record<StageId, number> = {
     'Nuevo': 0,
-    'En Contacto': 0,
-    'Calificado': 0,
+    'Intento': 0,
+    'Contactado': 0,
+    'Cita': 0,
     'Propuesta': 0,
     'Ganado': 0,
     'Perdido': 0,
+    'Basura': 0,
   };
 
   if (!leads || !Array.isArray(leads)) {

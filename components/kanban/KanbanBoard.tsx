@@ -35,15 +35,20 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
 
   const leadsByStage = useMemo(() => {
     const grouped: Record<StageId, Lead[]> = {
-      'Nuevo': [], 'En Contacto': [], 'Calificado': [],
-      'Propuesta': [], 'Ganado': [], 'Perdido': [],
+      'Nuevo': [], 'Intento': [], 'Contactado': [],
+      'Cita': [], 'Propuesta': [], 'Ganado': [], 
+      'Perdido': [], 'Basura': [],
     };
     
     const validIds = STAGES.map(s => s.id);
 
     for (const lead of leads) {
       // Normalize stage string: trim whitespace
-      const rawEtapa = (lead.etapa || '').toString().trim();
+      let rawEtapa = (lead.etapa || '').toString().trim();
+
+      // Mapeo manual para datos antiguos (Retrocompatibilidad)
+      if (rawEtapa === 'En Contacto') rawEtapa = 'Intento';
+      if (rawEtapa === 'Calificado') rawEtapa = 'Contactado';
       
       // Find matching stage ID (case-insensitive fallback)
       let stageId: StageId = 'Nuevo';

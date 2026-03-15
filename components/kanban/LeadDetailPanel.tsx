@@ -153,6 +153,37 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                 </div>
               )}
 
+              {/* Movimiento rápido (Selector de Etapa) */}
+              {onMove && (
+                <div className="space-y-3">
+                  <h4 className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Cambiar Etapa</h4>
+                  <div className="grid grid-cols-4 gap-2">
+                    {STAGES.map((s) => (
+                      <button
+                        key={s.id}
+                        disabled={moving || lead.etapa === s.id}
+                        onClick={() => handleMove(s.id)}
+                        className={cn(
+                          'flex flex-col items-center justify-center gap-1.5 rounded-xl border p-2 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100',
+                          lead.etapa === s.id 
+                            ? 'border-neon-500/30 bg-neon-500/10' 
+                            : 'border-border-subtle bg-bg-primary/20 hover:bg-bg-primary/40 hover:border-border-subtle/60'
+                        )}
+                        title={s.label}
+                      >
+                        <span className="text-lg">{s.emoji}</span>
+                        <span className={cn(
+                          "text-[9px] font-bold uppercase truncate w-full text-center px-1",
+                          lead.etapa === s.id ? "text-neon-400" : "text-text-muted"
+                        )}>
+                          {s.id}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Información</h4>
