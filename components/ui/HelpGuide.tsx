@@ -108,59 +108,60 @@ export function HelpGuide({ open, onClose }: HelpGuideProps) {
     <AnimatePresence>
       {open && (
         <>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={onClose}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[101] w-[92%] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2rem] border border-white/20 bg-bg-primary shadow-2xl backdrop-blur-3xl"
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative z-[101] w-full max-w-lg max-h-[90vh] overflow-hidden rounded-[2.5rem] border border-white/20 bg-bg-primary shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="relative h-28 w-full overflow-hidden">
+            <div className="relative h-28 flex-shrink-0 w-full overflow-hidden border-b border-white/5">
               <div 
-                className="absolute inset-0 opacity-30 blur-3xl transition-colors duration-500"
+                className="absolute inset-0 opacity-40 blur-3xl transition-colors duration-500"
                 style={{ backgroundColor: slide.color }}
               />
-              <div className="relative flex h-full items-center justify-between px-6 sm:px-8">
-                <div className="flex items-center gap-3 sm:gap-4">
+              <div className="relative flex h-full items-center justify-between px-6 sm:px-10">
+                <div className="flex items-center gap-4">
                   <div 
-                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl shadow-lg transition-all duration-500"
-                    style={{ backgroundColor: `${slide.color}30`, color: slide.color, border: `1px solid ${slide.color}40` }}
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl transition-all duration-500"
+                    style={{ backgroundColor: `${slide.color}40`, color: slide.color, border: `1px solid ${slide.color}50` }}
                   >
-                    <slide.icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <slide.icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <h2 className="text-base sm:text-lg font-display font-bold text-text-primary tracking-tight">{slide.title}</h2>
-                    <p className="text-[10px] font-mono text-text-muted uppercase tracking-widest leading-none">Guía de Usuario</p>
+                    <h2 className="text-xl font-display font-bold text-text-primary tracking-tight leading-none">{slide.title}</h2>
+                    <p className="mt-1 text-[10px] font-mono text-text-muted uppercase tracking-widest leading-none">Guía de Usuario</p>
                   </div>
                 </div>
                 <button 
                   onClick={onClose}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-text-muted hover:bg-white/20 hover:text-text-primary transition-all"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all border border-white/10"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="px-8 py-6">
-              <p className="mb-6 text-sm text-text-secondary/80 font-body">
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto px-6 sm:px-10 py-8 custom-scrollbar">
+              <p className="mb-8 text-sm sm:text-base text-text-secondary/90 font-body leading-relaxed">
                 {slide.description}
               </p>
               
               <AnimatePresence mode="wait">
                 <motion.div
                   key={slide.id}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
                 >
                   {slide.content}
@@ -169,26 +170,26 @@ export function HelpGuide({ open, onClose }: HelpGuideProps) {
             </div>
 
             {/* Footer / Nav */}
-            <div className="border-t border-white/5 bg-white/[0.02] px-8 py-6">
+            <div className="flex-shrink-0 border-t border-white/5 bg-white/[0.03] px-6 sm:px-10 py-6">
               <div className="flex items-center justify-between">
-                <div className="flex gap-1.5">
+                <div className="flex gap-2">
                   {SLIDES.map((_, i) => (
                     <div 
                       key={i} 
                       className={cn(
-                        "h-1.5 rounded-full transition-all duration-300",
-                        i === currentSlide ? "w-6" : "w-1.5 bg-white/10"
+                        "h-2 rounded-full transition-all duration-300",
+                        i === currentSlide ? "w-8" : "w-2 bg-white/10"
                       )}
                       style={{ backgroundColor: i === currentSlide ? slide.color : undefined }}
                     />
                   ))}
                 </div>
                 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   {currentSlide > 0 && (
                     <button 
                       onClick={prev}
-                      className="flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary transition-all"
+                      className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold text-text-secondary hover:text-text-primary transition-all"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       Atrás
@@ -196,16 +197,20 @@ export function HelpGuide({ open, onClose }: HelpGuideProps) {
                   )}
                   <button 
                     onClick={currentSlide === SLIDES.length - 1 ? onClose : next}
-                    className="flex items-center gap-2 rounded-xl px-6 py-2 text-xs font-semibold text-white shadow-lg transition-all hover:brightness-110 active:scale-95"
-                    style={{ backgroundColor: slide.color }}
+                    className="flex items-center gap-2 rounded-xl px-8 py-3 text-xs font-black uppercase tracking-wider text-white shadow-2xl transition-all hover:brightness-110 active:scale-95"
+                    style={{ 
+                      backgroundColor: slide.color,
+                      boxShadow: `0 8px 30px ${slide.color}40`
+                    }}
                   >
-                    <span>{currentSlide === SLIDES.length - 1 ? 'Empezar' : 'Siguiente'}</span>
+                    <span>{currentSlide === SLIDES.length - 1 ? '¡Entendido!' : 'Siguiente'}</span>
                     {currentSlide < SLIDES.length - 1 && <ChevronRight className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
             </div>
           </motion.div>
+        </div>
         </>
       )}
     </AnimatePresence>

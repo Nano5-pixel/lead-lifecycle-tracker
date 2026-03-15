@@ -105,19 +105,19 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
           )}
 
           {/* Info usuario + Temas + Logout */}
-          <div className="flex items-center gap-2 ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-border-subtle">
+          <div className="flex items-center gap-1.5 sm:gap-2 ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-border-subtle">
             {onShowHelp && (
               <button
                 onClick={onShowHelp}
-                className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-neon-500/20 bg-neon-500/10 text-neon-400 hover:bg-neon-500/20 transition-all shadow-sm"
+                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-neon-500 text-white shadow-neon active:scale-90 transition-all"
                 title="Centro de Ayuda"
               >
-                <HelpCircle className="h-4 w-4" />
+                <HelpCircle className="h-5 w-5" />
               </button>
             )}
             <button
               onClick={toggleTheme}
-              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/40 text-text-secondary hover:text-text-primary hover:bg-bg-primary/60 transition-all"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/50 text-text-secondary hover:text-text-primary transition-all"
               title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
             >
               {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
