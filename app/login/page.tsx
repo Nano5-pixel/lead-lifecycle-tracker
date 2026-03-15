@@ -33,7 +33,7 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 bg-[#050510] relative overflow-hidden">
+    <div className="flex min-h-screen items-center justify-center px-4 relative overflow-hidden">
       {/* Fondo decorativo Premium */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full" />

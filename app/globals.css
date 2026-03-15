@@ -11,6 +11,7 @@
   --glass-glow: rgba(10, 132, 255, 0.03);
   --accent-neon: #0A84FF;
   --bg-gradient: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(10, 132, 255, 0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%), radial-gradient(ellipse 50% 60% at 50% 90%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+  --autofill-bg: #050510;
 }
 
 .light {
@@ -24,7 +25,8 @@
   --glass-border: rgba(15, 23, 42, 0.08);
   --glass-glow: rgba(10, 132, 255, 0.02);
   --accent-neon: #0284C7;
-  --bg-gradient: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(14, 165, 233, 0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(10, 132, 255, 0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+  --autofill-bg: #FFFFFF;
 }
 
 @tailwind base;
@@ -93,7 +95,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-internal-autofill-selected {
   -webkit-text-fill-color: var(--text-primary) !important;
-  -webkit-box-shadow: 0 0 0px 1000px #050510 inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--autofill-bg) inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
   background-color: transparent !important;
   color: var(--text-primary) !important;

@@ -72,7 +72,7 @@ function DashboardContent() {
   }, [updateLead, toast]);
 
   return (
-    <div className="flex min-h-screen flex-col pb-16 sm:pb-0 bg-[#050510] relative overflow-hidden">
+    <div className="flex min-h-screen flex-col pb-16 sm:pb-0 relative overflow-hidden">
       {/* Background Gradients */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full" />
