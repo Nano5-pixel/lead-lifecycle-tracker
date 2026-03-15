@@ -25,7 +25,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
   const {
     attributes, listeners, setNodeRef, transform, transition,
     isDragging: isSortableDragging,
-  } = useSortable({ id: lead.id, data: { lead } });
+  } = useSortable({ id: lead.id, data: { lead, stageId: lead.etapa } });
 
   const style = { transform: CSS.Transform.toString(transform), transition };
   const stage = STAGE_MAP[lead.etapa];

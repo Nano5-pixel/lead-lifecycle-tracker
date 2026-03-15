@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/Toast';
 import { useLeadsForClient } from '@/hooks/useLeads';
 import { Cliente, Lead, StageId } from '@/types';
 import { validateStageTransition } from '@/lib/rules';
+import { VALID_STAGES } from '@/lib/stages';
 import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -62,6 +63,9 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
 
   const moveLeadToStage = useCallback(
     async (lead: Lead, toStage: StageId): Promise<{ success: boolean; error?: string }> => {
+      if (!VALID_STAGES.includes(toStage)) {
+        return { success: false, error: 'Etapa no válida' };
+      }
       const validation = validateStageTransition({
         leadId: lead.id, fromStage: lead.etapa, toStage, lead,
       });

@@ -6,7 +6,7 @@ import {
   PointerSensor, useSensor, useSensors, closestCorners,
 } from '@dnd-kit/core';
 import { Lead, StageId } from '@/types';
-import { STAGES } from '@/lib/stages';
+import { STAGES, VALID_STAGES } from '@/lib/stages';
 import { KanbanColumn } from './KanbanColumn';
 import { LeadCard } from './LeadCard';
 import { cn } from '@/lib/utils';
@@ -55,7 +55,9 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     const lead = leads.find((l) => l.id === active.id);
     if (!lead) return;
 
-    const targetStageId = (over.data?.current?.stage?.id || over.id) as StageId;
+    const targetStageId = (over.data?.current?.stage?.id || over.data?.current?.stageId || over.id) as StageId;
+    
+    if (!VALID_STAGES.includes(targetStageId)) return;
     if (lead.etapa === targetStageId) return;
 
     const result = await onMoveLeadToStage(lead, targetStageId);

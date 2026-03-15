@@ -14,6 +14,7 @@ import {
 import { db } from '@/lib/firebase';
 import { Lead, StageId, StageTransitionRequest } from '@/types';
 import { validateStageTransition } from '@/lib/rules';
+import { VALID_STAGES } from '@/lib/stages';
 import { useAuth } from './useAuth';
 
 // ==============================================
@@ -77,6 +78,9 @@ export function useLeads() {
       toStage: StageId
     ): Promise<{ success: boolean; error?: string }> => {
       if (!user) return { success: false, error: 'No autenticado' };
+      if (!VALID_STAGES.includes(toStage)) {
+        return { success: false, error: 'Etapa no válida' };
+      }
 
       // Validar reglas de negocio
       const req: StageTransitionRequest = {
