@@ -100,12 +100,8 @@ export function useLeads() {
         toStage,
         lead,
       };
-      
-      console.log(`[useLeads] Intentando mover lead ${lead.id} de ${lead.etapa} a ${toStage}`);
       const validation = validateStageTransition(req);
-      
       if (!validation.success) {
-        console.warn(`[useLeads] Validación fallida para ${lead.id}: ${validation.error}`);
         return { success: false, error: validation.error };
       }
 
@@ -121,10 +117,9 @@ export function useLeads() {
           diasEnEtapa: 0,
         });
 
-        console.log(`[useLeads] Lead ${lead.id} movido exitosamente a ${toStage}`);
         return { success: true };
       } catch (err) {
-        console.error('[useLeads] Error en updateDoc:', err);
+        console.error('Error moviendo lead:', err);
         return { success: false, error: 'Error al actualizar el lead.' };
       }
     },

@@ -186,8 +186,8 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
             <div
               key={stage.id}
               className={cn(
-                'flex-shrink-0',
-                activeStageId === stage.id ? 'block w-full sm:w-[320px]' : 'hidden sm:block'
+                'flex-shrink-0 sm:w-[300px]', // Ancho fijo en desktop asegurado
+                activeStageId === stage.id ? 'block w-full' : 'hidden sm:block'
               )}
             >
               <KanbanColumn
