@@ -39,8 +39,8 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
           </div>
           <div className="space-y-2.5">
             {STAGES.map((stage, i) => {
-              const count = stats.byStage[stage.id] || 0;
-              const maxCount = Math.max(...Object.values(stats.byStage), 1);
+              const count = (stats?.byStage && stats.byStage[stage.id]) || 0;
+              const maxCount = Math.max(...Object.values(stats?.byStage || {}), 1);
               const pct = (count / maxCount) * 100;
               return (
                 <motion.div key={stage.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
@@ -177,14 +177,15 @@ function SourceBreakdown({ leads }: { leads: Lead[] }) {
 function AgentPerformance({ leads, stats }: { leads: Lead[]; stats: PipelineStats }) {
   const agents = useMemo(() => {
     const map: Record<string, { total: number; won: number; active: number }> = {};
-    leads.forEach((l) => {
+    const list = leads || [];
+    list.forEach((l) => {
       const agent = l.gestionadoPor || 'Sin asignar';
       if (!map[agent]) map[agent] = { total: 0, won: 0, active: 0 };
       map[agent].total++;
       if (l.etapa === 'Ganado') map[agent].won++;
       if (l.etapa !== 'Ganado' && l.etapa !== 'Perdido') map[agent].active++;
     });
-    return Object.entries(map).sort((a, b) => b[1].won - a[1].won);
+    return Object.entries(map).sort((a, b) => (b[1].won || 0) - (a[1].won || 0));
   }, [leads]);
 
   return (

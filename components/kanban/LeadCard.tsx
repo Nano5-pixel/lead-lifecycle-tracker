@@ -38,6 +38,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={() => onSelect?.(lead)}
+        {...listeners}
         className={cn(
           'group relative rounded-xl border bg-white/[0.03] backdrop-blur-md',
           'transition-all duration-300 cursor-grab active:cursor-grabbing',
@@ -47,9 +48,9 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
         )}
       >
         <div className="flex items-start gap-2 p-3 pb-2">
-          <button {...listeners} className="mt-0.5 flex-shrink-0 text-white/20 hover:text-white/40 transition-colors">
+          <div className="mt-0.5 flex-shrink-0 text-white/20 group-hover:text-white/40 transition-colors">
             <GripVertical className="h-4 w-4" />
-          </button>
+          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -62,6 +63,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); setShowMoveMenu(!showMoveMenu); }}
+                onPointerDown={(e) => e.stopPropagation()}
                 className="p-1 sm:hidden text-white/20 hover:text-white/50 transition-colors"
               >
                 <MoreVertical className="h-4 w-4" />
@@ -84,12 +86,14 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               exit={{ height: 0, opacity: 0 }}
               className="mx-3 mb-2 flex items-center gap-1 overflow-x-auto rounded-lg bg-white/[0.04] p-1.5 no-scrollbar"
               onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               <span className="text-[9px] font-mono text-white/20 px-1 uppercase whitespace-nowrap">Mover a:</span>
               {STAGES.filter(s => s.id !== lead.etapa).map((s) => (
                 <button
                   key={s.id}
-                  onClick={() => { onMove?.(lead, s.id); setShowMoveMenu(false); }}
+                  onClick={(e) => { e.stopPropagation(); onMove?.(lead, s.id); setShowMoveMenu(false); }}
+                  onPointerDown={(e) => e.stopPropagation()}
                   className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-white/[0.06] hover:bg-white/[0.12] transition-colors"
                   title={s.label}
                 >
@@ -133,12 +137,14 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
             <>
               <a href={whatsappLink(lead.telefono)} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/15 px-2.5 py-1.5 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
-                onClick={(e) => e.stopPropagation()}>
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}>
                 <MessageCircle className="h-3 w-3" />
               </a>
               <a href={phoneLink(lead.telefono)}
                 className="flex items-center gap-1.5 rounded-lg bg-neon-500/10 border border-neon-500/15 px-2.5 py-1.5 text-[10px] font-semibold text-neon-400 hover:bg-neon-500/20 transition-colors"
-                onClick={(e) => e.stopPropagation()}>
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}>
                 <Phone className="h-3 w-3" />
               </a>
             </>
