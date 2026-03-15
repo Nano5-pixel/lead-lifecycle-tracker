@@ -52,9 +52,9 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
             <GripVertical className="h-4 w-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-bg-primary/50">
+            <div className="flex items-center justify-between gap-2 overflow-hidden">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-bg-primary/50">
                   <User className="h-3 w-3 text-text-muted" />
                 </div>
                 <h4 className="text-[13px] font-display font-semibold text-text-primary truncate">
@@ -64,7 +64,7 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               <button
                 onClick={(e) => { e.stopPropagation(); setShowMoveMenu(!showMoveMenu); }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="p-1 text-text-muted hover:text-text-secondary transition-colors"
+                className="flex-shrink-0 p-1 text-text-muted hover:text-text-secondary transition-colors"
                 title="Mover lead"
               >
                 <MoreVertical className="h-4 w-4" />

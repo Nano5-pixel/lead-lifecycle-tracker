@@ -24,7 +24,7 @@ export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="flex h-full w-[300px] flex-shrink-0 flex-col sm:w-[305px] lg:w-[320px]"
+      className="flex h-full w-full flex-col sm:w-[290px] lg:w-[310px] flex-shrink-0"
     >
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
