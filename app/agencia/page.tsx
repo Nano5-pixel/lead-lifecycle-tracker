@@ -13,6 +13,7 @@ import { useClientes } from '@/hooks/useClientes';
 import { Cliente } from '@/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Key, Copy, CheckCircle2 } from 'lucide-react';
+import { MobileNav } from '@/components/layout/MobileNav';
 
 type ViewMode = 'kanban' | 'stats';
 
@@ -139,6 +140,14 @@ function AgenciaContent() {
           )}
         </div>
       </main>
+
+      {selectedCliente && (
+        <MobileNav 
+          view={view} 
+          onViewChange={setView} 
+          onNewLead={() => (window as any).openNewLeadModal?.()} 
+        />
+      )}
     </div>
   );
 }

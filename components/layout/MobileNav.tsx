@@ -24,26 +24,26 @@ export function MobileNav({ view, onViewChange, onNewLead }: MobileNavProps) {
           onClick={() => onViewChange('kanban')}
           className={cn(
             'flex flex-col items-center gap-1 py-1.5 px-4 rounded-xl transition-all',
-            view === 'kanban' ? 'text-text-primary' : 'text-text-tertiary'
+            view === 'kanban' ? 'text-text-primary' : 'text-text-muted'
           )}
         >
           <Kanban className="h-5 w-5" />
           <span className="text-[10px] font-medium">Pipeline</span>
         </button>
         <button
-          onClick={() => (window as any).openNewLeadModal && (window as any).openNewLeadModal()}
+          onClick={onNewLead}
           className="flex flex-col items-center gap-1 text-white"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neon-500 shadow-neon">
             <Plus className="h-5 w-5" />
           </div>
-          <span className="text-[10px] font-medium">Nuevo</span>
+          <span className="text-[10px] font-medium text-white">Nuevo</span>
         </button>
         <button
           onClick={() => onViewChange('stats')}
           className={cn(
             'flex flex-col items-center gap-1 py-1.5 px-4 rounded-xl transition-all',
-            view === 'stats' ? 'text-neon-400' : 'text-text-muted'
+            view === 'stats' ? 'text-text-primary' : 'text-text-muted'
           )}
         >
           <BarChart3 className="h-5 w-5" />
