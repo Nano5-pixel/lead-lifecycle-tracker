@@ -104,7 +104,7 @@ function AdminContent() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header view="kanban" onViewChange={() => {}} title="Super Admin" />
+      <Header view="kanban" title="Super Admin" />
 
       <main className="flex-1">
         <div className="mx-auto max-w-[1200px] p-4 lg:p-6 space-y-6">

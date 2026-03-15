@@ -9,7 +9,7 @@ type ViewMode = 'kanban' | 'stats';
 
 interface HeaderProps {
   view: ViewMode;
-  onViewChange: (v: ViewMode) => void;
+  onViewChange?: (v: ViewMode) => void;
   onRefresh?: () => void;
   onNewLead?: () => void;
   loading?: boolean;
@@ -43,8 +43,8 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
           </div>
         </div>
 
-        {/* Centro: View Switcher (solo para vista de leads) */}
-        {onViewChange && (
+        {/* Centro: View Switcher (solo para vista de leads y no super admin) */}
+        {onViewChange && user?.rol !== 'super_admin' && (
           <div className="hidden sm:flex items-center gap-1 rounded-xl bg-white/[0.04] border border-white/[0.06] p-1">
             {[
               { id: 'kanban' as ViewMode, icon: Kanban, label: 'Pipeline' },

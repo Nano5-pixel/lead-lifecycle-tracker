@@ -104,8 +104,13 @@ function DashboardContent() {
                 )}
               </motion.div>
             ) : (
-              <motion.div key="stats" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
+              <motion.div 
+                key={`stats-${leads.length}-${leads[0]?.fechaUltimoCambio || 'init'}`}
+                initial={{ opacity: 0, x: 20 }} 
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }} 
+                transition={{ duration: 0.25 }}
+              >
                 <StatsOverview leads={leads} />
               </motion.div>
             )}
