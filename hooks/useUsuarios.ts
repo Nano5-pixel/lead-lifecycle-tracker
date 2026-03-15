@@ -67,5 +67,60 @@ export function useUsuarios() {
     []
   );
 
-  return { usuarios, loading, createUsuarioDoc };
+  const updateUsuarioDoc = useCallback(
+    async (
+      uid: string,
+      email: string,
+      nombre: string,
+      rol: string,
+      agenciaId: string,
+      clienteId: string
+    ): Promise<boolean> => {
+      try {
+        const ref = doc(db, 'usuarios', uid);
+        await setDoc(ref, {
+          email,
+          nombre,
+          rol,
+          agenciaId,
+          clienteId,
+        }, { merge: true });
+        return true;
+      } catch (err) {
+        console.error('Error actualizando usuario:', err);
+        return false;
+      }
+    },
+    []
+  );
+
+  const deleteUsuario = useCallback(
+    async (uid: string): Promise<boolean> => {
+      try {
+        // 1. Eliminar de Firebase Auth vía API
+        const response = await fetch('/api/admin/users/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uid }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || 'Error eliminando de Auth');
+        }
+
+        // 2. Eliminar de Firestore
+        const { deleteDoc } = await import('firebase/firestore');
+        await deleteDoc(doc(db, 'usuarios', uid));
+        
+        return true;
+      } catch (err) {
+        console.error('Error eliminando usuario:', err);
+        return false;
+      }
+    },
+    []
+  );
+
+  return { usuarios, loading, createUsuarioDoc, updateUsuarioDoc, deleteUsuario };
 }

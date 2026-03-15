@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield, Building2, Users, Plus, X, Key, Copy, CheckCircle2,
-  ToggleLeft, ToggleRight, UserPlus, Loader2,
+  ToggleLeft, ToggleRight, UserPlus, Loader2, Pencil, Trash2, AlertCircle
 } from 'lucide-react';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { Header } from '@/components/layout/Header';
@@ -19,14 +19,17 @@ import { auth } from '@/lib/firebase';
 
 function AdminContent() {
   const { user } = useAuth();
-  const { agencias, loading: loadingAg, createAgencia, toggleLicencia } = useAgencias();
-  const { usuarios, loading: loadingUs, createUsuarioDoc } = useUsuarios();
+  const { agencias, loading: loadingAg, createAgencia, toggleLicencia, updateAgencia, deleteAgencia } = useAgencias();
+  const { usuarios, loading: loadingUs, createUsuarioDoc, updateUsuarioDoc, deleteUsuario } = useUsuarios();
   const { toast } = useToast();
 
   const [tab, setTab] = useState<'agencias' | 'usuarios'>('agencias');
   const [showCreateAg, setShowCreateAg] = useState(false);
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [editingAg, setEditingAg] = useState<any>(null);
+  const [editingUs, setEditingUs] = useState<any>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Form agencia
   const [agNombre, setAgNombre] = useState('');
@@ -102,6 +105,68 @@ function AdminContent() {
     }
   };
 
+  const handleUpdateAgencia = async () => {
+    if (!editingAg) return;
+    const ok = await updateAgencia(editingAg.id, {
+      nombre: agNombre,
+      email: agEmail,
+      plan: agPlan
+    });
+    if (ok) {
+      toast('Agencia actualizada', 'success');
+      setEditingAg(null);
+      setAgNombre(''); setAgEmail(''); setAgPlan('premium');
+    } else {
+      toast('Error al actualizar agencia', 'error');
+    }
+  };
+
+  const handleDeleteAgencia = async (id: string) => {
+    if (!confirm('¿Estás seguro de eliminar esta agencia? Se borrarán sus datos de Firestore.')) return;
+    const ok = await deleteAgencia(id);
+    if (ok) toast('Agencia eliminada', 'success');
+    else toast('Error al eliminar agencia', 'error');
+  };
+
+  const handleUpdateUsuario = async () => {
+    if (!editingUs) return;
+    const ok = await updateUsuarioDoc(
+      editingUs.uid, usEmail, usNombre, usRol, usAgenciaId, usClienteId
+    );
+    if (ok) {
+      toast('Usuario actualizado', 'success');
+      setEditingUs(null);
+      setUsEmail(''); setUsNombre(''); setUsRol('agencia'); setUsAgenciaId(''); setUsClienteId('');
+    } else {
+      toast('Error al actualizar usuario', 'error');
+    }
+  };
+
+  const handleDeleteUsuario = async (uid: string) => {
+    if (!confirm('¿Estás seguro de eliminar este usuario? Se borrará de Firestore y Firebase Auth.')) return;
+    const ok = await deleteUsuario(uid);
+    if (ok) toast('Usuario eliminado', 'success');
+    else toast('Error al eliminar usuario', 'error');
+  };
+
+  const handleCleanupDemo = async () => {
+    if (!confirm('Se eliminará la "Agencia Demo" y todos sus usuarios asociados. ¿Continuar?')) return;
+    
+    const demoAg = agencias.find(a => a.nombre === 'Agencia Demo');
+    if (demoAg) {
+      // Borrar usuarios asociados
+      const demoUsers = usuarios.filter(u => u.agenciaId === demoAg.id);
+      for (const u of demoUsers) {
+        await deleteUsuario(u.uid);
+      }
+      // Borrar agencia
+      await deleteAgencia(demoAg.id);
+      toast('Datos demo eliminados correctamente', 'success');
+    } else {
+      toast('No se encontró la Agencia Demo', 'info');
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header view="kanban" title="Super Admin" />
@@ -148,24 +213,33 @@ function AdminContent() {
           </div>
 
           {/* Tabs */}
-          <div className="flex items-center gap-2">
-            {[
-              { id: 'agencias' as const, icon: Building2, label: 'Agencias' },
-              { id: 'usuarios' as const, icon: Users, label: 'Usuarios' },
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={cn(
-                  'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition-all border',
-                  tab === t.id
-                    ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
-                    : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/60'
-                )}
-              >
-                <t.icon className="h-3.5 w-3.5" />{t.label}
-              </button>
-            ))}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {[
+                { id: 'agencias' as const, icon: Building2, label: 'Agencias' },
+                { id: 'usuarios' as const, icon: Users, label: 'Usuarios' },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={cn(
+                    'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition-all border',
+                    tab === t.id
+                      ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
+                      : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:text-white/60'
+                  )}
+                >
+                  <t.icon className="h-3.5 w-3.5" />{t.label}
+                </button>
+              ))}
+            </div>
+            
+            <button
+              onClick={handleCleanupDemo}
+              className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-2 text-[10px] font-semibold text-red-400 hover:bg-red-500/20 transition-colors"
+            >
+              <Trash2 className="h-3 w-3" />Eliminar Datos Demo
+            </button>
           </div>
 
           {/* Tab: Agencias */}
@@ -181,12 +255,14 @@ function AdminContent() {
               </div>
 
               <AnimatePresence>
-                {showCreateAg && (
+                {(showCreateAg || editingAg) && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <GlassCard className="space-y-3">
+                    <GlassCard className="space-y-3 border-amber-500/20">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-display font-semibold text-white">Nueva Agencia</h3>
-                        <button onClick={() => setShowCreateAg(false)} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
+                        <h3 className="text-sm font-display font-semibold text-white">
+                          {editingAg ? `Editando: ${editingAg.nombre}` : 'Nueva Agencia'}
+                        </h3>
+                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div>
@@ -207,9 +283,13 @@ function AdminContent() {
                         </div>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => setShowCreateAg(false)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
-                        <button onClick={handleCreateAgencia} disabled={creatingAg || !agNombre.trim()} className="rounded-xl bg-neon-500 px-4 py-2 text-xs font-semibold text-white hover:bg-neon-400 disabled:opacity-40">
-                          {creatingAg ? 'Creando...' : 'Crear Agencia'}
+                        <button onClick={() => { setShowCreateAg(false); setEditingAg(null); }} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
+                        <button 
+                          onClick={editingAg ? handleUpdateAgencia : handleCreateAgencia} 
+                          disabled={creatingAg || !agNombre.trim()} 
+                          className="rounded-xl bg-neon-500 px-4 py-2 text-xs font-semibold text-white hover:bg-neon-400 disabled:opacity-40"
+                        >
+                          {creatingAg ? 'Guardando...' : editingAg ? 'Guardar Cambios' : 'Crear Agencia'}
                         </button>
                       </div>
                     </GlassCard>
@@ -265,6 +345,30 @@ function AdminContent() {
                               <><ToggleLeft className="h-4 w-4" />Inactivo</>
                             )}
                           </button>
+
+                          {/* Acciones CRUD */}
+                          <div className="flex items-center gap-1.5 border-l border-white/[0.06] pl-3">
+                            <button
+                              onClick={() => {
+                                setEditingAg(ag);
+                                setAgNombre(ag.nombre);
+                                setAgEmail(ag.email);
+                                setAgPlan(ag.plan);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="p-2 text-white/30 hover:text-white/70 hover:bg-white/[0.05] rounded-xl transition-all"
+                              title="Editar"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteAgencia(ag.id)}
+                              className="p-2 text-red-500/30 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                              title="Eliminar"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
                         </div>
                       </GlassCard>
                     </motion.div>
@@ -287,49 +391,57 @@ function AdminContent() {
               </div>
 
               <AnimatePresence>
-                {showCreateUser && (
+                {(showCreateUser || editingUs) && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <GlassCard className="space-y-3">
+                    <GlassCard className="space-y-3 border-amber-500/20">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-display font-semibold text-white">Nuevo Usuario</h3>
-                        <button onClick={() => setShowCreateUser(false)} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
+                        <h3 className="text-sm font-display font-semibold text-white">
+                          {editingUs ? `Editando: ${editingUs.nombre}` : 'Nuevo Usuario'}
+                        </h3>
+                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="text-white/30 hover:text-white/60"><X className="h-4 w-4" /></button>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
-                        <div>
+                        <div className="col-span-2 sm:col-span-1">
                           <label className="mb-1 block text-[11px] font-medium text-white/40">Nombre *</label>
                           <input className={inputClass} placeholder="Juan Pérez" value={usNombre} onChange={(e) => setUsNombre(e.target.value)} />
                         </div>
-                        <div>
+                        <div className="col-span-2 sm:col-span-1">
                           <label className="mb-1 block text-[11px] font-medium text-white/40">Email *</label>
-                          <input className={inputClass} placeholder="juan@agencia.com" type="email" value={usEmail} onChange={(e) => setUsEmail(e.target.value)} />
+                          <input className={inputClass} placeholder="juan@agencia.com" type="email" value={usEmail} onChange={(e) => setUsEmail(e.target.value)} disabled={!!editingUs} />
                         </div>
-                        <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">Contraseña *</label>
-                          <input className={inputClass} placeholder="Min. 6 caracteres" type="password" value={usPassword} onChange={(e) => setUsPassword(e.target.value)} />
-                        </div>
+                        
+                        {!editingUs && (
+                          <div className="col-span-2">
+                             <label className="mb-1 block text-[11px] font-medium text-white/40">Contraseña *</label>
+                             <input className={inputClass} placeholder="Min. 6 caracteres" type="password" value={usPassword} onChange={(e) => setUsPassword(e.target.value)} />
+                          </div>
+                        )}
+
                         <div>
                           <label className="mb-1 block text-[11px] font-medium text-white/40">Rol *</label>
                           <select className={inputClass} value={usRol} onChange={(e) => setUsRol(e.target.value)}>
                             <option value="agencia">Agencia</option>
                             <option value="cliente">Cliente</option>
+                            <option value="super_admin">Super Admin</option>
                           </select>
                         </div>
                         <div>
-                          <label className="mb-1 block text-[11px] font-medium text-white/40">ID Agencia *</label>
-                          <input className={inputClass} placeholder="Pega el ID de la agencia" value={usAgenciaId} onChange={(e) => setUsAgenciaId(e.target.value)} />
+                          <label className="mb-1 block text-[11px] font-medium text-white/40">ID Agencia</label>
+                          <input className={inputClass} placeholder="ID de la agencia" value={usAgenciaId} onChange={(e) => setUsAgenciaId(e.target.value)} />
                         </div>
-                        <div>
+                        <div className="col-span-2">
                           <label className="mb-1 block text-[11px] font-medium text-white/40">ID Cliente (solo rol cliente)</label>
-                          <input className={inputClass} placeholder="Pega el ID del cliente" value={usClienteId} onChange={(e) => setUsClienteId(e.target.value)} />
+                          <input className={inputClass} placeholder="ID del cliente" value={usClienteId} onChange={(e) => setUsClienteId(e.target.value)} />
                         </div>
                       </div>
-                      <p className="text-[10px] text-white/25 font-body">
-                        El ID de agencia y cliente se copian desde la lista de agencias o desde el panel de la agencia.
-                      </p>
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => setShowCreateUser(false)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
-                        <button onClick={handleCreateUsuario} disabled={creatingUs || !usEmail.trim() || !usNombre.trim() || !usPassword.trim()} className="rounded-xl bg-neon-500 px-4 py-2 text-xs font-semibold text-white hover:bg-neon-400 disabled:opacity-40">
-                          {creatingUs ? 'Creando...' : 'Crear Usuario'}
+                        <button onClick={() => { setShowCreateUser(false); setEditingUs(null); }} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs text-white/50 hover:bg-white/[0.06]">Cancelar</button>
+                        <button 
+                          onClick={editingUs ? handleUpdateUsuario : handleCreateUsuario} 
+                          disabled={creatingUs || !usEmail.trim() || !usNombre.trim() || (!editingUs && !usPassword.trim())} 
+                          className="rounded-xl bg-neon-500 px-4 py-2 text-xs font-semibold text-white hover:bg-neon-400 disabled:opacity-40"
+                        >
+                          {creatingUs ? 'Guardando...' : editingUs ? 'Guardar Cambios' : 'Crear Usuario'}
                         </button>
                       </div>
                     </GlassCard>
@@ -375,6 +487,32 @@ function AdminContent() {
                               Ag: {u.agenciaId.slice(0, 8)}...
                             </span>
                           )}
+
+                          {/* Acciones CRUD */}
+                          <div className="flex items-center gap-1.5 border-l border-white/[0.06] pl-3 ml-1">
+                            <button
+                              onClick={() => {
+                                setEditingUs(u);
+                                setUsNombre(u.nombre || '');
+                                setUsEmail(u.email);
+                                setUsRol(u.rol);
+                                setUsAgenciaId(u.agenciaId || '');
+                                setUsClienteId(u.clienteId || '');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="p-1.5 text-white/30 hover:text-white/70 hover:bg-white/[0.05] rounded-lg transition-all"
+                              title="Editar"
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUsuario(u.uid)}
+                              className="p-1.5 text-red-500/30 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                              title="Eliminar"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
                         </div>
                       </GlassCard>
                     </motion.div>

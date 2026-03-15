@@ -79,5 +79,34 @@ export function useAgencias() {
     []
   );
 
-  return { agencias, loading, createAgencia, toggleLicencia };
+  const updateAgencia = useCallback(
+    async (agenciaId: string, data: Partial<Agencia>): Promise<boolean> => {
+      try {
+        const ref = doc(db, 'agencias', agenciaId);
+        await updateDoc(ref, data);
+        return true;
+      } catch (err) {
+        console.error('Error actualizando agencia:', err);
+        return false;
+      }
+    },
+    []
+  );
+
+  const deleteAgencia = useCallback(
+    async (agenciaId: string): Promise<boolean> => {
+      try {
+        const { deleteDoc } = await import('firebase/firestore');
+        const ref = doc(db, 'agencias', agenciaId);
+        await deleteDoc(ref);
+        return true;
+      } catch (err) {
+        console.error('Error eliminando agencia:', err);
+        return false;
+      }
+    },
+    []
+  );
+
+  return { agencias, loading, createAgencia, toggleLicencia, updateAgencia, deleteAgencia };
 }
