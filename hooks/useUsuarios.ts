@@ -19,19 +19,32 @@ export function useUsuarios() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || user.rol !== 'super_admin') {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    // Super Admin ve todos, Agencia ve solo los suyos
+    if (user.rol !== 'super_admin' && user.rol !== 'agencia') {
       setLoading(false);
       return;
     }
 
     const ref = collection(db, 'usuarios');
+    // Si es agencia, limitamos la consulta (aunque onSnapshot filtrará después por seguridad)
     const q = query(ref, orderBy('email'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data: AppUser[] = snapshot.docs.map((d) => ({
+      let data: AppUser[] = snapshot.docs.map((d) => ({
         uid: d.id,
         ...d.data(),
       })) as AppUser[];
+
+      // Filtrado por seguridad en el cliente
+      if (user.rol === 'agencia') {
+        data = data.filter(u => u.agenciaId === user.agenciaId);
+      }
+
       setUsuarios(data);
       setLoading(false);
     });

@@ -12,8 +12,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useClientes } from '@/hooks/useClientes';
 import { Cliente } from '@/types';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { Key, Copy, CheckCircle2 } from 'lucide-react';
+import { Key, Copy, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { ClientUserManagementModal } from '@/components/agencia/ClientUserManagementModal';
 
 type ViewMode = 'kanban' | 'stats';
 
@@ -25,6 +26,7 @@ function AgenciaContent() {
   const [leadsCount, setLeadsCount] = useState<Record<string, number>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [agencyApiKey, setAgencyApiKey] = useState<string>('cargando...');
+  const [managingAccessCliente, setManagingAccessCliente] = useState<Cliente | null>(null);
 
   // Cargar API Key real de la agencia
   useEffect(() => {
@@ -134,12 +136,20 @@ function AgenciaContent() {
                 selectedId={(selectedCliente as Cliente | null)?.id || null}
                 onSelect={setSelectedCliente}
                 onCreate={createCliente}
+                onManageAccess={setManagingAccessCliente}
                 leadsCount={leadsCount}
               />
             </div>
           )}
         </div>
       </main>
+
+      <ClientUserManagementModal
+        open={!!managingAccessCliente}
+        onClose={() => setManagingAccessCliente(null)}
+        cliente={managingAccessCliente}
+        agenciaId={user?.agenciaId || ''}
+      />
 
       {selectedCliente && (
         <MobileNav 
