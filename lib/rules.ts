@@ -10,24 +10,9 @@ import {
 // MOTOR DE REGLAS DE NEGOCIO
 // ==============================================
 
-/** No revertir desde Ganado */
-function ruleNoRevertFromGanado(req: StageTransitionRequest): StageTransitionResult {
-  if (req.fromStage === 'Ganado' && req.toStage !== 'Ganado') {
-    return {
-      success: false,
-      error: 'Un lead Ganado no puede ser revertido. Contacta al administrador.',
-    };
-  }
-  return { success: true };
-}
-
 /** Ejecutar todas las reglas */
 export function validateStageTransition(req: StageTransitionRequest): StageTransitionResult {
-  const rules = [ruleNoRevertFromGanado];
-  for (const rule of rules) {
-    const result = rule(req);
-    if (!result.success) return result;
-  }
+  // Se eliminan restricciones para permitir libertad total de movimiento al cliente
   return { success: true };
 }
 
