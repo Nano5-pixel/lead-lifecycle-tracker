@@ -147,18 +147,15 @@ export function ClienteSelector({
               transition={{ delay: i * 0.05 }}
             >
               <div
+                onClick={() => onSelect(cliente)}
                 className={cn(
-                  'group relative w-full text-left rounded-2xl border p-4 transition-all duration-300',
+                  'group relative w-full text-left rounded-2xl border p-4 transition-all duration-300 cursor-pointer',
                   'bg-bg-primary/20 backdrop-blur-md hover:bg-bg-primary/40',
                   selectedId === cliente.id
                     ? 'border-neon-500/40 shadow-neon'
                     : 'border-border-subtle hover:border-text-muted/30'
                 )}
               >
-                <button
-                  onClick={() => onSelect(cliente)}
-                  className="absolute inset-0 z-0"
-                />
                 
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-2">

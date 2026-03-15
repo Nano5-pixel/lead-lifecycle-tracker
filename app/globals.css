@@ -67,9 +67,17 @@ body::before {
 @layer utilities {
   .glass-subtle {
     background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-premium {
+    background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.01));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px var(--glass-border);
   }
 }
 
@@ -77,4 +85,20 @@ body::before {
   outline: 2px solid rgba(10, 132, 255, 0.5);
   outline-offset: 2px;
   border-radius: 8px;
+}
+
+/* Fix para inputs con autofill - asegura visibilidad del texto */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  background-color: transparent !important;
 }

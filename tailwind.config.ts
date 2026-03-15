@@ -61,6 +61,7 @@ const config: Config = {
       },
       boxShadow: {
         glass: '0 8px 32px rgba(0, 0, 0, 0.25)',
+        'glass-premium': '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.1)',
         neon: '0 0 20px rgba(10, 132, 255, 0.3)',
         emerald: '0 0 20px rgba(16, 185, 129, 0.3)',
       },

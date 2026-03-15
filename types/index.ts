@@ -45,6 +45,7 @@ export interface Lead {
   fechaUltimoCambio: string;
   diasEnEtapa: number;
   gestionadoPor: string;
+  archivado?: boolean;
 }
 
 /** Agencia en Firestore */

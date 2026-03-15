@@ -93,21 +93,24 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
   return (
     <>
       {/* Mobile Stage Switcher */}
-      <div className="mb-4 flex gap-1 overflow-x-auto pb-2 sm:hidden no-scrollbar">
+      <div className="mb-6 flex gap-2 overflow-x-auto pb-2 sm:hidden no-scrollbar px-1">
         {STAGES.map((s) => (
           <button
             key={s.id}
             onClick={() => setActiveStageId(s.id)}
             className={cn(
-              'flex flex-shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all',
+              'flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold transition-all duration-300 border',
               activeStageId === s.id
-                ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
-                : 'border-border-subtle bg-bg-primary/30 text-text-muted'
+                ? 'border-neon-500/50 bg-neon-500/10 text-neon-400 shadow-[0_0_15px_rgba(10,132,255,0.15)] scale-105'
+                : 'border-border-subtle bg-bg-primary/30 text-text-muted hover:text-text-secondary'
             )}
           >
-            <span>{s.emoji}</span>
-            {s.label}
-            <span className="ml-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-border-subtle px-1 text-[9px]">
+            <span className="text-sm">{s.emoji}</span>
+            <span className="uppercase tracking-wider">{s.label}</span>
+            <span className={cn(
+              "ml-1 flex h-4 min-w-[18px] items-center justify-center rounded-full px-1.5 text-[9px] font-mono",
+              activeStageId === s.id ? "bg-neon-500 text-white" : "bg-border-subtle text-text-muted"
+            )}>
               {leadsByStage[s.id].length}
             </span>
           </button>

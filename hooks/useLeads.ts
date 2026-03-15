@@ -48,16 +48,18 @@ export function useLeads() {
 
     setLoading(true);
     const leadsRef = collection(db, path);
-    // Remove orderBy to avoid silently skipping documents where the field is missing
+    // Filtrar por no archivados por defecto
     const q = query(leadsRef);
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const leadsData: Lead[] = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Lead[];
+        const leadsData: Lead[] = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((l: any) => !l.archivado) as Lead[];
         
         // Sort client-side instead
         leadsData.sort((a, b) => {
@@ -145,6 +147,41 @@ export function useLeads() {
     [getLeadsPath]
   );
 
+  // Archivar lead
+  const archiveLead = useCallback(
+    async (leadId: string, archivado: boolean): Promise<boolean> => {
+      try {
+        const path = getLeadsPath();
+        if (!path) return false;
+        const leadRef = doc(db, path, leadId);
+        await updateDoc(leadRef, { archivado, fechaUltimoCambio: new Date().toISOString() });
+        return true;
+      } catch (err) {
+        console.error('Error archivando lead:', err);
+        return false;
+      }
+    },
+    [getLeadsPath]
+  );
+
+  // Eliminar lead permanentemente
+  const deleteLead = useCallback(
+    async (leadId: string): Promise<boolean> => {
+      try {
+        const path = getLeadsPath();
+        if (!path) return false;
+        const leadRef = doc(db, path, leadId);
+        const { deleteDoc: fsDeleteDoc } = await import('firebase/firestore');
+        await fsDeleteDoc(leadRef);
+        return true;
+      } catch (err) {
+        console.error('Error eliminando lead:', err);
+        return false;
+      }
+    },
+    [getLeadsPath]
+  );
+
   // Crear lead manualmente
   const createLead = useCallback(
     async (leadData: Partial<Lead>): Promise<boolean> => {
@@ -182,6 +219,8 @@ export function useLeads() {
     moveLeadToStage,
     updateLead,
     createLead,
+    archiveLead,
+    deleteLead,
   };
 }
 
@@ -204,10 +243,12 @@ export function useLeadsForClient(agenciaId: string, clienteId: string) {
     const q = query(leadsRef);
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data: Lead[] = snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      })) as Lead[];
+      const data: Lead[] = snapshot.docs
+        .map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }))
+        .filter((l: any) => !l.archivado) as Lead[];
 
       // Sort client-side
       data.sort((a, b) => {

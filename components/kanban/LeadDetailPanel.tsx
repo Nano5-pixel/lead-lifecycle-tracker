@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, User, Phone, Mail, MessageCircle, Tag,
   CheckCircle2, FileCheck, Save, Clock, AlertTriangle,
+  Archive, Trash2,
 } from 'lucide-react';
 import { Lead } from '@/types';
 import { StatusBadge } from '../ui/StatusBadge';
@@ -14,12 +15,15 @@ interface LeadDetailPanelProps {
   lead: Lead | null;
   onClose: () => void;
   onUpdate: (leadId: string, fields: Partial<Lead>) => Promise<boolean>;
+  onArchive?: (leadId: string, archivado: boolean) => Promise<boolean>;
+  onDelete?: (leadId: string) => Promise<boolean>;
 }
 
-export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProps) {
+export function LeadDetailPanel({ lead, onClose, onUpdate, onArchive, onDelete }: LeadDetailPanelProps) {
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<Partial<Lead>>({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (lead) {
@@ -38,6 +42,21 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
     await onUpdate(lead.id, form);
     setSaving(false);
     setEditing(false);
+  };
+
+  const handleArchive = async () => {
+    if (!lead || !onArchive) return;
+    const ok = await onArchive(lead.id, true);
+    if (ok) onClose();
+  };
+
+  const handleDelete = async () => {
+    if (!lead || !onDelete) return;
+    const ok = await onDelete(lead.id);
+    if (ok) {
+      setShowDeleteConfirm(false);
+      onClose();
+    }
   };
 
   const inputClass = cn(
@@ -164,6 +183,50 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
                   <textarea className={cn(inputClass, 'resize-none h-24')} value={form.notas || ''}
                     disabled={!editing}
                     onChange={(e) => setForm((f) => ({ ...f, notas: e.target.value }))} />
+                </div>
+
+                {/* Acciones de Peligro / Archivo */}
+                <div className="pt-4 border-t border-border-subtle space-y-3">
+                  <h4 className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Gestión de Lead</h4>
+                  <div className="flex flex-col gap-2">
+                    {onArchive && (
+                      <button
+                        onClick={handleArchive}
+                        className="flex items-center justify-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle py-2.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
+                      >
+                        <Archive className="h-4 w-4" />
+                        Archivar Lead
+                      </button>
+                    )}
+                    {onDelete && (
+                      <div className="relative">
+                        {!showDeleteConfirm ? (
+                          <button
+                            onClick={() => setShowDeleteConfirm(true)}
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-red-500/5 border border-red-500/10 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Eliminar Lead
+                          </button>
+                        ) : (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleDelete}
+                              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-red-500 py-2.5 text-xs font-semibold text-white hover:bg-red-600 transition-all"
+                            >
+                              Confirmar Eliminar
+                            </button>
+                            <button
+                              onClick={() => setShowDeleteConfirm(false)}
+                              className="px-4 rounded-xl bg-bg-primary/30 border border-border-subtle text-xs font-medium text-text-muted hover:text-text-primary transition-all"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 

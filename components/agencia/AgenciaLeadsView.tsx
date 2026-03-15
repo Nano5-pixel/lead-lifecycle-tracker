@@ -133,13 +133,44 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
     [basePath, toast]
   );
 
+  const archiveLead = useCallback(
+    async (leadId: string, archivado: boolean): Promise<boolean> => {
+      try {
+        const leadRef = doc(db, basePath, leadId);
+        await updateDoc(leadRef, { archivado, fechaUltimoCambio: new Date().toISOString() });
+        toast(archivado ? 'Lead archivado' : 'Lead restaurado', 'success');
+        return true;
+      } catch {
+        toast('Error al archivar', 'error');
+        return false;
+      }
+    },
+    [basePath, toast]
+  );
+
+  const deleteLead = useCallback(
+    async (leadId: string): Promise<boolean> => {
+      try {
+        const leadRef = doc(db, basePath, leadId);
+        const { deleteDoc: fsDeleteDoc } = await import('firebase/firestore');
+        await fsDeleteDoc(leadRef);
+        toast('Lead eliminado permanentemente', 'success');
+        return true;
+      } catch {
+        toast('Error al eliminar', 'error');
+        return false;
+      }
+    },
+    [basePath, toast]
+  );
+
   return (
     <div>
       {/* Barra superior con nombre del cliente y botón atrás */}
       <div className="mb-4 flex items-center gap-3">
         <button
           onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all shadow-sm"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
@@ -150,7 +181,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
         
         <button
           onClick={toggleTheme}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all ml-2"
+          className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/20 text-text-muted hover:text-text-primary hover:bg-bg-primary/40 transition-all ml-2"
           title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
         >
           {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
@@ -159,7 +190,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
         <div className="ml-auto">
           <button
             onClick={() => setShowNewLead(true)}
-            className="flex items-center gap-2 rounded-xl bg-neon-500 px-4 py-2.5 text-xs font-semibold text-white hover:bg-neon-400 transition-colors"
+            className="hidden sm:flex items-center gap-2 rounded-xl bg-neon-500 px-4 py-2.5 text-xs font-semibold text-white hover:bg-neon-400 transition-colors shadow-neon"
           >
             Nuevo Lead
           </button>
@@ -186,7 +217,13 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
       </AnimatePresence>
 
       <NewLeadModal open={showNewLead} onClose={() => setShowNewLead(false)} onCreate={createLead} />
-      <LeadDetailPanel lead={selectedLead} onClose={() => setSelectedLead(null)} onUpdate={updateLead} />
+      <LeadDetailPanel 
+        lead={selectedLead} 
+        onClose={() => setSelectedLead(null)} 
+        onUpdate={updateLead} 
+        onArchive={archiveLead}
+        onDelete={deleteLead}
+      />
     </div>
   );
 }

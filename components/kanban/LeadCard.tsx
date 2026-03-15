@@ -40,11 +40,11 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
         onClick={() => onSelect?.(lead)}
         {...listeners}
         className={cn(
-          'group relative rounded-xl border bg-bg-primary/30 backdrop-blur-md',
+          'group relative rounded-xl border glass-subtle',
           'transition-all duration-300 cursor-grab active:cursor-grabbing',
           dragging
             ? 'border-neon-500/40 bg-neon-500/[0.06] shadow-neon scale-[1.02] z-50'
-            : 'border-border-subtle hover:border-text-muted/30 hover:bg-bg-primary/50'
+            : 'hover:border-text-muted/30 hover:bg-bg-primary/50'
         )}
       >
         <div className="flex items-start gap-2 p-3 pb-2">
