@@ -46,7 +46,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
                 <motion.div key={stage.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25 + i * 0.04 }} className="flex items-center gap-3">
                   <span className="w-5 text-center text-sm">{stage.emoji}</span>
-                  <span className="w-28 text-[11px] font-body text-white/50 truncate">{stage.label}</span>
+                  <span className="w-20 sm:w-28 text-[11px] font-body text-white/50 truncate">{stage.label}</span>
                   <div className="flex-1 h-7 rounded-lg bg-white/[0.03] border border-white/[0.04] overflow-hidden relative">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }}
                       transition={{ delay: 0.3 + i * 0.05, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}

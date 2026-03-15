@@ -39,8 +39,6 @@ export interface Lead {
   email: string;
   fuente: string;
   etapa: StageId;
-  preCalificado: boolean;
-  contratoFirmado: boolean;
   motivoCaida: string;
   notas: string;
   fechaEntrada: string;

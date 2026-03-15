@@ -10,39 +10,6 @@ import {
 // MOTOR DE REGLAS DE NEGOCIO
 // ==============================================
 
-/**
- * RULE-07: Doble Compuerta
- * No se puede mover a "Ganado" sin Pre_Calificado Y Contrato_Firmado
- */
-function ruleDoubleGate(req: StageTransitionRequest): StageTransitionResult {
-  if (req.toStage !== 'Ganado') return { success: true };
-
-  const { preCalificado, contratoFirmado } = req.lead;
-
-  if (!preCalificado && !contratoFirmado) {
-    return {
-      success: false,
-      ruleViolation: 'RULE-07',
-      error: 'Este lead necesita estar Pre-Calificado y tener el Contrato Firmado antes de marcarse como Ganado.',
-    };
-  }
-  if (!preCalificado) {
-    return {
-      success: false,
-      ruleViolation: 'RULE-07',
-      error: 'El lead debe estar Pre-Calificado antes de marcarse como Ganado.',
-    };
-  }
-  if (!contratoFirmado) {
-    return {
-      success: false,
-      ruleViolation: 'RULE-07',
-      error: 'El Contrato debe estar Firmado antes de marcar el lead como Ganado.',
-    };
-  }
-  return { success: true };
-}
-
 /** No revertir desde Ganado */
 function ruleNoRevertFromGanado(req: StageTransitionRequest): StageTransitionResult {
   if (req.fromStage === 'Ganado' && req.toStage !== 'Ganado') {
@@ -56,7 +23,7 @@ function ruleNoRevertFromGanado(req: StageTransitionRequest): StageTransitionRes
 
 /** Ejecutar todas las reglas */
 export function validateStageTransition(req: StageTransitionRequest): StageTransitionResult {
-  const rules = [ruleDoubleGate, ruleNoRevertFromGanado];
+  const rules = [ruleNoRevertFromGanado];
   for (const rule of rules) {
     const result = rule(req);
     if (!result.success) return result;

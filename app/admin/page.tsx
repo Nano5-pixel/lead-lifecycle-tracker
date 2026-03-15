@@ -174,7 +174,7 @@ function AdminContent() {
       <main className="flex-1">
         <div className="mx-auto max-w-[1200px] p-4 lg:p-6 space-y-6">
           {/* Stats rápidos */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <GlassCard>
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15">
@@ -303,7 +303,7 @@ function AdminContent() {
                 <div className="space-y-3">
                   {agencias.map((ag, i) => (
                     <motion.div key={ag.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                      <GlassCard className="flex items-center justify-between flex-wrap gap-3">
+                      <GlassCard className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10">
                             <Building2 className="h-5 w-5 text-violet-400" />
@@ -313,7 +313,7 @@ function AdminContent() {
                             <p className="text-[11px] text-white/35 font-body">{ag.email} · {ag.plan}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                           {/* API Key */}
                           <div className="flex items-center gap-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] px-2.5 py-1.5">
                             <Key className="h-3 w-3 text-amber-400" />
@@ -347,7 +347,7 @@ function AdminContent() {
                           </button>
 
                           {/* Acciones CRUD */}
-                          <div className="flex items-center gap-1.5 border-l border-white/[0.06] pl-3">
+                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-white/[0.06] pt-3 sm:pt-0 sm:pl-3 justify-end">
                             <button
                               onClick={() => {
                                 setEditingAg(ag);
@@ -455,7 +455,7 @@ function AdminContent() {
                 <div className="space-y-2">
                   {usuarios.map((u, i) => (
                     <motion.div key={u.uid} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                      <GlassCard className="flex items-center justify-between">
+                      <GlassCard className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className={cn(
                             'flex h-8 w-8 items-center justify-center rounded-lg',
@@ -473,7 +473,7 @@ function AdminContent() {
                             <p className="text-[11px] text-white/30 font-body">{u.email}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                           <span className={cn(
                             'rounded-lg px-2.5 py-1 text-[10px] font-mono font-semibold border',
                             u.rol === 'super_admin' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
@@ -489,7 +489,7 @@ function AdminContent() {
                           )}
 
                           {/* Acciones CRUD */}
-                          <div className="flex items-center gap-1.5 border-l border-white/[0.06] pl-3 ml-1">
+                          <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-white/[0.06] pt-3 sm:pt-0 sm:pl-3 ml-0 sm:ml-1 justify-end">
                             <button
                               onClick={() => {
                                 setEditingUs(u);

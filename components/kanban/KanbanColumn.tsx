@@ -3,7 +3,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
-import { Lead, Stage } from '@/types';
+import { Lead, Stage, StageId } from '@/types';
 import { LeadCard } from './LeadCard';
 import { cn } from '@/lib/utils';
 
@@ -12,9 +12,10 @@ interface KanbanColumnProps {
   leads: Lead[];
   index: number;
   onSelectLead?: (lead: Lead) => void;
+  onMoveLead?: (lead: Lead, toStage: StageId) => void;
 }
 
-export function KanbanColumn({ stage, leads, index, onSelectLead }: KanbanColumnProps) {
+export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id, data: { stage } });
   const leadIds = leads.map((l) => l.id);
 
@@ -49,7 +50,7 @@ export function KanbanColumn({ stage, leads, index, onSelectLead }: KanbanColumn
         <SortableContext items={leadIds} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-2">
             {leads.map((lead) => (
-              <LeadCard key={lead.id} lead={lead} onSelect={onSelectLead} />
+              <LeadCard key={lead.id} lead={lead} onSelect={onSelectLead} onMove={onMoveLead} />
             ))}
           </div>
         </SortableContext>

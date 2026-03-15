@@ -146,8 +146,6 @@ export function useLeads() {
           email: leadData.email || '',
           fuente: leadData.fuente || '',
           etapa: 'Nuevo',
-          preCalificado: false,
-          contratoFirmado: false,
           motivoCaida: '',
           notas: leadData.notas || '',
           fechaEntrada: new Date().toISOString(),

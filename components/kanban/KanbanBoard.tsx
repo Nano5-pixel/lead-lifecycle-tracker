@@ -9,6 +9,7 @@ import { Lead, StageId } from '@/types';
 import { STAGES } from '@/lib/stages';
 import { KanbanColumn } from './KanbanColumn';
 import { LeadCard } from './LeadCard';
+import { cn } from '@/lib/utils';
 import { RuleViolationModal } from '../ui/RuleViolationModal';
 import { useToast } from '../ui/Toast';
 
@@ -19,6 +20,7 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBoardProps) {
+  const [activeStageId, setActiveStageId] = useState<StageId>(STAGES[0].id);
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [ruleModal, setRuleModal] = useState<{ open: boolean; message: string; ruleId?: string }>({
     open: false, message: '',
@@ -61,7 +63,6 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
       setRuleModal({
         open: true,
         message: result.error || 'Transición no permitida.',
-        ruleId: result.error?.includes('RULE-07') ? 'RULE-07' : undefined,
       });
     } else {
       toast(`${lead.nombre} movido a ${targetStageId}`, 'success');
@@ -70,21 +71,51 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
 
   return (
     <>
+      {/* Mobile Stage Switcher */}
+      <div className="mb-4 flex gap-1 overflow-x-auto pb-2 sm:hidden no-scrollbar">
+        {STAGES.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => setActiveStageId(s.id)}
+            className={cn(
+              'flex flex-shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all',
+              activeStageId === s.id
+                ? 'border-neon-500/30 bg-neon-500/10 text-neon-400'
+                : 'border-white/[0.06] bg-white/[0.03] text-white/40'
+            )}
+          >
+            <span>{s.emoji}</span>
+            {s.label}
+            <span className="ml-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-white/5 px-1 text-[9px]">
+              {leadsByStage[s.id].length}
+            </span>
+          </button>
+        ))}
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-3 overflow-x-auto pb-4 lg:gap-4">
+        <div className="flex gap-3 overflow-x-auto pb-4 lg:gap-4 no-scrollbar">
           {STAGES.map((stage, index) => (
-            <KanbanColumn
+            <div
               key={stage.id}
-              stage={stage}
-              leads={leadsByStage[stage.id] || []}
-              index={index}
-              onSelectLead={onSelectLead}
-            />
+              className={cn(
+                'flex-shrink-0',
+                activeStageId === stage.id ? 'block w-full sm:w-auto' : 'hidden sm:block'
+              )}
+            >
+              <KanbanColumn
+                stage={stage}
+                leads={leadsByStage[stage.id] || []}
+                index={index}
+                onSelectLead={onSelectLead}
+                onMoveLead={onMoveLeadToStage}
+              />
+            </div>
           ))}
         </div>
         <DragOverlay>

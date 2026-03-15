@@ -107,8 +107,6 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
           email: data.email || '',
           fuente: data.fuente || '',
           etapa: 'Nuevo',
-          preCalificado: false,
-          contratoFirmado: false,
           motivoCaida: '',
           notas: data.notas || '',
           fechaEntrada: new Date().toISOString(),

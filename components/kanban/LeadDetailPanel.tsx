@@ -26,7 +26,6 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
       setForm({
         nombre: lead.nombre, telefono: lead.telefono, email: lead.email,
         fuente: lead.fuente, notas: lead.notas, gestionadoPor: lead.gestionadoPor,
-        preCalificado: lead.preCalificado, contratoFirmado: lead.contratoFirmado,
         motivoCaida: lead.motivoCaida,
       });
       setEditing(false);
@@ -119,43 +118,6 @@ export function LeadDetailPanel({ lead, onClose, onUpdate }: LeadDetailPanelProp
                 </div>
               )}
 
-              {/* Calificación */}
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 space-y-3">
-                <h4 className="text-[11px] font-mono uppercase tracking-wider text-white/30">Calificación</h4>
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div
-                    className={cn('flex h-5 w-5 items-center justify-center rounded-md border transition-all',
-                      form.preCalificado ? 'border-violet-500 bg-violet-500/20' : 'border-white/15 bg-white/[0.03] group-hover:border-white/25'
-                    )}
-                    onClick={() => editing && setForm((f) => ({ ...f, preCalificado: !f.preCalificado }))}
-                  >
-                    {form.preCalificado && <CheckCircle2 className="h-3.5 w-3.5 text-violet-400" />}
-                  </div>
-                  <span className="text-sm text-white/60 font-body">Pre-Calificado</span>
-                </label>
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div
-                    className={cn('flex h-5 w-5 items-center justify-center rounded-md border transition-all',
-                      form.contratoFirmado ? 'border-cyan-500 bg-cyan-500/20' : 'border-white/15 bg-white/[0.03] group-hover:border-white/25'
-                    )}
-                    onClick={() => editing && setForm((f) => ({ ...f, contratoFirmado: !f.contratoFirmado }))}
-                  >
-                    {form.contratoFirmado && <FileCheck className="h-3.5 w-3.5 text-cyan-400" />}
-                  </div>
-                  <span className="text-sm text-white/60 font-body">Contrato Firmado</span>
-                </label>
-                {!form.preCalificado || !form.contratoFirmado ? (
-                  <p className="text-[10px] text-amber-400/60 font-body mt-1">
-                    Ambos deben estar activos para mover a &quot;Ganado&quot; (RULE-07)
-                  </p>
-                ) : (
-                  <p className="text-[10px] text-emerald-400/60 font-body mt-1">
-                    Doble Compuerta cumplida — elegible para &quot;Ganado&quot;
-                  </p>
-                )}
-              </div>
-
-              {/* Campos editables */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-[11px] font-mono uppercase tracking-wider text-white/30">Información</h4>
