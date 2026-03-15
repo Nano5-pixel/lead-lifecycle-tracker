@@ -92,7 +92,7 @@ function DashboardContent() {
           <AnimatePresence mode="wait">
             {view === 'kanban' ? (
               <motion.div key="kanban" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.25 }}>
+                 transition={{ duration: 0.25 }}>
                 <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} />
                 {loading && leads.length === 0 ? (
                   <div className="flex h-[60vh] items-center justify-center">
@@ -110,11 +110,11 @@ function DashboardContent() {
                 )}
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key={`stats-${leads.length}-${leads[0]?.fechaUltimoCambio || 'init'}`}
-                initial={{ opacity: 0, x: 20 }} 
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }} 
+                exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.25 }}
               >
                 <StatsOverview leads={leads} />
@@ -127,7 +127,12 @@ function DashboardContent() {
       <MobileNav view={view} onViewChange={setView} onNewLead={() => setShowNewLead(true)} />
 
       <NewLeadModal open={showNewLead} onClose={() => setShowNewLead(false)} onCreate={handleCreateLead} />
-      <LeadDetailPanel lead={selectedLead} onClose={() => setSelectedLead(null)} onUpdate={handleUpdateLead} />
+      <LeadDetailPanel
+        lead={selectedLead}
+        onClose={() => setSelectedLead(null)}
+        onUpdate={handleUpdateLead}
+        onMove={moveLeadToStage}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, User, Phone, Mail, MessageCircle, Tag,
   CheckCircle2, FileCheck, Save, Clock, AlertTriangle,
-  Archive, Trash2,
+  Archive, Trash2, Loader2,
 } from 'lucide-react';
 import { Lead } from '@/types';
 import { StatusBadge } from '../ui/StatusBadge';
@@ -15,15 +15,20 @@ interface LeadDetailPanelProps {
   lead: Lead | null;
   onClose: () => void;
   onUpdate: (leadId: string, fields: Partial<Lead>) => Promise<boolean>;
+  onMove?: (lead: Lead, toStage: StageId) => Promise<{ success: boolean; error?: string }>;
   onArchive?: (leadId: string, archivado: boolean) => Promise<boolean>;
   onDelete?: (leadId: string) => Promise<boolean>;
 }
 
-export function LeadDetailPanel({ lead, onClose, onUpdate, onArchive, onDelete }: LeadDetailPanelProps) {
+import { STAGES } from '@/lib/stages';
+import { StageId } from '@/types';
+
+export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, onDelete }: LeadDetailPanelProps) {
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<Partial<Lead>>({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [moving, setMoving] = useState(false);
 
   useEffect(() => {
     if (lead) {
@@ -43,6 +48,17 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onArchive, onDelete }
     setSaving(false);
     setEditing(false);
   };
+
+  const handleMove = async (toStage: StageId) => {
+    if (!lead || !onMove) return;
+    setMoving(true);
+    const result = await onMove(lead, toStage);
+    setMoving(false);
+    if (result.success) {
+      // No cerramos el panel, solo dejamos que el padre actualice los datos
+    }
+  };
+// ... rest of the component
 
   const handleArchive = async () => {
     if (!lead || !onArchive) return;

@@ -221,6 +221,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
         lead={selectedLead} 
         onClose={() => setSelectedLead(null)} 
         onUpdate={updateLead} 
+        onMove={moveLeadToStage}
         onArchive={archiveLead}
         onDelete={deleteLead}
       />

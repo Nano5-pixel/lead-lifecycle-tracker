@@ -64,7 +64,8 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               <button
                 onClick={(e) => { e.stopPropagation(); setShowMoveMenu(!showMoveMenu); }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="p-1 sm:hidden text-text-muted hover:text-text-secondary transition-colors"
+                className="p-1 text-text-muted hover:text-text-secondary transition-colors"
+                title="Mover lead"
               >
                 <MoreVertical className="h-4 w-4" />
               </button>
