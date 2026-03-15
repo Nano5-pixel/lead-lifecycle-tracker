@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Plus, Users, ChevronRight, X } from 'lucide-react';
+import { Building2, Plus, Users, ChevronRight, X, Copy, CheckCircle2 } from 'lucide-react';
 import { Cliente } from '@/types';
 import { GlassCard } from '../ui/GlassCard';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,7 @@ export function ClienteSelector({
   const [nombre, setNombre] = useState('');
   const [fuente, setFuente] = useState('');
   const [creating, setCreating] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCreate = async () => {
     if (!nombre.trim()) return;
@@ -37,6 +38,12 @@ export function ClienteSelector({
       setFuente('');
       setShowCreate(false);
     }
+  };
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const inputClass = cn(
@@ -139,34 +146,56 @@ export function ClienteSelector({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
             >
-              <button
-                onClick={() => onSelect(cliente)}
+              <div
                 className={cn(
-                  'w-full text-left rounded-2xl border p-4 transition-all duration-300',
+                  'group relative w-full text-left rounded-2xl border p-4 transition-all duration-300',
                   'bg-white/[0.03] backdrop-blur-md hover:bg-white/[0.06]',
                   selectedId === cliente.id
                     ? 'border-neon-500/40 shadow-neon'
                     : 'border-white/[0.06] hover:border-white/[0.12]'
                 )}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
-                    <Building2 className="h-4 w-4 text-violet-400" />
+                <button
+                  onClick={() => onSelect(cliente)}
+                  className="absolute inset-0 z-0"
+                />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
+                      <Building2 className="h-4 w-4 text-violet-400" />
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-white/20" />
                   </div>
-                  <ChevronRight className="h-4 w-4 text-white/20" />
+                  <h3 className="text-[14px] font-display font-semibold text-white mb-1 truncate">
+                    {cliente.nombre}
+                  </h3>
+                  {cliente.fuente && (
+                    <p className="text-[11px] text-white/30 font-body mb-2">{cliente.fuente}</p>
+                  )}
+                  <div className="flex items-center gap-1.5 text-[11px] text-white/25 font-mono">
+                    <Users className="h-3 w-3" />
+                    {leadsCount[cliente.id] || 0} leads
+                  </div>
+                  
+                  <div className="flex items-center justify-between mt-2 gap-2">
+                    <p className="text-[9px] text-white/15 font-mono truncate">ID: {cliente.id}</p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        copyToClipboard(cliente.id, cliente.id);
+                      }}
+                      className="text-white/20 hover:text-neon-400 transition-colors"
+                    >
+                      {copiedId === cliente.id ? (
+                        <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <h3 className="text-[14px] font-display font-semibold text-white mb-1 truncate">
-                  {cliente.nombre}
-                </h3>
-                {cliente.fuente && (
-                  <p className="text-[11px] text-white/30 font-body mb-2">{cliente.fuente}</p>
-                )}
-                <div className="flex items-center gap-1.5 text-[11px] text-white/25 font-mono">
-                  <Users className="h-3 w-3" />
-                  {leadsCount[cliente.id] || 0} leads
-                </div>
-                <p className="text-[9px] text-white/15 font-mono mt-1 truncate">ID: {cliente.id}</p>
-              </button>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -174,3 +203,4 @@ export function ClienteSelector({
     </div>
   );
 }
+
