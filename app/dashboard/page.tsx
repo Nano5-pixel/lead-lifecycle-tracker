@@ -120,7 +120,7 @@ function DashboardContent() {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.25 }}
               >
-                <StatsOverview leads={leads} />
+                <StatsOverview leads={filteredLeads} />
               </motion.div>
             )}
           </AnimatePresence>

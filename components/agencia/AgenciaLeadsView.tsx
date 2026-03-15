@@ -221,7 +221,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
           </motion.div>
         ) : (
           <motion.div key="stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <StatsOverview leads={leads} />
+            <StatsOverview leads={filteredLeads} />
           </motion.div>
         )}
       </AnimatePresence>

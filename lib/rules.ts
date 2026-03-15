@@ -50,7 +50,14 @@ export function calculateStats(leads: Lead[]): PipelineStats {
 
   for (const lead of leads) {
     if (!lead) continue;
-    if (byStage[lead.etapa] !== undefined) byStage[lead.etapa]++;
+    
+    // Normalizar etapa para retrocompatibilidad
+    let rawEtapa = (lead.etapa || '').toString().trim();
+    if (rawEtapa === 'En Contacto') rawEtapa = 'Intento';
+    if (rawEtapa === 'Calificado') rawEtapa = 'Contactado';
+    
+    const stageId = rawEtapa as StageId;
+    if (byStage[stageId] !== undefined) byStage[stageId]++;
     
     const dias = Number(lead.diasEnEtapa);
     if (!isNaN(dias) && dias > 0) {

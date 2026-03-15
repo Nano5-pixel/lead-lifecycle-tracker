@@ -119,32 +119,32 @@ export function HelpGuide({ open, onClose }: HelpGuideProps) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[101] w-[95%] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2.5rem] border border-white/10 bg-bg-primary/90 shadow-2xl backdrop-blur-2xl"
+            className="fixed left-1/2 top-1/2 z-[101] w-[92%] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2rem] border border-white/20 bg-bg-primary shadow-2xl backdrop-blur-3xl"
           >
             {/* Header */}
-            <div className="relative h-32 w-full overflow-hidden">
+            <div className="relative h-28 w-full overflow-hidden">
               <div 
-                className="absolute inset-0 opacity-20 blur-3xl transition-colors duration-500"
+                className="absolute inset-0 opacity-30 blur-3xl transition-colors duration-500"
                 style={{ backgroundColor: slide.color }}
               />
-              <div className="relative flex h-full items-center justify-between px-8">
-                <div className="flex items-center gap-4">
+              <div className="relative flex h-full items-center justify-between px-6 sm:px-8">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div 
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg transition-all duration-500"
-                    style={{ backgroundColor: `${slide.color}20`, color: slide.color, border: `1px solid ${slide.color}30` }}
+                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl shadow-lg transition-all duration-500"
+                    style={{ backgroundColor: `${slide.color}30`, color: slide.color, border: `1px solid ${slide.color}40` }}
                   >
-                    <slide.icon className="h-6 w-6" />
+                    <slide.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-display font-bold text-text-primary tracking-tight">{slide.title}</h2>
-                    <p className="text-[11px] font-mono text-text-muted uppercase tracking-widest">Guía de Usuario</p>
+                    <h2 className="text-base sm:text-lg font-display font-bold text-text-primary tracking-tight">{slide.title}</h2>
+                    <p className="text-[10px] font-mono text-text-muted uppercase tracking-widest leading-none">Guía de Usuario</p>
                   </div>
                 </div>
                 <button 
                   onClick={onClose}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-text-muted hover:bg-white/10 hover:text-text-primary transition-all"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-text-muted hover:bg-white/20 hover:text-text-primary transition-all"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
