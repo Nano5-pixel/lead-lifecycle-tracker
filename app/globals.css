@@ -101,7 +101,14 @@ input:-internal-autofill-selected {
   color: var(--text-primary) !important;
 }
 
-/* Forzar color de texto en inputs para evitar que se hereden opacidades bajas */
-input {
+/* Forzar color de texto en todos los campos para evitar invisibilidad */
+input, textarea, select {
   color: var(--text-primary) !important;
+  caret-color: var(--text-primary) !important;
+}
+
+/* Visibilidad forzada para placeholders */
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.6 !important;
 }

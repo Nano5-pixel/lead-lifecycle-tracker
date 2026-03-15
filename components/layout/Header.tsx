@@ -107,7 +107,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, loading, titl
           <div className="flex items-center gap-2 ml-2 pl-2 border-l border-border-subtle">
             <button
               onClick={toggleTheme}
-              className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-bg-primary/30 text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
               title={theme === 'light' ? 'Tema Oscuro' : 'Tema Claro'}
             >
               {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
