@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { Header } from '@/components/layout/Header';
@@ -23,6 +23,29 @@ function AgenciaContent() {
   const [view, setView] = useState<ViewMode>('kanban');
   const [leadsCount, setLeadsCount] = useState<Record<string, number>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [agencyApiKey, setAgencyApiKey] = useState<string>('cargando...');
+
+  // Cargar API Key real de la agencia
+  useEffect(() => {
+    if (!user?.agenciaId) return;
+
+    const fetchAgencyData = async () => {
+      try {
+        const agencyRef = doc(db, 'agencias', user.agenciaId);
+        const agencySnap = await getDoc(agencyRef);
+        if (agencySnap.exists()) {
+          setAgencyApiKey(agencySnap.data().apiKey || 'Sin API Key');
+        } else {
+          setAgencyApiKey('No encontrada');
+        }
+      } catch (error) {
+        console.error('Error fetching agency data:', error);
+        setAgencyApiKey('Error');
+      }
+    };
+
+    fetchAgencyData();
+  }, [user?.agenciaId]);
 
   useEffect(() => {
     if (!user?.agenciaId || clientes.length === 0) return;
@@ -76,9 +99,9 @@ function AgenciaContent() {
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2">
                       <Key className="h-3.5 w-3.5 text-amber-400" />
-                      <span className="text-[11px] font-mono text-white/50">API Key: demo-api-key-12345</span>
+                      <span className="text-[11px] font-mono text-white/50">API Key: {agencyApiKey}</span>
                       <button
-                        onClick={() => copyToClipboard('demo-api-key-12345', 'apikey')}
+                        onClick={() => copyToClipboard(agencyApiKey, 'apikey')}
                         className="text-white/30 hover:text-white/60 transition-colors"
                       >
                         {copiedId === 'apikey' ? (
@@ -119,6 +142,7 @@ function AgenciaContent() {
     </div>
   );
 }
+
 
 export default function AgenciaPage() {
   return (
