@@ -37,7 +37,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
   return (
     <div className="space-y-6 pb-20">
       {/* Date Filters */}
-      <div className="flex flex-wrap items-center gap-4 rounded-2xl bg-bg-primary/20 border border-border-subtle p-4 glass-subtle">
+      <div className="flex flex-wrap items-center gap-4 rounded-2xl bg-white/[0.04] border border-border-subtle p-4 glass-subtle">
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-neon-500" />
           <span className="text-[11px] font-mono uppercase tracking-wider text-text-muted">Rango de Fecha:</span>
@@ -49,7 +49,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateFrom} 
               onChange={(e) => setDateFrom(e.target.value)}
-              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
+              className="bg-black/20 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
               style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', colorScheme: 'dark' }}
             />
           </div>
@@ -59,7 +59,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateTo} 
               onChange={(e) => setDateTo(e.target.value)}
-              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
+              className="bg-black/20 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
               style={{ colorScheme: 'dark' }}
             />
           </div>
@@ -94,7 +94,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
       <div className="grid gap-4 lg:grid-cols-3">
         <GlassCard className="lg:col-span-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-sm font-display font-semibold text-text-primary">Embudo del Pipeline</h3>
+            <h3 className="text-sm font-display font-semibold text-white">Embudo del Pipeline</h3>
             <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider">distribución por etapa</span>
           </div>
           <div className="space-y-2.5">
@@ -112,7 +112,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
                       transition={{ delay: 0.3 + i * 0.05, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute inset-y-0 left-0 rounded-lg"
                       style={{ background: `linear-gradient(90deg, ${stage.color}30, ${stage.color}60)`, borderRight: `2px solid ${stage.color}` }} />
-                    <span className="relative z-10 flex h-full items-center pl-3 text-[11px] font-mono font-bold text-text-primary/70">{count}</span>
+                    <span className="relative z-10 flex h-full items-center pl-3 text-[11px] font-mono font-bold text-white/70">{count}</span>
                   </div>
                 </motion.div>
               );
@@ -138,7 +138,7 @@ function LostReasonBreakdown({ stats }: { stats: PipelineStats }) {
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-display font-semibold text-text-primary text-red-400">Motivos de Pérdida</h3>
+        <h3 className="text-sm font-display font-semibold text-white text-red-400">Motivos de Pérdida</h3>
         <XCircle className="h-4 w-4 text-red-500/50" />
       </div>
       <div className="space-y-4">
@@ -176,7 +176,7 @@ function KPICard({ icon: Icon, label, value, subtext, color, delay }: {
         </div>
         <ArrowUpRight className="h-4 w-4 text-text-muted/30" />
       </div>
-      <div className="text-2xl font-display font-bold text-text-primary tracking-tight">{value}</div>
+      <div className="text-2xl font-display font-bold text-white tracking-tight">{value}</div>
       <div className="mt-0.5 text-[11px] font-body text-text-secondary">{label}</div>
       <div className="mt-2 text-[10px] font-body text-text-muted">{subtext}</div>
     </GlassCard>
@@ -199,7 +199,7 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
 
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento Total</h3>
+      <h3 className="mb-4 text-sm font-display font-semibold text-white">Rendimiento Total</h3>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -212,7 +212,7 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
           <tbody className="divide-y divide-white/[0.02]">
             {agents.map(([name, data]) => (
               <tr key={name} className="group">
-                <td className="py-4 text-[13px] font-display font-medium text-text-primary">{name}</td>
+                <td className="py-4 text-[13px] font-display font-medium text-white">{name}</td>
                 <td className="py-4 text-xs font-mono text-text-muted">{data.total}</td>
                 <td className="py-4 text-xs font-mono text-blue-400">{data.active}</td>
                 <td className="py-4 text-xs font-mono text-emerald-400">{data.won}</td>

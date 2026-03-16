@@ -26,8 +26,8 @@ export default function LoginPage() {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.08] border border-white/20 pl-11 pr-4 py-3',
-    'text-sm text-white placeholder:text-text-muted/50 font-body',
+    'w-full rounded-xl bg-white/[0.08] border border-white/[0.08] pl-11 pr-4 py-3',
+    'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20',
     'transition-all duration-200 shadow-inner [color-scheme:dark]'
   );
@@ -61,7 +61,7 @@ export default function LoginPage() {
             >
               <div className="h-5 w-5 rounded-lg bg-neon-500" />
             </motion.div>
-            <h1 className="text-xl font-display font-bold text-text-primary">
+            <h1 className="text-xl font-display font-bold text-white">
               Lead Lifecycle Tracker
             </h1>
             <p className="mt-1 text-sm text-text-muted font-body">

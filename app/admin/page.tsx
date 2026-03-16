@@ -52,8 +52,8 @@ function AdminContent() {
   const [creatingUs, setCreatingUs] = useState(false);
 
   const inputClass = cn(
-    'w-full rounded-xl bg-bg-primary/30 border border-border-subtle px-4 py-2.5',
-    'text-sm text-white placeholder:text-text-muted font-body',
+    'w-full rounded-xl bg-white/[0.04] border border-border-subtle px-4 py-2.5',
+    'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -198,7 +198,7 @@ function AdminContent() {
                               <Shield className="h-4 w-4" />
                             </div>
                             <div>
-                               <p className="text-xs font-bold text-text-primary">{u.nombre}</p>
+                               <p className="text-xs font-bold text-white">{u.nombre}</p>
                                <p className="text-[10px] text-text-muted">{u.email}</p>
                             </div>
                           </div>
@@ -215,7 +215,7 @@ function AdminContent() {
 
                   <div className="flex items-center justify-between pt-4 border-t border-white/5">
                     <div>
-                      <h2 className="text-xl font-display font-bold text-text-primary">
+                      <h2 className="text-xl font-display font-bold text-white">
                         Clientes Registrados
                       </h2>
                       <p className="text-xs text-text-muted">Pipelines y flujos de leads activos</p>
@@ -243,7 +243,7 @@ function AdminContent() {
                             </div>
                           </div>
                           <div className="flex justify-end gap-3 pt-2">
-                            <button onClick={() => setShowCreateCl(false)} className="px-4 py-2 text-xs text-text-muted hover:text-text-primary transition-colors">Cancelar</button>
+                            <button onClick={() => setShowCreateCl(false)} className="px-4 py-2 text-xs text-text-muted hover:text-white transition-colors">Cancelar</button>
                             <button onClick={handleCreateCliente} disabled={creatingCl} className="rounded-xl bg-neon-500 px-8 py-2.5 text-xs font-black text-white uppercase tracking-widest shadow-xl shadow-neon-500/20 hover:scale-105 active:scale-95 transition-all">
                               {creatingCl ? 'Creando...' : 'Crear Registro'}
                             </button>
@@ -276,7 +276,7 @@ function AdminContent() {
                               <Users className="h-6 w-6" />
                             </div>
                             <div>
-                               <h4 className="text-lg font-display font-bold text-text-primary group-hover:text-white transition-colors">{cl.nombre}</h4>
+                               <h4 className="text-lg font-display font-bold text-white group-hover:text-white transition-colors">{cl.nombre}</h4>
                                <p className="text-[11px] text-text-muted font-body uppercase tracking-tighter">{cl.fuente || 'Sin fuente'}</p>
                             </div>
                           </div>
@@ -294,7 +294,7 @@ function AdminContent() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-display font-bold text-text-primary">
+                      <h2 className="text-xl font-display font-bold text-white">
                         Accesos: <span className="text-neon-400">{selectedCliente.nombre}</span>
                       </h2>
                       <p className="text-xs text-text-muted">Crea las credenciales de acceso para este pipeline específico</p>
@@ -346,7 +346,7 @@ function AdminContent() {
                           </div>
 
                           <div className="flex justify-end gap-3 pt-2">
-                            <button onClick={() => setShowCreateUser(false)} className="px-5 py-2 text-xs text-text-muted hover:text-text-primary transition-colors">Cancelar</button>
+                            <button onClick={() => setShowCreateUser(false)} className="px-5 py-2 text-xs text-text-muted hover:text-white transition-colors">Cancelar</button>
                             <button 
                               onClick={handleCreateUsuario} 
                               disabled={creatingUs} 
@@ -368,7 +368,7 @@ function AdminContent() {
                             <User className="h-6 w-6 text-text-muted group-hover:text-neon-400 transition-colors" />
                           </div>
                           <div>
-                            <h4 className="text-base font-bold text-text-primary group-hover:text-white transition-colors">{u.nombre}</h4>
+                            <h4 className="text-base font-bold text-white group-hover:text-white transition-colors">{u.nombre}</h4>
                             <div className="flex items-center gap-3">
                                <p className="text-xs text-text-muted">{u.email}</p>
                                <span className="w-1.5 h-1.5 rounded-full bg-border-subtle opacity-30" />
@@ -414,7 +414,7 @@ function AdminContent() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-display font-black text-text-primary tracking-tighter uppercase">Gestión Global</h2>
+                  <h2 className="text-2xl font-display font-black text-white tracking-tighter uppercase">Gestión Global</h2>
                   <p className="text-xs text-text-muted font-medium opacity-60">Control maestro de agencias y licenciamiento</p>
                 </div>
                 <button
@@ -448,7 +448,7 @@ function AdminContent() {
                         </div>
                       </div>
                       <div className="flex justify-end gap-3 pt-2">
-                        <button onClick={() => setShowCreateAg(false)} className="px-6 py-2 text-xs font-bold text-text-muted hover:text-text-primary transition-colors">Cancelar</button>
+                        <button onClick={() => setShowCreateAg(false)} className="px-6 py-2 text-xs font-bold text-text-muted hover:text-white transition-colors">Cancelar</button>
                         <button onClick={handleCreateAgencia} disabled={creatingAg} className="rounded-xl bg-neon-500 px-10 py-3 text-xs font-black text-white shadow-2xl shadow-neon-500/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">
                           {creatingAg ? 'Dando de Alta...' : 'REGISTRAR AGENCIA'}
                         </button>
@@ -470,7 +470,7 @@ function AdminContent() {
                         <Building2 className="h-8 w-8 text-violet-400" />
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-lg font-display font-black text-text-primary group-hover:text-white transition-colors uppercase tracking-tight">{ag.nombre}</h4>
+                        <h4 className="text-lg font-display font-black text-white group-hover:text-white transition-colors uppercase tracking-tight">{ag.nombre}</h4>
                         <p className="text-xs text-text-muted font-body mb-2">{ag.email}</p>
                         <div className="flex items-center gap-3">
                           <span className="rounded-lg px-2.5 py-1 bg-white/5 text-[9px] font-mono text-text-muted/60 border border-white/5 uppercase tracking-tighter">

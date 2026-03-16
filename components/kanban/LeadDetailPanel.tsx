@@ -97,8 +97,8 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
   };
 
   const inputClass = cn(
-    'w-full rounded-lg bg-black/20 border border-white/20 px-3 py-2',
-    'text-sm text-white placeholder:text-text-muted font-body',
+    'w-full rounded-lg bg-black/20 border border-white/[0.08] px-3 py-2',
+    'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all disabled:opacity-40'
   );
 
@@ -122,17 +122,17 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
             className="fixed right-0 top-0 z-[81] h-full w-full max-w-md border-l border-border-subtle bg-bg-primary/95 backdrop-blur-xl overflow-y-auto"
           >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-bg-primary/80 backdrop-blur-xl px-5 py-4">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-white/[0.04] backdrop-blur-xl px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-bg-primary/50 border border-border-subtle">
                   <User className="h-5 w-5 text-text-muted" />
                 </div>
                 <div>
-                  <h2 className="text-[15px] font-display font-semibold text-text-primary">{lead.nombre || 'Sin nombre'}</h2>
+                  <h2 className="text-[15px] font-display font-semibold text-white">{lead.nombre || 'Sin nombre'}</h2>
                   <StatusBadge stageId={lead.etapa} size="sm" />
                 </div>
               </div>
-              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-primary/50 transition-all">
+              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted hover:text-white hover:bg-bg-primary/50 transition-all">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -267,7 +267,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                     {onArchive && (
                       <button
                         onClick={handleArchive}
-                        className="flex items-center justify-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle py-2.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-bg-primary/50 transition-all"
+                        className="flex items-center justify-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle py-2.5 text-xs font-semibold text-text-secondary hover:text-white hover:bg-bg-primary/50 transition-all"
                       >
                         <Archive className="h-4 w-4" />
                         Archivar Lead
@@ -293,7 +293,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                             </button>
                             <button
                               onClick={() => setShowDeleteConfirm(false)}
-                              className="px-4 rounded-xl bg-bg-primary/30 border border-border-subtle text-xs font-medium text-text-muted hover:text-text-primary transition-all"
+                              className="px-4 rounded-xl bg-bg-primary/30 border border-border-subtle text-xs font-medium text-text-muted hover:text-white transition-all"
                             >
                               Cancelar
                             </button>

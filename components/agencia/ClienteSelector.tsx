@@ -47,8 +47,8 @@ export function ClienteSelector({
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-black/20 border border-white/20 px-4 py-2.5',
-    'text-sm text-white placeholder:text-text-muted font-body',
+    'w-full rounded-xl bg-black/20 border border-white/[0.08] px-4 py-2.5',
+    'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -61,7 +61,7 @@ export function ClienteSelector({
             <Building2 className="h-5 w-5 text-violet-400" />
           </div>
           <div>
-            <h2 className="text-lg font-display font-semibold text-text-primary">Tus Clientes</h2>
+            <h2 className="text-lg font-display font-semibold text-white">Tus Clientes</h2>
             <p className="text-[11px] text-text-muted font-body">{clientes.length} cliente{clientes.length !== 1 ? 's' : ''} activo{clientes.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function ClienteSelector({
           >
             <GlassCard className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-display font-semibold text-text-primary">Nuevo Cliente</h3>
+                <h3 className="text-sm font-display font-semibold text-white">Nuevo Cliente</h3>
                 <button onClick={() => setShowCreate(false)} className="text-text-muted hover:text-text-secondary transition-colors">
                   <X className="h-4 w-4" />
                 </button>
@@ -165,7 +165,7 @@ export function ClienteSelector({
                     </div>
                     <ChevronRight className="h-4 w-4 text-text-muted/40" />
                   </div>
-                  <h3 className="text-[14px] font-display font-semibold text-text-primary mb-1 truncate">
+                  <h3 className="text-[14px] font-display font-semibold text-white mb-1 truncate">
                     {cliente.nombre}
                   </h3>
                   {cliente.fuente && (

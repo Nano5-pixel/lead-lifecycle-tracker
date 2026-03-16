@@ -29,8 +29,8 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-black/20 border border-white/20 px-4 py-2.5',
-    'text-sm text-white placeholder:text-text-muted font-body',
+    'w-full rounded-xl bg-black/20 border border-white/[0.08] px-4 py-2.5',
+    'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 
@@ -57,7 +57,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
                 <UserPlus className="h-5 w-5 text-neon-400" />
               </div>
               <div>
-                <h2 className="text-lg font-display font-semibold text-text-primary">Nuevo Lead</h2>
+                <h2 className="text-lg font-display font-semibold text-white">Nuevo Lead</h2>
                 <p className="text-[11px] text-text-muted font-body">Se creará en etapa &quot;Nuevo&quot;</p>
               </div>
             </div>
@@ -103,7 +103,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
 
             <div className="mt-6 flex gap-3">
               <button onClick={onClose}
-                className="flex-1 rounded-xl border border-border-subtle bg-bg-primary/20 py-2.5 text-sm font-medium text-text-muted hover:bg-bg-primary/40 transition-colors">
+                className="flex-1 rounded-xl border border-border-subtle bg-white/[0.04] py-2.5 text-sm font-medium text-text-muted hover:bg-bg-primary/40 transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSubmit} disabled={loading || !form.nombre.trim()}
