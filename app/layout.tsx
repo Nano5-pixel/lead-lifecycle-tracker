@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'Lead Lifecycle Tracker',
   description: 'CRM profesional de pipeline de leads',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/icon-192.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',

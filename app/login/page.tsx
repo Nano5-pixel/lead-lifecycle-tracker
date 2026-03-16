@@ -57,9 +57,9 @@ export default function LoginPage() {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-neon-500/15 border border-neon-500/20"
+              className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/5 border border-white/10 overflow-hidden shadow-2xl"
             >
-              <div className="h-5 w-5 rounded-lg bg-neon-500" />
+              <img src="/icon-192.png" alt="Logo" className="h-full w-full object-cover" />
             </motion.div>
             <h1 className="text-xl font-display font-bold text-white">
               Lead Lifecycle Tracker

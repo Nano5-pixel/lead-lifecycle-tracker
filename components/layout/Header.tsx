@@ -33,8 +33,8 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
       <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 lg:px-6">
         {/* Izquierda: Marca */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${THEME_COLOR}20` }}>
-            <div className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-md" style={{ backgroundColor: THEME_COLOR }} />
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl overflow-hidden border border-white/10 bg-white/5">
+            <img src="/icon-192.png" alt="Logo" className="h-full w-full object-cover" />
           </div>
           <div className="min-w-0">
             <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate">
