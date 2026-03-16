@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  background-color: #04080F !important;
+  color: #ffffff !important;
+}
+
 :root {
   /* Dark Theme (Default) */
   --bg-primary: #04080F;
@@ -94,14 +99,22 @@ input:-internal-autofill-selected {
   color: #ffffff !important;
 }
 
-/* Global forced visibility overrides */
+/* Global forced visibility overrides - Nuclear Version */
 input, textarea, select, [contenteditable] {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
   opacity: 1 !important;
-  background-color: #0A1128 !important; /* Solid dark color instead of transparent white */
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #020617 !important; /* Extremely dark blue/black */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Specific fix for white background issues on various inputs */
+input:not([type="button"]):not([type="submit"]), 
+textarea, 
+select {
+  background-color: #020617 !important;
+  background: #020617 !important;
 }
 
 select option {

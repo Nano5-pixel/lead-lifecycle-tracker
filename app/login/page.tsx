@@ -59,7 +59,7 @@ export default function LoginPage() {
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
               className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/5 border border-white/10 overflow-hidden shadow-2xl"
             >
-              <img src="/logo-main.png" alt="Logo" className="h-full w-full object-contain" />
+              <img src="/logo-main.png?v=2" alt="Logo" className="h-full w-full object-contain" />
             </motion.div>
             <h1 className="text-xl font-display font-bold text-white">
               Lead Lifecycle Tracker
@@ -91,6 +91,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputClass}
+                style={{ backgroundColor: '#020617', color: 'white' }}
                 required
                 autoComplete="email"
               />
@@ -104,6 +105,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={inputClass}
+                style={{ backgroundColor: '#020617', color: 'white' }}
                 required
                 autoComplete="current-password"
               />
