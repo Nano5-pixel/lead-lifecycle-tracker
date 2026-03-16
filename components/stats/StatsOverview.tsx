@@ -49,7 +49,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateFrom} 
               onChange={(e) => setDateFrom(e.target.value)}
-              className="bg-bg-primary/40 border border-border-subtle rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50 [color-scheme:light_dark]"
+              className="bg-bg-primary/80 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50 [color-scheme:light_dark]"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateTo} 
               onChange={(e) => setDateTo(e.target.value)}
-              className="bg-bg-primary/40 border border-border-subtle rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50 [color-scheme:light_dark]"
+              className="bg-bg-primary/80 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50 [color-scheme:light_dark]"
             />
           </div>
           {(dateFrom || dateTo) && (

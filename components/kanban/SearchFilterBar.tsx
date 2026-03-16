@@ -40,7 +40,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
             onChange={(e) => onChange({ ...filters, search: e.target.value })}
             placeholder="Buscar por nombre, teléfono, email..."
             className={cn(
-              'w-full rounded-xl bg-bg-primary/30 border border-border-subtle pl-10 pr-4 py-2.5',
+              'w-full rounded-xl bg-bg-primary/80 border border-white/20 pl-10 pr-4 py-2.5',
               'text-sm text-text-primary placeholder:text-text-muted font-body',
               'focus:outline-none focus:border-neon-500/30 focus:ring-1 focus:ring-neon-500/15 transition-all'
             )}
