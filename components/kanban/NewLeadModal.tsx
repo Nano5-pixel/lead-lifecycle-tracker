@@ -67,6 +67,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
                 <div>
                   <label className="mb-1 block text-[11px] font-medium text-text-muted">Nombre *</label>
                   <input className={inputClass} placeholder="Juan Pérez" value={form.nombre}
+                    style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'white' }}
                     onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))} />
                 </div>
                 <div>
@@ -95,6 +96,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
               <div>
                 <label className="mb-1 block text-[11px] font-medium text-text-muted">Notas</label>
                 <textarea className={cn(inputClass, 'resize-none h-20')} placeholder="Notas adicionales..."
+                  style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'white' }}
                   value={form.notas} onChange={(e) => setForm((f) => ({ ...f, notas: e.target.value }))} />
               </div>
             </div>

@@ -95,6 +95,7 @@ export function ClienteSelector({
                   <label className="mb-1 block text-[11px] font-medium text-text-muted/60">Nombre del cliente *</label>
                   <input
                     className={inputClass}
+                    style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}
                     placeholder="Inmobiliaria ABC"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}

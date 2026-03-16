@@ -44,6 +44,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
               'text-sm text-text-primary placeholder:text-text-muted font-body',
               'focus:outline-none focus:border-neon-500/30 focus:ring-1 focus:ring-neon-500/15 transition-all'
             )}
+            style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'white' }}
           />
           {filters.search && (
             <button onClick={() => onChange({ ...filters, search: '' })}
@@ -126,6 +127,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
                     value={filters.assignedTo}
                     onChange={(e) => onChange({ ...filters, assignedTo: e.target.value })}
                     className="rounded-lg bg-bg-primary/30 border border-border-subtle px-3 py-2 text-sm text-text-primary font-body focus:outline-none focus:border-neon-500/30"
+                    style={{ backgroundColor: '#00000033', color: 'white' }}
                   >
                     <option value="" className="bg-bg-primary">Todos</option>
                     {agents.map((a) => (<option key={a} value={a} className="bg-bg-primary">{a}</option>))}
