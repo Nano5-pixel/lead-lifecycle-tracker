@@ -185,7 +185,8 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
   const agents = useMemo(() => {
     const map: Record<string, { total: number; won: number; active: number }> = {};
     leads.forEach((l) => {
-      const agent = l.gestionadoPor || 'Sin asignar';
+      const agent = l.gestionadoPor;
+      if (!agent) return; 
       if (!map[agent]) map[agent] = { total: 0, won: 0, active: 0 };
       map[agent].total++;
       if (l.etapa === 'Ganado') map[agent].won++;
@@ -201,7 +202,7 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
-              {['Identificador', 'Total', 'Activos', 'Ganados', 'Efectividad'].map((h) => (
+              {['Agente', 'Total', 'Activos', 'Ganados', 'Efectividad'].map((h) => (
                 <th key={h} className="pb-3 text-left text-[10px] font-mono uppercase tracking-wider text-text-muted font-normal">{h}</th>
               ))}
             </tr>
