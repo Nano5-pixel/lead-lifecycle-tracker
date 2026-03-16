@@ -14,6 +14,7 @@ import { LeadCard } from './LeadCard';
 import { cn } from '@/lib/utils';
 import { RuleViolationModal } from '../ui/RuleViolationModal';
 import { useToast } from '../ui/Toast';
+import { LostReasonModal } from './LostReasonModal';
 
 interface KanbanBoardProps {
   leads: Lead[];
@@ -26,6 +27,9 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [ruleModal, setRuleModal] = useState<{ open: boolean; message: string; ruleId?: string }>({
     open: false, message: '',
+  });
+  const [lostReasonState, setLostReasonState] = useState<{ open: boolean; lead: Lead | null; targetStage: StageId | null }>({
+    open: false, lead: null, targetStage: null
   });
   const { toast } = useToast();
 
@@ -42,7 +46,8 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     
     const validIds = STAGES.map(s => s.id);
 
-    for (const lead of leads) {
+    for (const lead of leads || []) {
+      if (!lead) continue;
       // Normalize stage string: trim whitespace
       let rawEtapa = (lead.etapa || '').toString().trim();
 
@@ -67,11 +72,24 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     }
     return grouped;
   }, [leads]);
-
+  
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const lead = leads.find((l) => l.id === event.active.id);
     setActiveLead(lead || null);
   }, [leads]);
+
+  const executeMove = async (lead: Lead, targetStageId: StageId, reason?: string) => {
+    const moveData = reason ? { ...lead, motivoCaida: reason } : lead;
+    const result = await onMoveLeadToStage(moveData, targetStageId);
+    if (!result.success) {
+      setRuleModal({
+        open: true,
+        message: result.error || 'Transición no permitida.',
+      });
+    } else {
+      toast(`${lead.nombre} movido a ${targetStageId}`, 'success');
+    }
+  };
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -86,16 +104,22 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     if (!VALID_STAGES.includes(targetStageId)) return;
     if (lead.etapa === targetStageId) return;
 
-    const result = await onMoveLeadToStage(lead, targetStageId);
-    if (!result.success) {
-      setRuleModal({
-        open: true,
-        message: result.error || 'Transición no permitida.',
-      });
-    } else {
-      toast(`${lead.nombre} movido a ${targetStageId}`, 'success');
+    // Interceptar si es Perdido o Basura
+    if (targetStageId === 'Perdido' || targetStageId === 'Basura') {
+      setLostReasonState({ open: true, lead, targetStage: targetStageId });
+      return;
     }
+
+    await executeMove(lead, targetStageId);
   }, [leads, onMoveLeadToStage, toast]);
+
+  const handleLostReasonConfirm = async (reason: string) => {
+    if (lostReasonState.lead && lostReasonState.targetStage) {
+      const { lead, targetStage } = lostReasonState;
+      setLostReasonState({ open: false, lead: null, targetStage: null });
+      await executeMove(lead, targetStage, reason);
+    }
+  };
 
   // Estado para controlar si estamos viendo el dashboard de estados en móvil
   const [showMobileGrid, setShowMobileGrid] = useState(true);
@@ -107,6 +131,12 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
 
   return (
     <>
+      <LostReasonModal 
+        isOpen={lostReasonState.open} 
+        onClose={() => setLostReasonState({ open: false, lead: null, targetStage: null })}
+        onConfirm={handleLostReasonConfirm}
+        title={lostReasonState.targetStage === 'Basura' ? '¿Por qué es Basura?' : 'Motivo de Pérdida'}
+      />
       {/* Mobile Stages Grid (Dashboard) */}
       <AnimatePresence mode="wait">
         {showMobileGrid ? (
@@ -138,7 +168,6 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
                     {leadsByStage[s.id].length} {leadsByStage[s.id].length === 1 ? 'LEAD' : 'LEADS'}
                   </p>
                 </div>
-                {/* Visual glow indicator */}
                 <div 
                   className="absolute bottom-0 inset-x-0 h-1 opacity-20"
                   style={{ background: `linear-gradient(90deg, transparent, ${s.color}, transparent)` }}
@@ -176,8 +205,7 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
                ))}
             </div>
           </div>
-        )
-      }
+        )}
       </AnimatePresence>
 
       <DndContext

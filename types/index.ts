@@ -91,9 +91,12 @@ export interface PipelineStats {
   byStage: Record<StageId, number>;
   conversionRate: number;
   avgDaysInStage: number;
+  avgClosingDays: number;
+  contactEfficiency: number; // % move from Nuevo in < 24h
   lostCount: number;
   newThisWeek: number;
   leadsByAgent: Record<string, number>;
+  lostReasons: Record<string, number>;
 }
 
 /** Payload de ingesta desde Make.com */

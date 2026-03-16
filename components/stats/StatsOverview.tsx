@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, Trophy, XCircle, Zap, Target, ArrowUpRight, Clock, Calendar, FilterX } from 'lucide-react';
+import { Users, Trophy, Zap, Target, ArrowUpRight, Calendar, FilterX, XCircle } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { Lead, PipelineStats, StageId } from '@/types';
 import { STAGES } from '@/lib/stages';
@@ -19,7 +19,6 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
       const entry = l.fechaEntrada ? new Date(l.fechaEntrada).getTime() : 0;
       if (dateFrom && entry < new Date(dateFrom).getTime()) return false;
       if (dateTo) {
-        // Set dateTo to end of day
         const endDay = new Date(dateTo);
         endDay.setHours(23, 59, 59, 999);
         if (entry > endDay.getTime()) return false;
@@ -79,17 +78,17 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        <KPICard icon={Users} label="Leads Totales" value={String(stats.totalLeads)}
+        <KPICard icon={Users} label="Total Leads" value={String(stats.totalLeads)}
           subtext={`+${stats.newThisWeek} esta semana`} color="#0A84FF" delay={0} />
-        <KPICard icon={TrendingUp} label="Tasa de Conversión" value={`${stats.conversionRate}%`}
-          subtext="leads activos → ganados" color="#10B981" delay={0.05} />
-        <KPICard icon={Clock} label="Prom. Días en Etapa" value={`${stats.avgDaysInStage}d`}
-          subtext="promedio todas las etapas" color="#8B5CF6" delay={0.1} />
-        <KPICard icon={Trophy} label="Ganados" value={String(stats.byStage['Ganado'] || 0)}
-          subtext={`de ${stats.totalLeads} leads totales`} color="#F59E0B" delay={0.15} />
+        <KPICard icon={Trophy} label="Tiempo de Cierre" value={`${stats.avgClosingDays}d`}
+          subtext="desde nuevo hasta cierre" color="#10B981" delay={0.05} />
+        <KPICard icon={Zap} label="Eficiencia Inicial" value={`${stats.contactEfficiency}%`}
+          subtext="contacto en < 24 horas" color="#8B5CF6" delay={0.1} />
+        <KPICard icon={Target} label="Conversión Real" value={`${stats.conversionRate}%`}
+          subtext="activos vs ganados" color="#F59E0B" delay={0.15} />
       </div>
 
-      {/* Embudo + Resumen */}
+      {/* Embudo + Pérdidas */}
       <div className="grid gap-4 lg:grid-cols-3">
         <GlassCard className="lg:col-span-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <div className="mb-4 flex items-center justify-between">
@@ -119,40 +118,53 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
           </div>
         </GlassCard>
 
-        <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Resumen Rápido</h3>
-          <div className="space-y-4">
-            <QuickStat icon={Zap} label="Nuevos esta semana" value={String(stats.newThisWeek)} color="#0A84FF" />
-            <QuickStat icon={Target} label="En calificación"
-              value={String((stats.byStage['Intento'] || 0) + (stats.byStage['Contactado'] || 0))} color="#8B5CF6" />
-            <QuickStat icon={Trophy} label="Ganados" value={String(stats.byStage['Ganado'] || 0)} color="#10B981" />
-            <QuickStat icon={XCircle} label="Perdidos" value={String(stats.lostCount)} color="#EF4444" />
-            <div className="mt-4 pt-4 border-t border-border-subtle">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] text-text-muted font-body">Tasa de Éxito</span>
-                <span className="text-lg font-display font-bold text-emerald-500">{stats.conversionRate}%</span>
-              </div>
-              <div className="mt-2 h-2 rounded-full bg-bg-primary/50 overflow-hidden">
-                <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(stats.conversionRate, 100)}%` }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" />
-              </div>
-            </div>
-          </div>
-        </GlassCard>
+        <LostReasonBreakdown stats={stats} />
       </div>
 
-      {/* Fuentes + Agentes */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <SourceBreakdown leads={leads} />
-        <AgentPerformance leads={leads} stats={stats} />
+      {/* Agentes */}
+      <div className="grid gap-4">
+        <AgentPerformance leads={filteredLeads} />
       </div>
     </div>
   );
 }
 
+function LostReasonBreakdown({ stats }: { stats: PipelineStats }) {
+  const reasons = Object.entries(stats.lostReasons || {}).sort((a, b) => b[1] - a[1]);
+  const totalLost = stats.lostCount || 1;
+
+  return (
+    <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-sm font-display font-semibold text-text-primary text-red-400">Motivos de Pérdida</h3>
+        <XCircle className="h-4 w-4 text-red-500/50" />
+      </div>
+      <div className="space-y-4">
+        {reasons.length > 0 ? reasons.map(([reason, count], i) => (
+          <div key={reason} className="space-y-1.5">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-text-secondary font-medium">{reason}</span>
+              <span className="text-text-muted font-mono">{count}</span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-bg-primary/30 overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }} 
+                animate={{ width: `${(count / totalLost) * 100}%` }}
+                transition={{ delay: 0.4 + i * 0.05, duration: 0.8 }}
+                className="h-full bg-red-500/40 rounded-full" 
+              />
+            </div>
+          </div>
+        )) : (
+          <div className="py-10 text-center text-[11px] text-text-muted/40 font-body">No hay datos de pérdida suficientes</div>
+        )}
+      </div>
+    </GlassCard>
+  );
+}
+
 function KPICard({ icon: Icon, label, value, subtext, color, delay }: {
-  icon: typeof Users; label: string; value: string; subtext: string; color: string; delay: number;
+  icon: any; label: string; value: string; subtext: string; color: string; delay: number;
 }) {
   return (
     <GlassCard hoverGlow glowColor={`${color}15`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }}>
@@ -169,115 +181,53 @@ function KPICard({ icon: Icon, label, value, subtext, color, delay }: {
   );
 }
 
-function QuickStat({ icon: Icon, label, value, color }: {
-  icon: typeof Users; label: string; value: string; color: string;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ backgroundColor: `${color}12` }}>
-        <Icon className="h-4 w-4" style={{ color }} />
-      </div>
-      <div className="flex-1"><p className="text-[11px] text-text-muted font-body">{label}</p></div>
-      <span className="text-sm font-display font-bold text-text-primary">{value}</span>
-    </div>
-  );
-}
-
-const SOURCE_COLORS: Record<string, string> = {
-  'Facebook Ads': '#1877F2', 'Google Ads': '#34A853', Instagram: '#E1306C',
-  Referido: '#F59E0B', 'Landing Page': '#06B6D4', Otro: '#6B7280',
-};
-
-function SourceBreakdown({ leads }: { leads: Lead[] }) {
-  const sources = useMemo(() => {
-    const map: Record<string, number> = {};
-    leads.forEach((l) => { const src = l.fuente || 'Otro'; map[src] = (map[src] || 0) + 1; });
-    return Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 6);
-  }, [leads]);
-  const total = leads.length || 1;
-
-  return (
-    <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
-      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Fuentes de Leads</h3>
-      <div className="mb-4 flex h-5 w-full overflow-hidden rounded-full bg-bg-primary/30">
-        {sources.map(([name, count], i) => {
-          const pct = (count / total) * 100;
-          const color = SOURCE_COLORS[name] || SOURCE_COLORS['Otro'];
-          return (
-            <motion.div key={name} initial={{ width: 0 }} animate={{ width: `${pct}%` }}
-              transition={{ delay: 0.4 + i * 0.05, duration: 0.6 }}
-              className="h-full first:rounded-l-full last:rounded-r-full"
-              style={{ backgroundColor: color }} title={`${name}: ${count}`} />
-          );
-        })}
-      </div>
-      <div className="space-y-2">
-        {sources.map(([name, count]) => {
-          const pct = Math.round((count / total) * 100);
-          const color = SOURCE_COLORS[name] || SOURCE_COLORS['Otro'];
-          return (
-            <div key={name} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: color }} />
-                <span className="text-[12px] text-text-secondary font-body">{name}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-[11px] text-text-muted font-mono">{pct}%</span>
-                <span className="text-[12px] font-display font-semibold text-text-primary w-6 text-right">{count}</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </GlassCard>
-  );
-}
-
-function AgentPerformance({ leads, stats }: { leads: Lead[]; stats: PipelineStats }) {
+function AgentPerformance({ leads }: { leads: Lead[] }) {
   const agents = useMemo(() => {
     const map: Record<string, { total: number; won: number; active: number }> = {};
-    const list = leads || [];
-    list.forEach((l) => {
+    leads.forEach((l) => {
       const agent = l.gestionadoPor || 'Sin asignar';
+      if (agent === 'Sin asignar') return; 
       if (!map[agent]) map[agent] = { total: 0, won: 0, active: 0 };
       map[agent].total++;
       if (l.etapa === 'Ganado') map[agent].won++;
-      if (l.etapa !== 'Ganado' && l.etapa !== 'Perdido' && l.etapa !== 'Basura') map[agent].active++;
+      if (!['Ganado', 'Perdido', 'Basura'].includes(l.etapa)) map[agent].active++;
     });
-    return Object.entries(map).sort((a, b) => (b[1].won || 0) - (a[1].won || 0));
+    return Object.entries(map).sort((a, b) => b[1].won - a[1].won).slice(0, 5);
   }, [leads]);
 
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento Total</h3>
+      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento por Agente</h3>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-border-subtle">
-              {['Agente', 'Total', 'Activos', 'Ganados', '% Éxito'].map((h) => (
-                <th key={h} className="pb-2 text-left text-[10px] font-mono uppercase tracking-wider text-text-muted font-normal">{h}</th>
+            <tr className="border-b border-white/5">
+              {['Agente', 'Total', 'Activos', 'Ganados', 'Efectividad'].map((h) => (
+                <th key={h} className="pb-3 text-left text-[10px] font-mono uppercase tracking-wider text-text-muted font-normal">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody>
-            {agents.map(([name, data], i) => (
-              <motion.tr key={name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.45 + i * 0.04 }} className="border-b border-border-subtle/50">
-                <td className="py-2.5 text-[12px] font-body font-medium text-text-secondary">{name}</td>
-                <td className="py-2.5 text-[12px] font-mono text-text-muted">{data.total}</td>
-                <td className="py-2.5 text-[12px] font-mono text-neon-400/70">{data.active}</td>
-                <td className="py-2.5 text-[12px] font-mono text-emerald-400/80">{data.won}</td>
-                <td className="py-2.5 text-[12px] font-mono font-semibold text-text-muted">
-                  {data.total > 0 ? `${Math.round((data.won / data.total) * 100)}%` : '—'}
+          <tbody className="divide-y divide-white/[0.02]">
+            {agents.map(([name, data]) => (
+              <tr key={name} className="group">
+                <td className="py-4 text-[13px] font-display font-medium text-text-primary">{name}</td>
+                <td className="py-4 text-xs font-mono text-text-muted">{data.total}</td>
+                <td className="py-4 text-xs font-mono text-blue-400">{data.active}</td>
+                <td className="py-4 text-xs font-mono text-emerald-400">{data.won}</td>
+                <td className="py-4">
+                   <div className="flex items-center gap-2">
+                     <span className="text-xs font-mono font-bold text-text-secondary">{data.total > 0 ? Math.round((data.won/data.total)*100) : 0}%</span>
+                     <div className="h-1 w-12 rounded-full bg-white/5 overflow-hidden hidden sm:block">
+                        <div className="h-full bg-emerald-500" style={{ width: `${(data.won/data.total)*100}%` }} />
+                     </div>
+                   </div>
                 </td>
-              </motion.tr>
+              </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {agents.length === 0 && (
-        <p className="py-6 text-center text-[11px] text-text-muted/40 font-body">Sin datos de agentes</p>
-      )}
+      {agents.length === 0 && <p className="py-10 text-center text-xs text-text-muted font-body italic">No hay agentes asignados con leads</p>}
     </GlassCard>
   );
 }

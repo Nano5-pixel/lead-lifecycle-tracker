@@ -93,7 +93,7 @@ function DashboardContent() {
       <main className="flex-1 overflow-hidden">
         <div className="mx-auto max-w-[1600px] p-4 lg:p-6">
           <AnimatePresence mode="wait">
-            {view === 'kanban' ? (
+            {view === 'kanban' && (
               <motion.div key="kanban" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                  transition={{ duration: 0.25 }}>
                 <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} />
@@ -112,9 +112,10 @@ function DashboardContent() {
                   />
                 )}
               </motion.div>
-            ) : (
+            )}
+            {view === 'stats' && (
               <motion.div
-                key={`stats-${leads.length}-${leads[0]?.fechaUltimoCambio || 'init'}`}
+                key="stats-view"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}

@@ -22,6 +22,7 @@ interface LeadDetailPanelProps {
 
 import { STAGES } from '@/lib/stages';
 import { StageId } from '@/types';
+import { LostReasonModal } from './LostReasonModal';
 
 export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, onDelete }: LeadDetailPanelProps) {
   const [editing, setEditing] = useState(false);
@@ -29,6 +30,8 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
   const [form, setForm] = useState<Partial<Lead>>({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [moving, setMoving] = useState(false);
+  const [lostReasonOpen, setLostReasonOpen] = useState(false);
+  const [pendingStage, setPendingStage] = useState<StageId | null>(null);
 
   useEffect(() => {
     if (lead) {
@@ -49,16 +52,34 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
     setEditing(false);
   };
 
-  const handleMove = async (toStage: StageId) => {
+  const handleMove = async (toStage: StageId, reason?: string) => {
     if (!lead || !onMove) return;
+    
+    // Si es Perdido/Basura y no hay razón, abrir modal
+    if ((toStage === 'Perdido' || toStage === 'Basura') && !reason) {
+      setPendingStage(toStage);
+      setLostReasonOpen(true);
+      return;
+    }
+
     setMoving(true);
-    const result = await onMove(lead, toStage);
+    // Si hay razón, actualizar el lead localmente antes de mover (el padre lo subirá)
+    const leadToMove = reason ? { ...lead, motivoCaida: reason } : lead;
+    const result = await onMove(leadToMove, toStage);
     setMoving(false);
     if (result.success) {
-      // No cerramos el panel, solo dejamos que el padre actualice los datos
+      // Éxito
     }
   };
-// ... rest of the component
+
+  const confirmLostReason = async (reason: string) => {
+    if (pendingStage) {
+      const stage = pendingStage;
+      setLostReasonOpen(false);
+      setPendingStage(null);
+      await handleMove(stage, reason);
+    }
+  };
 
   const handleArchive = async () => {
     if (!lead || !onArchive) return;
@@ -87,6 +108,12 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
     <AnimatePresence>
       {open && lead && (
         <>
+          <LostReasonModal 
+            isOpen={lostReasonOpen}
+            onClose={() => { setLostReasonOpen(false); setPendingStage(null); }}
+            onConfirm={confirmLostReason}
+            title={pendingStage === 'Basura' ? '¿Por qué es Basura?' : 'Motivo de Pérdida'}
+          />
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[80] bg-black/50 backdrop-blur-sm" onClick={onClose} />
           <motion.aside
