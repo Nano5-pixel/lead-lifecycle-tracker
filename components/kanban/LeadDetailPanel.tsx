@@ -98,7 +98,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
 
   const inputClass = cn(
     'w-full rounded-lg bg-black/20 border border-white/20 px-3 py-2',
-    'text-sm text-text-primary placeholder:text-text-muted font-body',
+    'text-sm text-white placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all disabled:opacity-40'
   );
 

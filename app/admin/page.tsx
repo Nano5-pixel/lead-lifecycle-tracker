@@ -53,7 +53,7 @@ function AdminContent() {
 
   const inputClass = cn(
     'w-full rounded-xl bg-bg-primary/30 border border-border-subtle px-4 py-2.5',
-    'text-sm text-text-primary placeholder:text-text-muted font-body',
+    'text-sm text-white placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );
 

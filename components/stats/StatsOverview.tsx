@@ -49,7 +49,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateFrom} 
               onChange={(e) => setDateFrom(e.target.value)}
-              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50"
+              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
               style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', colorScheme: 'dark' }}
             />
           </div>
@@ -59,7 +59,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
               type="date" 
               value={dateTo} 
               onChange={(e) => setDateTo(e.target.value)}
-              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-text-primary focus:outline-none focus:border-neon-500/50"
+              className="bg-black/20 border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neon-500/50"
               style={{ colorScheme: 'dark' }}
             />
           </div>

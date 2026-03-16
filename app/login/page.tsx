@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   const inputClass = cn(
     'w-full rounded-xl bg-white/[0.08] border border-white/20 pl-11 pr-4 py-3',
-    'text-sm text-text-primary placeholder:text-text-muted/50 font-body',
+    'text-sm text-white placeholder:text-text-muted/50 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20',
     'transition-all duration-200 shadow-inner [color-scheme:dark]'
   );

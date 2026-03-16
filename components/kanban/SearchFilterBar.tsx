@@ -41,7 +41,7 @@ export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarPr
             placeholder="Buscar por nombre, teléfono, email..."
             className={cn(
               'w-full rounded-xl bg-black/20 border border-white/20 pl-10 pr-4 py-2.5',
-              'text-sm text-text-primary placeholder:text-text-muted font-body',
+              'text-sm text-white placeholder:text-text-muted font-body',
               'focus:outline-none focus:border-neon-500/30 focus:ring-1 focus:ring-neon-500/15 transition-all'
             )}
             style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'white' }}
