@@ -186,23 +186,22 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
     const map: Record<string, { total: number; won: number; active: number }> = {};
     leads.forEach((l) => {
       const agent = l.gestionadoPor || 'Sin asignar';
-      if (agent === 'Sin asignar') return; 
       if (!map[agent]) map[agent] = { total: 0, won: 0, active: 0 };
       map[agent].total++;
       if (l.etapa === 'Ganado') map[agent].won++;
       if (!['Ganado', 'Perdido', 'Basura'].includes(l.etapa)) map[agent].active++;
     });
-    return Object.entries(map).sort((a, b) => b[1].won - a[1].won).slice(0, 5);
+    return Object.entries(map).sort((a, b) => b[1].won - a[1].won);
   }, [leads]);
 
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento por Agente</h3>
+      <h3 className="mb-4 text-sm font-display font-semibold text-text-primary">Rendimiento Total</h3>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
-              {['Agente', 'Total', 'Activos', 'Ganados', 'Efectividad'].map((h) => (
+              {['Identificador', 'Total', 'Activos', 'Ganados', 'Efectividad'].map((h) => (
                 <th key={h} className="pb-3 text-left text-[10px] font-mono uppercase tracking-wider text-text-muted font-normal">{h}</th>
               ))}
             </tr>
@@ -227,7 +226,7 @@ function AgentPerformance({ leads }: { leads: Lead[] }) {
           </tbody>
         </table>
       </div>
-      {agents.length === 0 && <p className="py-10 text-center text-xs text-text-muted font-body italic">No hay agentes asignados con leads</p>}
+      {agents.length === 0 && <p className="py-10 text-center text-xs text-text-muted font-body italic">No hay datos de rendimiento disponibles</p>}
     </GlassCard>
   );
 }

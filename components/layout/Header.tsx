@@ -41,7 +41,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
               {title || 'Lead Lifecycle Tracker'}
             </h1>
             <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-text-muted truncate">
-              {user?.rol === 'super_admin' ? 'Super Admin' : user?.rol === 'agencia' ? 'Agencia' : 'Pipeline'}
+              {user?.rol === 'cliente' ? 'Panel de Leads' : user?.rol === 'agencia' ? 'Agencia' : 'Super Admin'}
             </p>
           </div>
         </div>

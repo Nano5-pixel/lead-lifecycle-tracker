@@ -111,11 +111,18 @@ export function useLeads() {
         if (!path) return { success: false, error: 'Ruta no encontrada' };
 
         const leadRef = doc(db, path, lead.id);
-        await updateDoc(leadRef, {
+        const updates: any = {
           etapa: toStage,
           fechaUltimoCambio: new Date().toISOString(),
           diasEnEtapa: 0,
-        });
+        };
+
+        // Persistir el motivo si viene en el objeto lead (usado por LostReasonModal)
+        if (lead.motivoCaida) {
+          updates.motivoCaida = lead.motivoCaida;
+        }
+
+        await updateDoc(leadRef, updates);
 
         return { success: true };
       } catch (err) {
