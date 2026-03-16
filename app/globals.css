@@ -33,6 +33,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.3);
+  --bg-primary: #04080F;
+  --bg-secondary: #0A1128;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
