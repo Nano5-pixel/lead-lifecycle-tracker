@@ -49,8 +49,9 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
             </div>
           </div>
           <div className="min-w-0">
-            <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate">
+            <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate flex items-center gap-2">
               {title || 'Lead Lifecycle Tracker'}
+              <span className="text-[8px] bg-red-500 text-white px-1 rounded">V5</span>
             </h1>
             <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-text-muted truncate">
               {user?.rol === 'cliente' ? 'Panel de Leads' : user?.rol === 'agencia' ? 'Agencia' : 'Super Admin'}

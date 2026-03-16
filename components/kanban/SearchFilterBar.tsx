@@ -26,6 +26,7 @@ interface SearchFilterBarProps {
 }
 
 export function SearchFilterBar({ filters, onChange, agents }: SearchFilterBarProps) {
+  return null; // NUCLEAR REMOVAL - User requested removal
   const [showFilters, setShowFilters] = useState(false);
   const activeCount = filters.stages.length + (filters.assignedTo ? 1 : 0);
 
