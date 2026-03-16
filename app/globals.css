@@ -120,7 +120,17 @@ input:-internal-autofill-selected {
 input, textarea, select {
   color: var(--text-primary) !important;
   caret-color: var(--text-primary) !important;
-  color-scheme: dark light;
+  color-scheme: light dark;
+}
+
+.dark input, .dark textarea, .dark select {
+  color-scheme: dark !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.light input, .light textarea, .light select {
+  color-scheme: light !important;
+  background-color: #ffffff !important;
 }
 
 /* Visibilidad forzada para iconos de fecha */
