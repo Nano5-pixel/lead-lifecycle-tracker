@@ -33,6 +33,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  input, textarea, select {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    caret-color: white !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
 :root {
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.6);
