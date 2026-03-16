@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  background-color: #04080F !important;
-  color: #ffffff !important;
-}
-
 :root {
   /* Dark Theme (Default) */
   --bg-primary: #04080F;
@@ -87,46 +82,42 @@ html, body {
 
 ::selection { background: rgba(10, 132, 255, 0.3); color: var(--text-primary); }
 
-/* Fix robusto para inputs con autofill - asegura visibilidad del texto */
+/* Global input styling - Theme aware */
+input, textarea, select, [contenteditable] {
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--accent-neon) !important;
+  opacity: 1 !important;
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+/* Fix robusto para inputs con autofill */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-internal-autofill-selected {
-  -webkit-text-fill-color: #ffffff !important;
-  -webkit-box-shadow: 0 0 0px 1000px #050510 inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--autofill-bg) inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
   background-color: transparent !important;
-  color: #ffffff !important;
-}
-
-/* Global forced visibility overrides - Nuclear Version */
-input, textarea, select, [contenteditable] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  caret-color: #ffffff !important;
-  opacity: 1 !important;
-  background-color: #020617 !important; /* Extremely dark blue/black */
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-/* Specific fix for white background issues on various inputs */
-input:not([type="button"]):not([type="submit"]), 
-textarea, 
-select {
-  background-color: #020617 !important;
-  background: #020617 !important;
+  color: var(--text-primary) !important;
 }
 
 select option {
-  background-color: #0A1128;
-  color: white;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 /* Date picker indicator fix */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: invert(var(--calendar-invert, 1));
   opacity: 0.6;
   cursor: pointer;
+}
+
+.light input[type="date"]::-webkit-calendar-picker-indicator {
+  --calendar-invert: 0;
 }
 
 /* Background Gradients */

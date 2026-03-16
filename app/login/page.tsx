@@ -26,10 +26,10 @@ export default function LoginPage() {
   };
 
   const inputClass = cn(
-    'w-full rounded-xl bg-bg-secondary/40 border border-white/[0.08] pl-11 pr-4 py-3',
-    'text-sm text-white placeholder:text-white/25 font-body',
+    'w-full rounded-xl bg-bg-secondary/40 border border-border-subtle pl-11 pr-4 py-3',
+    'text-sm text-text-primary placeholder:text-text-muted font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20',
-    'transition-all duration-200 shadow-inner [color-scheme:dark]'
+    'transition-all duration-200 shadow-inner'
   );
 
   return (
@@ -57,11 +57,11 @@ export default function LoginPage() {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/5 border border-white/10 overflow-hidden shadow-2xl"
+              className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-bg-secondary/20 border border-border-subtle overflow-hidden shadow-2xl"
             >
               <img src="/logo-main.png?v=2" alt="Logo" className="h-full w-full object-contain" />
             </motion.div>
-            <h1 className="text-xl font-display font-bold text-white">
+            <h1 className="text-xl font-display font-bold text-text-primary">
               Lead Lifecycle Tracker
             </h1>
             <p className="mt-1 text-sm text-text-muted font-body">
@@ -91,7 +91,6 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputClass}
-                style={{ backgroundColor: '#020617', color: 'white' }}
                 required
                 autoComplete="email"
               />
@@ -105,7 +104,6 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={inputClass}
-                style={{ backgroundColor: '#020617', color: 'white' }}
                 required
                 autoComplete="current-password"
               />
