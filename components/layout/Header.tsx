@@ -33,8 +33,20 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
       <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 lg:px-6">
         {/* Izquierda: Marca */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl overflow-hidden border border-white/10 bg-white/5">
-            <img src="/logo-main.png?v=2" alt="Logo" className="h-full w-full object-contain" />
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl overflow-hidden border border-white/10 bg-white/5 relative">
+            {/* Logo image with cache-busting */}
+            <img 
+              src="/logo-main.png?v=3" 
+              alt="Logo" 
+              className="h-full w-full object-contain relative z-10"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            {/* Minimal fallback dot only if image fails */}
+            <div className="absolute inset-0 flex items-center justify-center -z-10">
+              <div className="h-2 w-2 rounded-full bg-neon-500 blur-[2px] opacity-50" />
+            </div>
           </div>
           <div className="min-w-0">
             <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate">

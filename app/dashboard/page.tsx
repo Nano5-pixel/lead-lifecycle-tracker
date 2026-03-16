@@ -11,7 +11,7 @@ import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import { NewLeadModal } from '@/components/kanban/NewLeadModal';
 import { LeadDetailPanel } from '@/components/kanban/LeadDetailPanel';
-import { SearchFilterBar, FilterState, DEFAULT_FILTERS } from '@/components/kanban/SearchFilterBar';
+// import { SearchFilterBar, FilterState, DEFAULT_FILTERS } from '@/components/kanban/SearchFilterBar';
 import { ToastProvider, useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useLeads } from '@/hooks/useLeads';
@@ -24,7 +24,7 @@ function DashboardContent() {
   const [showNewLead, setShowNewLead] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  // const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const { user } = useAuth();
   const { leads, loading, moveLeadToStage, updateLead, createLead } = useLeads();
@@ -37,7 +37,8 @@ function DashboardContent() {
     return Array.from(set).sort();
   }, [leads]);
 
-  // Leads filtrados
+  const filteredLeads = leads;
+  /* Filters removed as per user request
   const filteredLeads = useMemo(() => {
     let result = leads;
     if (filters.search.trim()) {
@@ -58,6 +59,7 @@ function DashboardContent() {
     }
     return result;
   }, [leads, filters]);
+  */
 
   const handleCreateLead = useCallback(async (data: Record<string, string>) => {
     const ok = await createLead(data as any);
@@ -96,7 +98,8 @@ function DashboardContent() {
             {view === 'kanban' && (
               <motion.div key="kanban" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                  transition={{ duration: 0.25 }}>
-                <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} />
+                {/* Search bar removed as per user request */}
+                {/* <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} /> */}
                 {loading && leads.length === 0 ? (
                   <div className="flex h-[60vh] items-center justify-center">
                     <div className="flex flex-col items-center gap-4">

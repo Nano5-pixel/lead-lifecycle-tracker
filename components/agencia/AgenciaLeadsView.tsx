@@ -7,7 +7,7 @@ import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import { NewLeadModal } from '@/components/kanban/NewLeadModal';
 import { LeadDetailPanel } from '@/components/kanban/LeadDetailPanel';
-import { SearchFilterBar, FilterState, DEFAULT_FILTERS } from '@/components/kanban/SearchFilterBar';
+// import { SearchFilterBar, FilterState, DEFAULT_FILTERS } from '@/components/kanban/SearchFilterBar';
 import { HelpGuide } from '@/components/ui/HelpGuide';
 import { useToast } from '@/components/ui/Toast';
 import { useLeadsForClient } from '@/hooks/useLeads';
@@ -31,7 +31,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
   const [showNewLead, setShowNewLead] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  // const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const { leads, loading } = useLeadsForClient(agenciaId, cliente.id);
   const { toast } = useToast();
   const { theme, toggleTheme } = useTheme();
@@ -47,6 +47,8 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
     return Array.from(set).sort();
   }, [leads]);
 
+  const filteredLeads = leads;
+  /* Filters removed as per user request
   const filteredLeads = useMemo(() => {
     let result = leads;
     if (filters.search.trim()) {
@@ -67,6 +69,7 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
     }
     return result;
   }, [leads, filters]);
+  */
 
   const moveLeadToStage = useCallback(
     async (lead: Lead, toStage: StageId): Promise<{ success: boolean; error?: string }> => {
@@ -214,7 +217,8 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
       <AnimatePresence mode="wait">
         {view === 'kanban' ? (
           <motion.div key="kanban" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} />
+            {/* Search bar removed as per user request */}
+            {/* <SearchFilterBar filters={filters} onChange={setFilters} agents={agents} /> */}
             {loading ? (
               <div className="flex h-[50vh] items-center justify-center">
                 <Loader2 className="h-8 w-8 text-neon-500 animate-spin" />
