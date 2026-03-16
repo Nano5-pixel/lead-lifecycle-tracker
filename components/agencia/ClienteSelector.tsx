@@ -114,7 +114,7 @@ export function ClienteSelector({
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowCreate(false)}
-                  className="rounded-xl border border-border-subtle bg-bg-primary/20 px-4 py-2 text-xs font-medium text-text-muted hover:bg-bg-primary/40 transition-colors"
+                  className="rounded-xl border border-border-subtle bg-white/[0.04] px-4 py-2 text-xs font-medium text-text-muted hover:bg-white/[0.04] transition-colors"
                 >
                   Cancelar
                 </button>
@@ -151,7 +151,7 @@ export function ClienteSelector({
                 onClick={() => onSelect(cliente)}
                 className={cn(
                   'group relative w-full text-left rounded-2xl border p-4 transition-all duration-300 cursor-pointer',
-                  'bg-bg-primary/20 backdrop-blur-md hover:bg-bg-primary/40',
+                  'bg-white/[0.04] backdrop-blur-md hover:bg-white/[0.04]',
                   selectedId === cliente.id
                     ? 'border-neon-500/40 shadow-neon'
                     : 'border-border-subtle hover:border-text-muted/30'

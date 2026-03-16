@@ -107,7 +107,7 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
                   transition={{ delay: 0.25 + i * 0.04 }} className="flex items-center gap-3">
                   <span className="w-5 text-center text-sm">{stage.emoji}</span>
                   <span className="w-20 sm:w-28 text-[11px] font-body text-text-secondary truncate">{stage.label}</span>
-                  <div className="flex-1 h-7 rounded-lg bg-bg-primary/30 border border-border-subtle overflow-hidden relative">
+                  <div className="flex-1 h-7 rounded-lg bg-white/[0.04] border border-border-subtle overflow-hidden relative">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }}
                       transition={{ delay: 0.3 + i * 0.05, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute inset-y-0 left-0 rounded-lg"
@@ -148,7 +148,7 @@ function LostReasonBreakdown({ stats }: { stats: PipelineStats }) {
               <span className="text-text-secondary font-medium">{reason}</span>
               <span className="text-text-muted font-mono">{count}</span>
             </div>
-            <div className="h-1.5 w-full rounded-full bg-bg-primary/30 overflow-hidden">
+            <div className="h-1.5 w-full rounded-full bg-white/[0.04] overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }} 
                 animate={{ width: `${(count / totalLost) * 100}%` }}

@@ -119,12 +119,12 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
           <motion.aside
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 z-[81] h-full w-full max-w-md border-l border-border-subtle bg-bg-primary/95 backdrop-blur-xl overflow-y-auto"
+            className="fixed right-0 top-0 z-[81] h-full w-full max-w-md border-l border-border-subtle bg-white/[0.04] backdrop-blur-xl overflow-y-auto"
           >
             {/* Header */}
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-white/[0.04] backdrop-blur-xl px-5 py-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-bg-primary/50 border border-border-subtle">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] border border-border-subtle">
                   <User className="h-5 w-5 text-text-muted" />
                 </div>
                 <div>
@@ -132,7 +132,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                   <StatusBadge stageId={lead.etapa} size="sm" />
                 </div>
               </div>
-              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted hover:text-white hover:bg-bg-primary/50 transition-all">
+              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted hover:text-white hover:bg-white/[0.04] transition-all">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -194,7 +194,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                           'flex flex-col items-center justify-center gap-1.5 rounded-xl border p-2 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100',
                           lead.etapa === s.id 
                             ? 'border-neon-500/30 bg-neon-500/10' 
-                            : 'border-border-subtle bg-bg-primary/20 hover:bg-bg-primary/40 hover:border-border-subtle/60'
+                            : 'border-border-subtle bg-white/[0.04] hover:bg-bg-primary/40 hover:border-border-subtle/60'
                         )}
                         title={s.label}
                       >
@@ -267,7 +267,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                     {onArchive && (
                       <button
                         onClick={handleArchive}
-                        className="flex items-center justify-center gap-2 rounded-xl bg-bg-primary/30 border border-border-subtle py-2.5 text-xs font-semibold text-text-secondary hover:text-white hover:bg-bg-primary/50 transition-all"
+                        className="flex items-center justify-center gap-2 rounded-xl bg-white/[0.04] border border-border-subtle py-2.5 text-xs font-semibold text-text-secondary hover:text-white hover:bg-white/[0.04] transition-all"
                       >
                         <Archive className="h-4 w-4" />
                         Archivar Lead
@@ -293,7 +293,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                             </button>
                             <button
                               onClick={() => setShowDeleteConfirm(false)}
-                              className="px-4 rounded-xl bg-bg-primary/30 border border-border-subtle text-xs font-medium text-text-muted hover:text-white transition-all"
+                              className="px-4 rounded-xl bg-white/[0.04] border border-border-subtle text-xs font-medium text-text-muted hover:text-white transition-all"
                             >
                               Cancelar
                             </button>
@@ -306,7 +306,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
               </div>
 
               {/* Metadatos */}
-              <div className="rounded-xl border border-border-subtle bg-bg-primary/20 p-4 space-y-2">
+              <div className="rounded-xl border border-border-subtle bg-white/[0.04] p-4 space-y-2">
                 <h4 className="text-[10px] font-mono uppercase tracking-wider text-text-muted/40 mb-2">Metadatos</h4>
                 {[
                   { label: 'ID Lead', value: lead.id },

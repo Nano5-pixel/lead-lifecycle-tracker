@@ -45,7 +45,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border border-border-subtle bg-bg-primary/95 backdrop-blur-xl p-6 shadow-glass"
+            className="fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border border-border-subtle bg-white/[0.04] backdrop-blur-xl p-6 shadow-glass"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-500/30 to-transparent rounded-t-2xl" />
             <button onClick={onClose} className="absolute right-4 top-4 text-text-muted hover:text-text-secondary transition-colors">
@@ -103,7 +103,7 @@ export function NewLeadModal({ open, onClose, onCreate }: NewLeadModalProps) {
 
             <div className="mt-6 flex gap-3">
               <button onClick={onClose}
-                className="flex-1 rounded-xl border border-border-subtle bg-white/[0.04] py-2.5 text-sm font-medium text-text-muted hover:bg-bg-primary/40 transition-colors">
+                className="flex-1 rounded-xl border border-border-subtle bg-white/[0.04] py-2.5 text-sm font-medium text-text-muted hover:bg-white/[0.04] transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSubmit} disabled={loading || !form.nombre.trim()}
