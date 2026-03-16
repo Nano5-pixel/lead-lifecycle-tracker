@@ -160,3 +160,10 @@ input::placeholder, textarea::placeholder {
   color: var(--text-muted) !important;
   opacity: 0.6 !important;
 }
+
+input, textarea, select, [contenteditable] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  opacity: 1 !important;
+}
