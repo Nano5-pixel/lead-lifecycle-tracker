@@ -1,8 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Dark Theme (Default) */
   --bg-primary: #04080F;
   --bg-secondary: #0A1128;
-  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-muted: rgba(255, 255, 255, 0.3);
   --border-subtle: rgba(255, 255, 255, 0.06);
@@ -29,58 +33,77 @@
   --autofill-bg: #FFFFFF;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
+  body {
+    @apply min-h-screen antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
   input, textarea, select {
     color: white !important;
     -webkit-text-fill-color: white !important;
     caret-color: white !important;
   }
+
   input::placeholder, textarea::placeholder {
     color: rgba(255, 255, 255, 0.3) !important;
     -webkit-text-fill-color: rgba(255, 255, 255, 0.3) !important;
   }
 }
 
-:root {
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-muted: rgba(255, 255, 255, 0.3);
-  --bg-primary: #04080F;
-  --bg-secondary: #0A1128;
+@layer utilities {
+  .glass-subtle {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-premium {
+    background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px var(--glass-border);
+  }
 }
 
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-}
-
+/* Scrollbar and Selection */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.1);
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.2);
-}
+.custom-scrollbar::-webkit-scrollbar { height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.1); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.2); }
 
 ::selection { background: rgba(10, 132, 255, 0.3); color: var(--text-primary); }
 
+/* Global forced visibility overrides */
+input, textarea, select, [contenteditable] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  opacity: 1 !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+select option {
+  background-color: #0A1128;
+  color: white;
+}
+
+/* Date picker indicator fix */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/* Background Gradients */
 body::after {
   content: '';
   position: fixed;
@@ -99,92 +122,4 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background: var(--bg-gradient);
-}
-
-@layer utilities {
-  .glass-subtle {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-  }
-
-  .glass-premium {
-    background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.01));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px var(--glass-border);
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="search"],
-  input[type="tel"],
-  textarea,
-  select {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-    caret-color: #ffffff !important;
-  }
-}
-
-*:focus-visible {
-  outline: 2px solid rgba(10, 132, 255, 0.5);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
-/* Fix robusto para inputs con autofill - asegura visibilidad del texto */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-internal-autofill-selected {
-  -webkit-text-fill-color: var(--text-primary) !important;
-  -webkit-box-shadow: 0 0 0px 1000px var(--autofill-bg) inset !important;
-  transition: background-color 5000s ease-in-out 0s !important;
-  background-color: transparent !important;
-  color: var(--text-primary) !important;
-}
-
-/* Forzar color de texto en todos los campos para evitar invisibilidad */
-input, textarea, select {
-  color: white !important;
-  caret-color: white !important;
-}
-
-input::placeholder, textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3) !important;
-}
-
-select option {
-  background-color: #0A1128;
-  color: white;
-}
-
-/* Visibilidad forzada para iconos de fecha */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(var(--calendar-invert, 1));
-  opacity: 0.6;
-  cursor: pointer;
-}
-
-.light input[type="date"]::-webkit-calendar-picker-indicator {
-  --calendar-invert: 0;
-}
-
-/* Visibilidad forzada para placeholders */
-input::placeholder, textarea::placeholder {
-  color: var(--text-muted) !important;
-  opacity: 0.6 !important;
-}
-
-input, textarea, select, [contenteditable] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  caret-color: #ffffff !important;
-  opacity: 1 !important;
-  background-color: rgba(255, 255, 255, 0.04) !important;
 }

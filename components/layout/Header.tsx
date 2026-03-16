@@ -34,7 +34,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
         {/* Izquierda: Marca */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-xl overflow-hidden border border-white/10 bg-white/5">
-            <img src="/icon-192.png" alt="Logo" className="h-full w-full object-cover" />
+            <img src="/logo-main.png" alt="Logo" className="h-full w-full object-contain" />
           </div>
           <div className="min-w-0">
             <h1 className="text-sm sm:text-[15px] font-display font-semibold text-text-primary tracking-tight truncate">

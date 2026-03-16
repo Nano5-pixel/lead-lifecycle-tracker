@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   description: 'CRM profesional de pipeline de leads',
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/icon-192.png',
+    icon: '/logo-main.png',
+    shortcut: '/logo-main.png',
+    apple: '/logo-main.png',
   },
   appleWebApp: {
     capable: true,
