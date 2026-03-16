@@ -1,3 +1,4 @@
+// Production Version: 2.0.1 - Dark Mode & Mobile Fixes
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/context/ThemeContext';
