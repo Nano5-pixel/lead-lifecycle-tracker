@@ -80,11 +80,15 @@ export function AgenciaLeadsView({ agenciaId, cliente, onBack, view }: AgenciaLe
 
       try {
         const leadRef = doc(db, basePath, lead.id);
-        await updateDoc(leadRef, {
+        const updates: any = {
           etapa: toStage,
           fechaUltimoCambio: new Date().toISOString(),
           diasEnEtapa: 0,
-        });
+        };
+        if (lead.motivoCaida) {
+          updates.motivoCaida = lead.motivoCaida;
+        }
+        await updateDoc(leadRef, updates);
         return { success: true };
       } catch {
         return { success: false, error: 'Error al mover el lead' };

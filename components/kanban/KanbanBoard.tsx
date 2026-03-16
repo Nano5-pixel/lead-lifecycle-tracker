@@ -91,6 +91,15 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     }
   };
 
+  const handleMoveToStage = useCallback(async (lead: Lead, targetStageId: StageId) => {
+    if (lead.etapa === targetStageId) return;
+    if (targetStageId === 'Perdido' || targetStageId === 'Basura') {
+      setLostReasonState({ open: true, lead, targetStage: targetStageId });
+      return;
+    }
+    await executeMove(lead, targetStageId);
+  }, [executeMove]);
+
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveLead(null);
@@ -100,18 +109,10 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     if (!lead) return;
 
     const targetStageId = (over.data?.current?.stage?.id || over.data?.current?.stageId || over.id) as StageId;
-    
     if (!VALID_STAGES.includes(targetStageId)) return;
-    if (lead.etapa === targetStageId) return;
-
-    // Interceptar si es Perdido o Basura
-    if (targetStageId === 'Perdido' || targetStageId === 'Basura') {
-      setLostReasonState({ open: true, lead, targetStage: targetStageId });
-      return;
-    }
-
-    await executeMove(lead, targetStageId);
-  }, [leads, onMoveLeadToStage, toast]);
+    
+    await handleMoveToStage(lead, targetStageId);
+  }, [leads, handleMoveToStage]);
 
   const handleLostReasonConfirm = async (reason: string) => {
     if (lostReasonState.lead && lostReasonState.targetStage) {
@@ -228,7 +229,7 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
                 leads={leadsByStage[stage.id] || []}
                 index={index}
                 onSelectLead={onSelectLead}
-                onMoveLead={onMoveLeadToStage}
+                onMoveLead={handleMoveToStage}
               />
             </div>
           ))}
