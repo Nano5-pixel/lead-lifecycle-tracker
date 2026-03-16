@@ -28,7 +28,7 @@ export function MobileNav({ view, onViewChange, onNewLead }: MobileNavProps) {
           )}
         >
           <Kanban className={cn("h-5 w-5 transition-transform duration-300", view === 'kanban' && "scale-110")} />
-          <span className="text-[10px] font-semibold tracking-wide">Pipeline</span>
+          <span className="text-[10px] font-semibold tracking-wide">Leads</span>
         </button>
 
         <button

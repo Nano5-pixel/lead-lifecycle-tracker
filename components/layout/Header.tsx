@@ -50,7 +50,7 @@ export function Header({ view, onViewChange, onRefresh, onNewLead, onShowHelp, l
         {onViewChange && user?.rol !== 'super_admin' && (
           <div className="hidden sm:flex items-center gap-1 rounded-xl bg-bg-primary/30 border border-border-subtle p-1">
             {[
-              { id: 'kanban' as ViewMode, icon: Kanban, label: 'Pipeline' },
+              { id: 'kanban' as ViewMode, icon: Kanban, label: 'Panel de Leads' },
               { id: 'stats' as ViewMode, icon: BarChart3, label: 'Analítica' },
             ].map((tab) => (
               <button
