@@ -52,7 +52,7 @@ function AdminContent() {
   const [creatingUs, setCreatingUs] = useState(false);
 
   const inputClass = cn(
-    'w-full rounded-xl bg-white/[0.04] border border-border-subtle px-4 py-2.5',
+    'w-full rounded-xl bg-bg-secondary/40 border border-border-subtle px-4 py-2.5',
     'text-sm text-white placeholder:text-white/25 font-body',
     'focus:outline-none focus:border-neon-500/40 focus:ring-1 focus:ring-neon-500/20 transition-all'
   );

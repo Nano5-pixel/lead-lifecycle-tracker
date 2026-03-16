@@ -82,13 +82,26 @@
 
 ::selection { background: rgba(10, 132, 255, 0.3); color: var(--text-primary); }
 
+/* Fix robusto para inputs con autofill - asegura visibilidad del texto */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-internal-autofill-selected {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #050510 inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
 /* Global forced visibility overrides */
 input, textarea, select, [contenteditable] {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
   opacity: 1 !important;
-  background-color: rgba(255, 255, 255, 0.04) !important;
+  background-color: #0A1128 !important; /* Solid dark color instead of transparent white */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 select option {
