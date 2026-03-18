@@ -1,27 +1,52 @@
-import { initializeApp, getApps, cert, App, getApp } from 'firebase-admin/app';
+import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
-// ==============================================
-// FIREBASE ADMIN — para el backend (API routes)
-// ==============================================
+let adminApp: App | undefined;
 
-export function getAdminApp(): App {
-  if (getApps().length === 0) {
-    return initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: (process.env.FIREBASE_ADMIN_PRIVATE_KEY || '').replace(/^"/, '').replace(/"$/, '').replace(/\\n/g, '\n'),
-      }),
-    });
+function getAdminApp(): App {
+  if (adminApp) return adminApp;
+  
+  if (getApps().length > 0) {
+    adminApp = getApps()[0];
+    return adminApp;
   }
-  return getApp();
+
+  const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+  let privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error('Firebase Admin credentials not configured');
+  }
+
+  // Handle base64 encoded key
+  if (process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64) {
+    privateKey = Buffer.from(process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64, 'base64').toString('utf8');
+  } else {
+    // Clean up the key - remove surrounding quotes and convert escaped newlines
+    privateKey = privateKey.replace(/^"/, '').replace(/"$/, '').replace(/\\n/g, '\n');
+  }
+
+  adminApp = initializeApp({
+    credential: cert({
+      projectId,
+      clientEmail,
+      privateKey,
+    }),
+  });
+
+  return adminApp;
 }
 
-export const getAdminAuth = () => getAuth(getAdminApp());
-export const getAdminDb = () => getFirestore(getAdminApp());
+export function getAdminAuth() {
+  return getAuth(getAdminApp());
+}
 
-// Mantener exportaciones directas para compatibilidad
+export function getAdminDb() {
+  return getFirestore(getAdminApp());
+}
+
+// Compatibilidad con exportaciones directas
 export const adminAuth = getAuth(getAdminApp());
 export const adminDb = getFirestore(getAdminApp());
