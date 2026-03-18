@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { adminAuth } from '@/lib/firebase-admin';
+import { getAdminAuth } from '@/lib/firebase-admin';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     // Opcional: Podríamos verificar el token de sesión aquí para asegurar que quien llama es admin.
     // Pero por ahora, implementamos la funcionalidad básica solicitada.
     
-    await adminAuth.deleteUser(uid);
+    await getAdminAuth().deleteUser(uid);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
