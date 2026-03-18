@@ -17,17 +17,31 @@ function getAdminApp(): App {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 not configured');
   }
 
-  const sa = JSON.parse(Buffer.from(saBase64, 'base64').toString('utf8'));
+  try {
+    const jsonString = Buffer.from(saBase64, 'base64').toString('utf8');
+    const sa = JSON.parse(jsonString);
+    
+    // CRITICAL: Normalize private key. 
+    // JSON.parse handles \n in the string, but if the key was double-escaped 
+    // or stored as a literal string with backslashes, we must fix it.
+    if (sa.private_key) {
+      sa.private_key = sa.private_key.replace(/\\n/g, '\n');
+    }
 
-  adminApp = initializeApp({
-    credential: cert(sa),
-  });
+    adminApp = initializeApp({
+      credential: cert(sa),
+    });
 
-  // Force Firestore to use REST instead of gRPC
-  const db = getFirestore(adminApp);
-  db.settings({ preferRest: true });
+    // Force Firestore to use REST instead of gRPC. 
+    // This often bypasses gRPC-specific auth/metadata plugin errors.
+    const db = getFirestore(adminApp);
+    db.settings({ preferRest: true });
 
-  return adminApp;
+    return adminApp;
+  } catch (error: any) {
+    console.error('Firebase Admin initialization failed:', error);
+    throw error;
+  }
 }
 
 export function getAdminAuth() {
