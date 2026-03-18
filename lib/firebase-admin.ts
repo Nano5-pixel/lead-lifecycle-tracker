@@ -16,16 +16,16 @@ function getAdminApp(): App {
   const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
   let privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
 
-  if (!projectId || !clientEmail || !privateKey) {
+  if (!projectId || !clientEmail) {
     throw new Error('Firebase Admin credentials not configured');
   }
 
-  // Handle base64 encoded key
   if (process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64) {
     privateKey = Buffer.from(process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64, 'base64').toString('utf8');
-  } else {
-    // Clean up the key - remove surrounding quotes and convert escaped newlines
+  } else if (privateKey) {
     privateKey = privateKey.replace(/^"/, '').replace(/"$/, '').replace(/\\n/g, '\n');
+  } else {
+    throw new Error('Firebase Admin private key not configured');
   }
 
   adminApp = initializeApp({
@@ -46,7 +46,3 @@ export function getAdminAuth() {
 export function getAdminDb() {
   return getFirestore(getAdminApp());
 }
-
-// Compatibilidad con exportaciones directas
-export const adminAuth = getAuth(getAdminApp());
-export const adminDb = getFirestore(getAdminApp());
