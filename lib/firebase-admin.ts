@@ -1,7 +1,6 @@
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import { createPrivateKey } from 'crypto';
 
 let adminApp: App | undefined;
 
@@ -19,20 +18,14 @@ function getAdminApp(): App {
   }
 
   const sa = JSON.parse(Buffer.from(saBase64, 'base64').toString('utf8'));
-  
-  // Fix for OpenSSL 3.x: convert the key to PKCS#8 format explicitly
-  const privateKey = createPrivateKey(sa.private_key).export({
-    type: 'pkcs8',
-    format: 'pem',
-  });
 
   adminApp = initializeApp({
-    credential: cert({
-      projectId: sa.project_id,
-      clientEmail: sa.client_email,
-      privateKey: privateKey as string,
-    }),
+    credential: cert(sa),
   });
+
+  // Force Firestore to use REST instead of gRPC
+  const db = getFirestore(adminApp);
+  db.settings({ preferRest: true });
 
   return adminApp;
 }
