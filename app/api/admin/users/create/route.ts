@@ -1,3 +1,4 @@
+/*
 import { NextResponse } from 'next/server';
 import { getAdminAuth, getAdminDb } from '@/lib/firebase-admin';
 
@@ -43,4 +44,14 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+}
+*/
+
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  return NextResponse.json(
+    { error: 'Endpoint temporalmente deshabilitado — usa Firebase Console para crear usuarios' },
+    { status: 503 }
+  );
 }
