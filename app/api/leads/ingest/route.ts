@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export async function POST(req: NextRequest) {
+  console.log('BASE64 exists:', !!process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64);
+  console.log('BASE64 length:', process.env.FIREBASE_ADMIN_PRIVATE_KEY_BASE64?.length);
+  console.log('PRIVATE_KEY exists:', !!process.env.FIREBASE_ADMIN_PRIVATE_KEY);
   try {
     const body = await req.json();
 
