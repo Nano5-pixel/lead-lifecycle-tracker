@@ -42,10 +42,9 @@ export function KanbanColumn({ stage, leads, index, onSelectLead, onMoveLead }: 
       <div
         ref={setNodeRef}
         className={cn(
-          'flex-1 rounded-2xl border-2 border-dashed p-2 transition-all duration-300 overflow-y-auto',
+          'flex-1 rounded-2xl border-2 border-dashed p-2 transition-all duration-300 overflow-y-auto custom-scrollbar',
           isOver ? 'border-neon-500/40 bg-neon-500/[0.04]' : 'border-transparent bg-bg-primary/20'
         )}
-        style={{ minHeight: '200px' }}
       >
         <SortableContext items={leadIds} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-2">

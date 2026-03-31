@@ -251,12 +251,12 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pb-10 min-h-[75vh] items-start custom-scrollbar">
+        <div className="flex gap-4 overflow-x-auto pb-6 h-[calc(100vh-250px)] items-start custom-scrollbar overflow-y-hidden">
           {STAGES.map((stage, index) => (
             <div
               key={stage.id}
               className={cn(
-                'flex-shrink-0 transition-all duration-300', 
+                'flex-shrink-0 transition-all duration-300 h-full', 
                 activeStageId === stage.id ? 'block w-full sm:w-[290px] lg:w-[310px]' : 'hidden sm:block sm:w-[290px] lg:w-[310px]'
               )}
             >
