@@ -11,6 +11,7 @@ import { Header } from '@/components/layout/Header';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ToastProvider, useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/hooks/useAuth';
+import { HelpGuide } from '@/components/ui/HelpGuide';
 import { useAgencias } from '@/hooks/useAgencias';
 import { useUsuarios } from '@/hooks/useUsuarios';
 import { useClientes } from '@/hooks/useClientes';
@@ -29,6 +30,7 @@ function AdminContent() {
   // Custom hook usage for clients (dynamic based on selected agency)
   const { clientes, loading: loadingCl, createCliente } = useClientes(selectedAgencia?.id);
 
+  const [showHelp, setShowHelp] = useState(false);
   const [showCreateAg, setShowCreateAg] = useState(false);
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [showCreateCl, setShowCreateCl] = useState(false);
@@ -137,7 +139,11 @@ function AdminContent() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
       </div>
 
-      <Header view="kanban" title="Super Admin" />
+      <Header 
+        view="kanban" 
+        title="Super Admin" 
+        onShowHelp={() => setShowHelp(true)}
+      />
 
       <main className="flex-1 relative z-10">
         <div className="mx-auto max-w-[1200px] p-4 lg:p-6 space-y-6">
@@ -526,6 +532,8 @@ function AdminContent() {
 
         </div>
       </main>
+
+      <HelpGuide open={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }

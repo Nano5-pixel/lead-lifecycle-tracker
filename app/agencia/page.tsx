@@ -15,6 +15,7 @@ import { Cliente } from '@/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Key, Copy, CheckCircle2, ChevronRight } from 'lucide-react';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { HelpGuide } from '@/components/ui/HelpGuide';
 import { cn } from '@/lib/utils';
 
 type ViewMode = 'kanban' | 'stats';
@@ -24,6 +25,7 @@ function AgenciaContent() {
   const { clientes, loading, createCliente } = useClientes();
   const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null);
   const [view, setView] = useState<ViewMode>('kanban');
+  const [showHelp, setShowHelp] = useState(false);
   const [leadsCount, setLeadsCount] = useState<Record<string, number>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [agencyApiKey, setAgencyApiKey] = useState<string>('cargando...');
@@ -84,6 +86,7 @@ function AgenciaContent() {
       <Header
         view={view}
         onViewChange={selectedCliente ? setView : () => {}}
+        onShowHelp={() => setShowHelp(true)}
         title={user?.nombre || 'Panel Agencia'}
         loading={loading}
       />
@@ -171,6 +174,8 @@ function AgenciaContent() {
           onNewLead={() => (window as any).openNewLeadModal?.()} 
         />
       )}
+
+      <HelpGuide open={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }
