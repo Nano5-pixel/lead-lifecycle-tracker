@@ -10,12 +10,36 @@ import { STAGES } from '@/lib/stages';
 import { calculateStats } from '@/lib/rules';
 import { cn } from '@/lib/utils';
 
-// ── Tooltip component — pure CSS, no extra deps ──
+// ── Tooltip component — fixed positioning to escape overflow:hidden parents ──
 function Tooltip({ text }: { text: string }) {
   const [show, setShow] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0, alignRight: false });
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const handleMouseEnter = () => {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const tooltipWidth = 224; // w-56 = 14rem = 224px
+      const spaceRight = window.innerWidth - rect.left;
+      const alignRight = spaceRight < tooltipWidth + 16;
+      setCoords({
+        top: rect.top - 8,        // above the button, with a small gap
+        left: alignRight
+          ? rect.right - tooltipWidth // anchor to right edge
+          : rect.left - tooltipWidth / 2 + rect.width / 2, // center
+        alignRight,
+      });
+    }
+    setShow(true);
+  };
+
   return (
-    <div className="relative inline-flex" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-      <button className="flex h-5 w-5 items-center justify-center rounded-full text-text-muted/40 hover:text-text-muted transition-colors">
+    <div className="relative inline-flex" onMouseEnter={handleMouseEnter} onMouseLeave={() => setShow(false)}>
+      <button
+        ref={btnRef}
+        type="button"
+        className="flex h-5 w-5 items-center justify-center rounded-full text-text-muted/40 hover:text-text-muted transition-colors"
+      >
         <HelpCircle className="h-3.5 w-3.5" />
       </button>
       <AnimatePresence>
@@ -25,16 +49,24 @@ function Tooltip({ text }: { text: string }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-56 rounded-xl border border-white/10 bg-[#0a1020]/95 backdrop-blur-xl p-3 shadow-2xl"
+            style={{
+              position: 'fixed',
+              top: coords.top,
+              left: coords.left,
+              transform: 'translateY(-100%)',
+              zIndex: 9999,
+              width: '224px',
+            }}
+            className="rounded-xl border border-white/10 bg-[#0a1020]/98 backdrop-blur-xl p-3 shadow-2xl pointer-events-none"
           >
             <p className="text-[11px] text-text-secondary leading-relaxed font-body">{text}</p>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-white/10" />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 }
+
 
 interface StatsOverviewProps {
   leads: Lead[];
