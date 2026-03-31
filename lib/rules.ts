@@ -19,72 +19,76 @@ export function validateStageTransition(req: StageTransitionRequest): StageTrans
 /** Calcular estadísticas del pipeline */
 export function calculateStats(leads: Lead[]): PipelineStats {
   const byStage: Record<StageId, number> = {
-    'Nuevo': 0,
-    'Intento': 0,
-    'Contactado': 0,
-    'Cita': 0,
-    'Propuesta': 0,
-    'Ganado': 0,
-    'Perdido': 0,
-    'Basura': 0,
+    'Nuevo': 0, 'Intento': 0, 'Contactado': 0, 'Cita': 0,
+    'Propuesta': 0, 'Ganado': 0, 'Perdido': 0, 'Basura': 0,
   };
 
   if (!leads || !Array.isArray(leads)) {
     return {
-      totalLeads: 0,
-      byStage,
-      conversionRate: 0,
-      avgDaysInStage: 0,
-      avgClosingDays: 0,
-      contactEfficiency: 0,
-      lostCount: 0,
-      newThisWeek: 0,
-      leadsByAgent: {},
-      lostReasons: {},
+      totalLeads: 0, byStage,
+      conversionRate: 0, avgDaysInStage: 0, avgClosingDays: 0,
+      contactEfficiency: 0, lostCount: 0, newThisWeek: 0,
+      leadsByAgent: {}, lostReasons: {},
+      activeLeads: 0, wonLeads: 0, lostLeads: 0, junkLeads: 0,
+      funnelRates: {}, abandonmentByStage: {}, lostMotivos: {}, junkMotivos: {},
     };
   }
 
   let newThisWeek = 0;
   let totalDaysInStage = 0;
   let countWithDays = 0;
-  
   let totalClosingDays = 0;
   let closedCount = 0;
-  
   let fastContacts = 0;
   let contactableCount = 0;
 
   const leadsByAgent: Record<string, number> = {};
   const lostReasons: Record<string, number> = {};
-  
+  const lostMotivos: Record<string, number> = {};
+  const junkMotivos: Record<string, number> = {};
+  const abandonmentByStage: Record<string, number> = {};
+
+  let countIntento = 0, countContactado = 0, countCita = 0, countPropuesta = 0, countGanado = 0;
+
   const now = new Date();
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
   for (const lead of leads) {
     if (!lead) continue;
-    
-    // Normalizar etapa para retrocompatibilidad
+
     let rawEtapa = (lead.etapa || '').toString().trim();
     if (rawEtapa === 'En Contacto') rawEtapa = 'Intento';
     if (rawEtapa === 'Calificado') rawEtapa = 'Contactado';
-    
     const stageId = rawEtapa as StageId;
     if (byStage[stageId] !== undefined) byStage[stageId]++;
-    
-    // Motivos de pérdida
-    if (stageId === 'Perdido' || stageId === 'Basura') {
-      const reason = lead.motivoCaida || 'No especificado';
-      lostReasons[reason] = (lostReasons[reason] || 0) + 1;
+
+    // ── Contadores de hitos del embudo (timestamp real > modelo acumulativo) ──
+    if (lead.fechaIntento || ['Intento','Contactado','Cita','Propuesta','Ganado','Perdido','Basura'].includes(stageId)) countIntento++;
+    if (lead.fechaContactado || ['Contactado','Cita','Propuesta','Ganado'].includes(stageId)) countContactado++;
+    if (lead.fechaCita || ['Cita','Propuesta','Ganado'].includes(stageId)) countCita++;
+    if (lead.fechaPropuesta || ['Propuesta','Ganado'].includes(stageId)) countPropuesta++;
+    if (lead.fechaGanado || stageId === 'Ganado') countGanado++;
+
+    // ── Motivos de pérdida separados ──
+    if (stageId === 'Perdido') {
+      const r = lead.motivoCaida || 'No especificado';
+      lostReasons[r] = (lostReasons[r] || 0) + 1;
+      lostMotivos[r] = (lostMotivos[r] || 0) + 1;
+    }
+    if (stageId === 'Basura') {
+      const r = lead.motivoCaida || 'No especificado';
+      lostReasons[r] = (lostReasons[r] || 0) + 1;
+      junkMotivos[r] = (junkMotivos[r] || 0) + 1;
     }
 
-    // Promedio días en etapa (general)
+    // ── Abandono por fase ──
+    if ((stageId === 'Perdido' || stageId === 'Basura') && lead.etapaCaida) {
+      abandonmentByStage[lead.etapaCaida] = (abandonmentByStage[lead.etapaCaida] || 0) + 1;
+    }
+
     const dias = Number(lead.diasEnEtapa);
-    if (!isNaN(dias) && dias > 0) {
-      totalDaysInStage += dias;
-      countWithDays++;
-    }
+    if (!isNaN(dias) && dias > 0) { totalDaysInStage += dias; countWithDays++; }
 
-    // Tiempo de cierre (Nuevo -> Ganado)
     if (stageId === 'Ganado' && lead.fechaEntrada && lead.fechaUltimoCambio) {
       const start = new Date(lead.fechaEntrada).getTime();
       const end = new Date(lead.fechaUltimoCambio).getTime();
@@ -94,49 +98,50 @@ export function calculateStats(leads: Lead[]): PipelineStats {
       }
     }
 
-    // Eficiencia de contacto (Moverse de Nuevo en < 24h)
-    // Usamos el hecho de que si ya no está en Nuevo, fue contactado/movido
     if (stageId !== 'Nuevo') {
       contactableCount++;
-      // Si se movió rápido (diasEnEtapa es pequeño y ya no es Nuevo)
-      // Nota: Esto es una estimación basada en la data disponible
       if (lead.diasEnEtapa <= 1) fastContacts++;
     }
 
     const agent = lead.gestionadoPor || 'Sin asignar';
-    if (agent !== 'Sin asignar') {
-      leadsByAgent[agent] = (leadsByAgent[agent] || 0) + 1;
-    }
+    if (agent !== 'Sin asignar') leadsByAgent[agent] = (leadsByAgent[agent] || 0) + 1;
 
     try {
       if (lead.fechaEntrada) {
         const created = new Date(lead.fechaEntrada);
-        if (!isNaN(created.getTime()) && created >= weekAgo) {
-          newThisWeek++;
-        }
+        if (!isNaN(created.getTime()) && created >= weekAgo) newThisWeek++;
       }
-    } catch {
-      // Ignorar
-    }
+    } catch { /* Ignorar */ }
   }
 
-  const totalActive = leads.length - (byStage['Perdido'] || 0) - (byStage['Basura'] || 0);
-  const wonCount = byStage['Ganado'] || 0;
-  const conversionRate = totalActive > 0 ? (wonCount / totalActive) * 100 : 0;
+  const total = leads.length;
+  const activeLeads = total - (byStage['Perdido'] || 0) - (byStage['Basura'] || 0);
+  const wonLeads = byStage['Ganado'] || 0;
+  const lostLeads = byStage['Perdido'] || 0;
+  const junkLeads = byStage['Basura'] || 0;
+  const conversionRate = total > 0 ? (wonLeads / total) * 100 : 0;
   const avgDaysInStage = countWithDays > 0 ? Math.round(totalDaysInStage / countWithDays) : 0;
   const avgClosingDays = closedCount > 0 ? Math.round(totalClosingDays / closedCount) : 0;
   const contactEfficiency = contactableCount > 0 ? Math.round((fastContacts / contactableCount) * 100) : 0;
 
+  const pct = (num: number, den: number) => den > 0 ? Math.round((num / den) * 1000) / 10 : 0;
+  const funnelRates: Record<string, number> = {
+    'Nuevo→Intento':      pct(countIntento, total),
+    'Intento→Contactado': pct(countContactado, countIntento),
+    'Contactado→Cita':    pct(countCita, countContactado),
+    'Cita→Propuesta':     pct(countPropuesta, countCita),
+    'Propuesta→Ganado':   pct(countGanado, countPropuesta),
+    'Lead→Ganado':        pct(wonLeads, total),
+  };
+
   return {
-    totalLeads: leads.length,
-    byStage,
+    totalLeads: total, byStage,
     conversionRate: isNaN(conversionRate) ? 0 : Math.round(conversionRate * 10) / 10,
     avgDaysInStage: isNaN(avgDaysInStage) ? 0 : avgDaysInStage,
-    avgClosingDays,
-    contactEfficiency,
-    lostCount: (byStage['Perdido'] || 0) + (byStage['Basura'] || 0),
-    newThisWeek,
-    leadsByAgent,
-    lostReasons,
+    avgClosingDays, contactEfficiency,
+    lostCount: lostLeads + junkLeads,
+    newThisWeek, leadsByAgent, lostReasons,
+    activeLeads, wonLeads, lostLeads, junkLeads,
+    funnelRates, abandonmentByStage, lostMotivos, junkMotivos,
   };
 }

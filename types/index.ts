@@ -103,11 +103,20 @@ export interface PipelineStats {
   conversionRate: number;
   avgDaysInStage: number;
   avgClosingDays: number;
-  contactEfficiency: number; // % move from Nuevo in < 24h
+  contactEfficiency: number;
   lostCount: number;
   newThisWeek: number;
   leadsByAgent: Record<string, number>;
   lostReasons: Record<string, number>;
+  // Extended analytics
+  activeLeads: number;
+  wonLeads: number;
+  lostLeads: number;
+  junkLeads: number;
+  funnelRates: Record<string, number>;       // Tasas de conversión por etapa del embudo
+  abandonmentByStage: Record<string, number>; // Leads perdidos/basura por etapa de caída
+  lostMotivos: Record<string, number>;        // Motivos de "Perdido"
+  junkMotivos: Record<string, number>;        // Motivos de "Basura"
 }
 
 /** Payload de ingesta desde Make.com (Soporta múltiples variaciones de nombres de campos) */
