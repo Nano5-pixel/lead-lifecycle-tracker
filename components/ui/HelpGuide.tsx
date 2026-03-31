@@ -26,7 +26,7 @@ const SLIDES = [
     content: (
       <div className="space-y-4">
         <p className="text-sm text-text-secondary leading-relaxed">
-          Un **CRM** (Customer Relationship Management) es la "memoria" de tu empresa. Centraliza todos tus prospectos (leads) para que **ninguna oportunidad se pierda** por falta de seguimiento.
+          Un **CRM** (Customer Relationship Management) es la &quot;memoria&quot; de tu empresa. Centraliza todos tus prospectos (leads) para que **ninguna oportunidad se pierda** por falta de seguimiento.
         </p>
         <div className="grid grid-cols-1 gap-3">
           <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5">
@@ -161,7 +161,7 @@ const SLIDES = [
             <div className="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-xs">2</div>
             <div>
               <p className="text-xs font-bold text-text-primary uppercase">Limpieza Profunda</p>
-              <p className="text-[11px] text-text-muted">No tengas miedo a descartar "Basura" rápido. Enfócate solo en el oro.</p>
+              <p className="text-[11px] text-text-muted">No tengas miedo a descartar &quot;Basura&quot; rápido. Enfócate solo en el oro.</p>
             </div>
           </div>
           <div className="flex gap-4">
