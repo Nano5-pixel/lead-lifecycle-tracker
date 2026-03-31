@@ -1,14 +1,40 @@
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useMemo, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Trophy, Zap, Target, ArrowUpRight, Calendar,
-  FilterX, XCircle, TrendingDown, CheckCircle2, Trash2, Activity,
+  FilterX, XCircle, TrendingDown, CheckCircle2, Trash2, Activity, HelpCircle,
 } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { Lead, PipelineStats, StageId } from '@/types';
 import { STAGES } from '@/lib/stages';
 import { calculateStats } from '@/lib/rules';
 import { cn } from '@/lib/utils';
+
+// ── Tooltip component — pure CSS, no extra deps ──
+function Tooltip({ text }: { text: string }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative inline-flex" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <button className="flex h-5 w-5 items-center justify-center rounded-full text-text-muted/40 hover:text-text-muted transition-colors">
+        <HelpCircle className="h-3.5 w-3.5" />
+      </button>
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-56 rounded-xl border border-white/10 bg-[#0a1020]/95 backdrop-blur-xl p-3 shadow-2xl"
+          >
+            <p className="text-[11px] text-text-secondary leading-relaxed font-body">{text}</p>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-white/10" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 interface StatsOverviewProps {
   leads: Lead[];
@@ -86,40 +112,41 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
       </div>
 
       {/* ── Sección 1: Métricas Generales ── */}
-      <SectionHeader label="Métricas Generales" icon={Activity} />
+      <SectionHeader label="Métricas Generales" icon={Activity} tooltip="Contadores globales del estado actual de tu pipeline. Te dan una foto instantánea de cuántos leads tienes en cada categoría." />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 lg:gap-4">
-        <KPICard icon={Users}       label="Total Ingresados" value={String(stats.totalLeads)}   subtext={`+${stats.newThisWeek} esta semana`} color="#0A84FF" delay={0} />
-        <KPICard icon={Zap}         label="Leads Activos"    value={String(stats.activeLeads)}   subtext="en el pipeline ahora" color="#8B5CF6" delay={0.05} />
-        <KPICard icon={CheckCircle2} label="Leads Ganados"   value={String(stats.wonLeads)}      subtext="cierres confirmados" color="#22C55E" delay={0.1} />
-        <KPICard icon={XCircle}     label="Leads Perdidos"   value={String(stats.lostLeads)}     subtext="no pudimos cerrar" color="#EF4444" delay={0.15} />
-        <KPICard icon={Trash2}      label="No Calificados"   value={String(stats.junkLeads)}     subtext="descartados / basura" color="#6B7280" delay={0.2} />
+        <KPICard icon={Users}        label="Total Ingresados"  value={String(stats.totalLeads)}  subtext={`+${stats.newThisWeek} esta semana`} color="#0A84FF" delay={0}    tooltip="Todos los leads que han entrado al sistema, sin excepción. Incluye activos, ganados, perdidos y basura." />
+        <KPICard icon={Zap}          label="Leads Activos"     value={String(stats.activeLeads)} subtext="en el pipeline ahora" color="#8B5CF6" delay={0.05}  tooltip="Leads que siguen en el proceso de venta (no han sido marcados como Ganado, Perdido o Basura)." />
+        <KPICard icon={CheckCircle2} label="Leads Ganados"     value={String(stats.wonLeads)}    subtext="cierres confirmados" color="#22C55E" delay={0.1}   tooltip="Leads que llegaron a la etapa 'Ganado'. Representa tus cierres comerciales exitosos." />
+        <KPICard icon={XCircle}      label="Leads Perdidos"    value={String(stats.lostLeads)}   subtext="no pudimos cerrar" color="#EF4444" delay={0.15}  tooltip="Leads que estaban interesados pero no pudimos cerrar. Se perdieron frente a la competencia, por precio u otras razones comerciales." />
+        <KPICard icon={Trash2}       label="No Calificados"    value={String(stats.junkLeads)}   subtext="descartados / basura" color="#6B7280" delay={0.2}   tooltip="Leads que no eran el perfil adecuado: números falsos, personas buscando empleo, bots, etc. Indica la calidad del targeting de tus campañas." />
       </div>
 
       {/* ── Sección 2: KPIs de Eficiencia ── */}
+      <SectionHeader label="KPIs de Eficiencia" icon={Zap} tooltip="Indicadores que miden la calidad y velocidad de tu proceso comercial. Úsalos para identificar cuellos de botella." />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        <KPICard icon={Target}  label="Conversión Real"  value={`${stats.conversionRate}%`}    subtext="leads totales → ganados" color="#F59E0B" delay={0.25} />
-        <KPICard icon={Trophy}  label="Tiempo de Cierre" value={`${stats.avgClosingDays}d`}     subtext="promedio nuevo → ganado" color="#10B981" delay={0.3} />
-        <KPICard icon={Zap}     label="Eficiencia Inicial" value={`${stats.contactEfficiency}%`} subtext="contactados en < 24h" color="#3B82F6" delay={0.35} />
-        <KPICard icon={TrendingDown} label="Tasa de Pérdida" value={`${stats.totalLeads > 0 ? Math.round(((stats.lostLeads + stats.junkLeads) / stats.totalLeads) * 100) : 0}%`} subtext="perdidos + no calificados" color="#EF4444" delay={0.4} />
+        <KPICard icon={Target}       label="Conversión Real"    value={`${stats.conversionRate}%`}  subtext="leads totales → ganados" color="#F59E0B" delay={0.25} tooltip="Porcentaje de todos los leads ingresados que terminaron en un cierre. Es tu métrica de efectividad global." />
+        <KPICard icon={Trophy}       label="Tiempo de Cierre"   value={`${stats.avgClosingDays}d`}   subtext="promedio nuevo → ganado" color="#10B981" delay={0.3}  tooltip="Días promedio que tarda un lead en pasar de 'Nuevo' a 'Ganado'. Mientras más bajo, más ágil es tu proceso." />
+        <KPICard icon={Zap}          label="Eficiencia Inicial" value={`${stats.contactEfficiency}%`} subtext="contactados en < 24h"    color="#3B82F6" delay={0.35} tooltip="Porcentaje de leads que fueron contactados (movidos de 'Nuevo') en menos de 24 horas. Mide la velocidad de reacción de tu equipo." />
+        <KPICard icon={TrendingDown} label="Tasa de Pérdida"   value={`${stats.totalLeads > 0 ? Math.round(((stats.lostLeads + stats.junkLeads) / stats.totalLeads) * 100) : 0}%`} subtext="perdidos + no calificados" color="#EF4444" delay={0.4} tooltip="Porcentaje de leads que no generaron valor (Perdidos + Basura) sobre el total ingresado. Una tasa alta puede indicar problema en campañas o en el proceso de cierre." />
       </div>
 
-      {/* ── Sección 2: Embudo de Conversión ── */}
-      <SectionHeader label="Embudo de Conversión" icon={Target} />
+      {/* ── Sección 3: Embudo de Conversión ── */}
+      <SectionHeader label="Embudo de Conversión" icon={Target} tooltip="Muestra cuántos leads pasan de una etapa a la siguiente. Te ayuda a detectar en qué punto exacto se atoran o se pierden los prospectos." />
       <div className="grid gap-4 lg:grid-cols-2">
         <FunnelChart stats={stats} />
         <ConversionRates stats={stats} />
       </div>
 
-      {/* ── Sección 3: Métricas de Pérdida ── */}
-      <SectionHeader label="Análisis de Pérdidas" icon={TrendingDown} />
+      {/* ── Sección 4: Métricas de Pérdida ── */}
+      <SectionHeader label="Análisis de Pérdidas" icon={TrendingDown} tooltip="Desglosa dónde y por qué se pierden los leads. Esencial para corregir el proceso comercial y mejorar la calificación de campañas." />
       <div className="grid gap-4 lg:grid-cols-3">
         <AbandonmentByStage stats={stats} />
-        <LostReasonBreakdown title="Motivos de Pérdida" motivos={stats.lostMotivos} color="#EF4444" />
-        <LostReasonBreakdown title="Motivos de Descalificación" motivos={stats.junkMotivos} color="#6B7280" />
+        <LostReasonBreakdown title="Motivos de Pérdida" motivos={stats.lostMotivos} color="#EF4444" tooltip="Razones por las que leads interesados no cerraron. Ayuda a ajustar propuestas, precios y estrategias de seguimiento." />
+        <LostReasonBreakdown title="Motivos de Descalificación" motivos={stats.junkMotivos} color="#6B7280" tooltip="Razones por las que leads fueron marcados como Basura. Indica problemas en el targeting de tus campañas publicitarias." />
       </div>
 
-      {/* ── Sección 4: Rendimiento por Agente ── */}
-      <SectionHeader label="Rendimiento por Agente" icon={Users} />
+      {/* ── Sección 5: Rendimiento por Agente ── */}
+      <SectionHeader label="Rendimiento por Agente" icon={Users} tooltip="Compara la efectividad individual de cada asesor comercial. Útil para identificar top performers y quién necesita más soporte." />
       <AgentPerformance leads={filteredLeads} />
 
     </div>
@@ -128,13 +155,14 @@ export function StatsOverview({ leads }: StatsOverviewProps) {
 
 // ── Sub-componentes ──
 
-function SectionHeader({ label, icon: Icon }: { label: string; icon: any }) {
+function SectionHeader({ label, icon: Icon, tooltip }: { label: string; icon: any; tooltip?: string }) {
   return (
     <div className="flex items-center gap-3 pt-2">
       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-neon-500/10">
         <Icon className="h-4 w-4 text-neon-500" />
       </div>
       <h2 className="text-[13px] font-display font-bold text-white uppercase tracking-widest">{label}</h2>
+      {tooltip && <Tooltip text={tooltip} />}
       <div className="flex-1 h-px bg-white/[0.05]" />
     </div>
   );
@@ -249,14 +277,17 @@ function AbandonmentByStage({ stats }: { stats: PipelineStats }) {
   );
 }
 
-function LostReasonBreakdown({ title, motivos, color }: { title: string; motivos: Record<string, number>; color: string }) {
+function LostReasonBreakdown({ title, motivos, color, tooltip }: { title: string; motivos: Record<string, number>; color: string; tooltip?: string }) {
   const entries = Object.entries(motivos).sort((a, b) => b[1] - a[1]);
   const total = entries.reduce((acc, [, v]) => acc + v, 0) || 1;
 
   return (
     <GlassCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-display font-semibold text-white">{title}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-display font-semibold text-white">{title}</h3>
+          {tooltip && <Tooltip text={tooltip} />}
+        </div>
         <XCircle className="h-4 w-4" style={{ color: `${color}80` }} />
       </div>
       {entries.length > 0 ? (
@@ -282,8 +313,8 @@ function LostReasonBreakdown({ title, motivos, color }: { title: string; motivos
   );
 }
 
-function KPICard({ icon: Icon, label, value, subtext, color, delay }: {
-  icon: any; label: string; value: string; subtext: string; color: string; delay: number;
+function KPICard({ icon: Icon, label, value, subtext, color, delay, tooltip }: {
+  icon: any; label: string; value: string; subtext: string; color: string; delay: number; tooltip?: string;
 }) {
   return (
     <GlassCard hoverGlow glowColor={`${color}15`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }}>
@@ -291,7 +322,7 @@ function KPICard({ icon: Icon, label, value, subtext, color, delay }: {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: `${color}15` }}>
           <Icon className="h-5 w-5" style={{ color }} />
         </div>
-        <ArrowUpRight className="h-4 w-4 text-text-muted/30" />
+        {tooltip ? <Tooltip text={tooltip} /> : <ArrowUpRight className="h-4 w-4 text-text-muted/30" />}
       </div>
       <div className="text-2xl font-display font-bold text-white tracking-tight">{value}</div>
       <div className="mt-0.5 text-[11px] font-body text-text-secondary">{label}</div>
