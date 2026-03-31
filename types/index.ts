@@ -48,6 +48,17 @@ export interface Lead {
   diasEnEtapa: number;
   gestionadoPor: string;
   archivado?: boolean;
+
+  // ── Analytics: Timestamps de hitos (opcionales, solo se sellan al pasar por la etapa) ──
+  fechaIntento?: string;      // Primera vez que el lead fue movido a "Intento"
+  fechaContactado?: string;   // Primera vez que el lead fue movido a "Contactado"
+  fechaCita?: string;         // Primera vez que el lead fue movido a "Cita"
+  fechaPropuesta?: string;    // Primera vez que el lead fue movido a "Propuesta"
+  fechaGanado?: string;       // Fecha en que se marcó como "Ganado"
+  fechaPerdido?: string;      // Fecha en que se marcó como "Perdido" o "Basura"
+
+  // ── Analytics: Tasa de abandono (etapa donde se perdió el lead) ──
+  etapaCaida?: StageId;       // Etapa desde la que se movió a "Perdido" o "Basura"
 }
 
 /** Agencia en Firestore */

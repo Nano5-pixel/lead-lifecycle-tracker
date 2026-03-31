@@ -84,10 +84,29 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
 
   const executeMove = async (lead: Lead, targetStageId: StageId, reason?: string, note?: string) => {
     let moveData = { ...lead };
-    
+    const now = new Date().toISOString();
+
+    // ── Analytics: Sellar timestamp de hito (solo si no se ha sellado antes) ──
+    const hitoMap: Partial<Record<StageId, keyof Lead>> = {
+      'Intento':    'fechaIntento',
+      'Contactado': 'fechaContactado',
+      'Cita':       'fechaCita',
+      'Propuesta':  'fechaPropuesta',
+      'Ganado':     'fechaGanado',
+    };
+    const hitoField = hitoMap[targetStageId];
+    if (hitoField && !moveData[hitoField]) {
+      (moveData as any)[hitoField] = now;
+    }
+
+    // ── Analytics: Capturar dónde se cayó el lead (tasa de abandono por fase) ──
+    if (targetStageId === 'Perdido' || targetStageId === 'Basura') {
+      moveData.etapaCaida = lead.etapa; // Snapshot del etapa antes de morir
+      moveData.fechaPerdido = now;
+    }
+
     if (reason) {
       moveData.motivoCaida = reason;
-      // También añadir motivo como nota para el historial
       const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
       const transitionNote = `\n\n[${date}] Perdido por: ${reason}`;
       moveData.notas = (moveData.notas || '') + transitionNote;
