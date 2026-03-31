@@ -1,4 +1,5 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Trophy, Zap, Target, ArrowUpRight, Calendar,
@@ -10,60 +11,65 @@ import { STAGES } from '@/lib/stages';
 import { calculateStats } from '@/lib/rules';
 import { cn } from '@/lib/utils';
 
-// ── Tooltip component — fixed positioning to escape overflow:hidden parents ──
+// ── Tooltip — Portal que escapa de transforms de framer-motion ──
 function Tooltip({ text }: { text: string }) {
   const [show, setShow] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0, alignRight: false });
+  const [domRect, setDomRect] = useState<DOMRect | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
-  const handleMouseEnter = () => {
-    if (btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect();
-      const tooltipWidth = 224; // w-56 = 14rem = 224px
-      const spaceRight = window.innerWidth - rect.left;
-      const alignRight = spaceRight < tooltipWidth + 16;
-      setCoords({
-        top: rect.top - 8,        // above the button, with a small gap
-        left: alignRight
-          ? rect.right - tooltipWidth // anchor to right edge
-          : rect.left - tooltipWidth / 2 + rect.width / 2, // center
-        alignRight,
-      });
-    }
+  const handleEnter = useCallback(() => {
+    if (btnRef.current) setDomRect(btnRef.current.getBoundingClientRect());
     setShow(true);
+  }, []);
+
+  const tooltipWidth = 220;
+
+  const getStyle = (): React.CSSProperties => {
+    if (!domRect) return {};
+    let left = domRect.left + domRect.width / 2 - tooltipWidth / 2;
+    const minLeft = 8;
+    const maxLeft = window.innerWidth - tooltipWidth - 8;
+    left = Math.max(minLeft, Math.min(left, maxLeft));
+    // Position above: domRect.top gives viewport distance from top
+    const bottom = window.innerHeight - domRect.top + 6;
+    return { position: 'fixed', bottom, left, width: tooltipWidth, zIndex: 99999 };
   };
 
   return (
-    <div className="relative inline-flex" onMouseEnter={handleMouseEnter} onMouseLeave={() => setShow(false)}>
-      <button
-        ref={btnRef}
-        type="button"
-        className="flex h-5 w-5 items-center justify-center rounded-full text-text-muted/40 hover:text-text-muted transition-colors"
+    <>
+      <div
+        className="relative inline-flex"
+        onMouseEnter={handleEnter}
+        onMouseLeave={() => setShow(false)}
       >
-        <HelpCircle className="h-3.5 w-3.5" />
-      </button>
-      <AnimatePresence>
-        {show && (
-          <motion.div
-            initial={{ opacity: 0, y: 4, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            style={{
-              position: 'fixed',
-              top: coords.top,
-              left: coords.left,
-              transform: 'translateY(-100%)',
-              zIndex: 9999,
-              width: '224px',
-            }}
-            className="rounded-xl border border-white/10 bg-[#0a1020]/98 backdrop-blur-xl p-3 shadow-2xl pointer-events-none"
-          >
-            <p className="text-[11px] text-text-secondary leading-relaxed font-body">{text}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        <button
+          ref={btnRef}
+          type="button"
+          className="flex h-5 w-5 items-center justify-center rounded-full text-text-muted/40 hover:text-text-muted transition-colors"
+        >
+          <HelpCircle className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      {mounted && createPortal(
+        <AnimatePresence>
+          {show && domRect && (
+            <motion.div
+              initial={{ opacity: 0, y: 4, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.97 }}
+              transition={{ duration: 0.15 }}
+              style={getStyle()}
+              className="rounded-xl border border-white/10 bg-[#060d1f]/98 backdrop-blur-xl p-3 shadow-2xl pointer-events-none"
+            >
+              <p className="text-[11px] text-text-secondary leading-relaxed font-body">{text}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </>
   );
 }
 
