@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { RuleViolationModal } from '../ui/RuleViolationModal';
 import { useToast } from '../ui/Toast';
 import { LostReasonModal } from './LostReasonModal';
+import { TransitionNoteModal } from './TransitionNoteModal';
 
 interface KanbanBoardProps {
   leads: Lead[];
@@ -29,6 +30,9 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     open: false, message: '',
   });
   const [lostReasonState, setLostReasonState] = useState<{ open: boolean; lead: Lead | null; targetStage: StageId | null }>({
+    open: false, lead: null, targetStage: null
+  });
+  const [transitionNoteState, setTransitionNoteState] = useState<{ open: boolean; lead: Lead | null; targetStage: StageId | null }>({
     open: false, lead: null, targetStage: null
   });
   const { toast } = useToast();
@@ -78,8 +82,23 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     setActiveLead(lead || null);
   }, [leads]);
 
-  const executeMove = async (lead: Lead, targetStageId: StageId, reason?: string) => {
-    const moveData = reason ? { ...lead, motivoCaida: reason } : lead;
+  const executeMove = async (lead: Lead, targetStageId: StageId, reason?: string, note?: string) => {
+    let moveData = { ...lead };
+    
+    if (reason) {
+      moveData.motivoCaida = reason;
+      // También añadir motivo como nota para el historial
+      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+      const transitionNote = `\n\n[${date}] Perdido por: ${reason}`;
+      moveData.notas = (moveData.notas || '') + transitionNote;
+    }
+
+    if (note) {
+      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+      const transitionNote = `\n\n[${date}] Movido a ${targetStageId}: ${note}`;
+      moveData.notas = (moveData.notas || '') + transitionNote;
+    }
+
     const result = await onMoveLeadToStage(moveData, targetStageId);
     if (!result.success) {
       setRuleModal({
@@ -93,12 +112,15 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
 
   const handleMoveToStage = useCallback(async (lead: Lead, targetStageId: StageId) => {
     if (lead.etapa === targetStageId) return;
+    
     if (targetStageId === 'Perdido' || targetStageId === 'Basura') {
       setLostReasonState({ open: true, lead, targetStage: targetStageId });
       return;
     }
-    await executeMove(lead, targetStageId);
-  }, [executeMove]);
+
+    // Para cualquier otra etapa, pedir nota (Opción 3 elegida por el usuario)
+    setTransitionNoteState({ open: true, lead, targetStage: targetStageId });
+  }, []);
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -122,6 +144,14 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
     }
   };
 
+  const handleTransitionNoteConfirm = async (note: string) => {
+    if (transitionNoteState.lead && transitionNoteState.targetStage) {
+      const { lead, targetStage } = transitionNoteState;
+      setTransitionNoteState({ open: false, lead: null, targetStage: null });
+      await executeMove(lead, targetStage, undefined, note);
+    }
+  };
+
   // Estado para controlar si estamos viendo el dashboard de estados en móvil
   const [showMobileGrid, setShowMobileGrid] = useState(true);
 
@@ -137,6 +167,12 @@ export function KanbanBoard({ leads, onMoveLeadToStage, onSelectLead }: KanbanBo
         onClose={() => setLostReasonState({ open: false, lead: null, targetStage: null })}
         onConfirm={handleLostReasonConfirm}
         title={lostReasonState.targetStage === 'Basura' ? '¿Por qué es Basura?' : 'Motivo de Pérdida'}
+      />
+      <TransitionNoteModal
+        isOpen={transitionNoteState.open}
+        onClose={() => setTransitionNoteState({ open: false, lead: null, targetStage: null })}
+        onConfirm={handleTransitionNoteConfirm}
+        targetStage={transitionNoteState.targetStage}
       />
       {/* Mobile Stages Grid (Dashboard) */}
       <AnimatePresence mode="wait">

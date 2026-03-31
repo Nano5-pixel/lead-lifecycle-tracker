@@ -99,14 +99,17 @@ export interface PipelineStats {
   lostReasons: Record<string, number>;
 }
 
-/** Payload de ingesta desde Make.com */
+/** Payload de ingesta desde Make.com (Soporta múltiples variaciones de nombres de campos) */
 export interface IngestPayload {
   apiKey: string;
   clienteId: string;
-  nombre: string;
-  telefono: string;
+  // Campos principales (Soportamos variaciones en el API)
+  nombre?: string;
+  telefono?: string;
   email?: string;
   fuente?: string;
   notas?: string;
   gestionadoPor?: string;
+  // Permitimos cualquier otro campo para flexibilidad en la ingesta
+  [key: string]: any;
 }

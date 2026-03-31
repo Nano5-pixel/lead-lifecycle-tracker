@@ -110,7 +110,12 @@ export async function POST(req: NextRequest) {
     if (!body.clienteId) {
       return NextResponse.json({ error: 'Falta clienteId' }, { status: 400 });
     }
-    if (!body.nombre && !body.telefono) {
+    // Mapeo flexible de campos (Soporta variaciones comunes de Webhooks/Make)
+    const nombre = body.nombre || body['full name'] || body.fullName || body.full_name || body.name || '';
+    const telefono = body.telefono || body.phone || body.phone_number || body.phoneNumber || '';
+    const email = body.email || body['email address'] || body.emailAddress || body.email_address || '';
+
+    if (!nombre && !telefono) {
       return NextResponse.json({ error: 'Se requiere al menos nombre o telefono' }, { status: 400 });
     }
 
@@ -139,12 +144,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'clienteId no encontrado' }, { status: 404 });
     }
 
+    // 3.5 Verificar si ya existe un lead con el mismo teléfono en este cliente
+    if (telefono) {
+      const existingLead = await firestoreQuery(
+        `agencias/${agenciaId}/clientes/${body.clienteId}/leads`,
+        'telefono',
+        telefono,
+        token
+      );
+      if (existingLead) {
+        // Lead ya existe — devolver éxito silencioso para no romper Make
+        const existingId = existingLead.name?.split('/').pop() || 'unknown';
+        return NextResponse.json({
+          success: true,
+          leadId: existingId,
+          message: 'Lead ya existente, omitido',
+          duplicate: true,
+        });
+      }
+    }
+
     // Create lead
     const now = new Date().toISOString();
     const leadFields = {
-      nombre: body.nombre || '',
-      telefono: body.telefono || '',
-      email: body.email || '',
+      nombre,
+      telefono,
+      email,
       fuente: body.fuente || 'Facebook Ads',
       etapa: 'Nuevo',
       preCalificado: false,

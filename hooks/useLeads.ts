@@ -122,6 +122,11 @@ export function useLeads() {
           updates.motivoCaida = lead.motivoCaida;
         }
 
+        // Persistir notas si vienen en el objeto lead (usado por TransitionNoteModal)
+        if (lead.notas) {
+          updates.notas = lead.notas;
+        }
+
         await updateDoc(leadRef, updates);
 
         return { success: true };
