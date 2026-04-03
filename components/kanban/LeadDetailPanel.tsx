@@ -37,7 +37,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
     if (lead) {
       setForm({
         nombre: lead.nombre, telefono: lead.telefono, email: lead.email,
-        fuente: lead.fuente, notas: lead.notas, gestionadoPor: lead.gestionadoPor,
+        fuente: lead.fuente, campana: lead.campana, notas: lead.notas, gestionadoPor: lead.gestionadoPor,
         motivoCaida: lead.motivoCaida,
       });
       setEditing(false);
@@ -229,6 +229,7 @@ export function LeadDetailPanel({ lead, onClose, onUpdate, onMove, onArchive, on
                   { icon: Phone, label: 'Teléfono', key: 'telefono' },
                   { icon: Mail, label: 'Email', key: 'email', type: 'email' },
                   { icon: Tag, label: 'Fuente', key: 'fuente' },
+                  { icon: Tag, label: 'Campaña', key: 'campana' },
                   { icon: User, label: 'Gestionado por', key: 'gestionadoPor' },
                 ].map(({ icon: Icon, label, key, type }) => (
                   <div key={key}>

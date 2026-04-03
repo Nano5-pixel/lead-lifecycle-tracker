@@ -71,15 +71,25 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
               </button>
             </div>
             <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-text-muted font-mono">
-              {lead.fuente && (
-                <span 
-                  className="inline-flex items-center rounded bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 text-indigo-400/90 truncate max-w-[130px]" 
-                  title={lead.fuente}
-                >
-                  {lead.fuente}
-                </span>
-              )}
-              <span className="flex items-center gap-1 ml-auto">
+              <div className="flex flex-wrap items-center gap-1.5 min-w-0 flex-1">
+                {lead.fuente && (
+                  <span 
+                    className="inline-flex items-center rounded bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 text-indigo-400/90 truncate max-w-[130px]" 
+                    title={lead.fuente}
+                  >
+                    {lead.fuente}
+                  </span>
+                )}
+                {lead.campana && (
+                  <span 
+                    className="inline-flex items-center rounded bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.5 text-purple-400/90 truncate max-w-[130px]" 
+                    title={lead.campana}
+                  >
+                    {lead.campana}
+                  </span>
+                )}
+              </div>
+              <span className="flex flex-shrink-0 items-center gap-1 ml-auto">
                 <Clock className="h-[10px] w-[10px]" />{formatDate(lead.fechaEntrada)}
               </span>
             </div>

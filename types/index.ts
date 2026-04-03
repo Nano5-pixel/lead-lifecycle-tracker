@@ -40,6 +40,7 @@ export interface Lead {
   telefono: string;
   email: string;
   fuente: string;
+  campana?: string; // Nombre de la campaña (opcional)
   etapa: StageId;
   motivoCaida: string;
   notas: string;
@@ -128,6 +129,7 @@ export interface IngestPayload {
   telefono?: string;
   email?: string;
   fuente?: string;
+  campana?: string; // Para recibir la campaña ('campana', 'campaña', 'campaign', 'campaign_name', etc)
   notas?: string;
   gestionadoPor?: string;
   // Permitimos cualquier otro campo para flexibilidad en la ingesta

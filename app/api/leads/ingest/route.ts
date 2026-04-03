@@ -145,6 +145,7 @@ export async function POST(req: NextRequest) {
     const nombre = body.nombre || body['full name'] || body.fullName || body.full_name || body.name || '';
     const telefono = body.telefono || body.phone || body.phone_number || body.phoneNumber || '';
     const email = body.email || body['email address'] || body.emailAddress || body.email_address || '';
+    const campana = body.campana || body.campaña || body.campaign || body.campaign_name || body.campaignName || '';
 
     if (!nombre && !telefono) {
       return NextResponse.json({ error: 'Se requiere al menos nombre o telefono' }, { status: 400 });
@@ -202,6 +203,7 @@ export async function POST(req: NextRequest) {
       telefono,
       email,
       fuente: body.fuente || 'Facebook Ads',
+      campana,
       etapa: 'Nuevo',
       preCalificado: false,
       contratoFirmado: false,
