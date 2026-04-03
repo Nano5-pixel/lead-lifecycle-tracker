@@ -102,7 +102,38 @@ async function firestoreCreate(collectionPath: string, fields: Record<string, an
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    let body: Record<string, any> = {};
+    const contentType = req.headers.get('content-type') || '';
+
+    try {
+      if (contentType.includes('application/json')) {
+        body = await req.json();
+      } else if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
+        const formData = await req.formData();
+        formData.forEach((value, key) => {
+          body[key] = value;
+        });
+      } else {
+        const textToParse = await req.text();
+        if (textToParse) {
+          try {
+            body = JSON.parse(textToParse);
+          } catch(e) {
+            const urlParams = new URLSearchParams(textToParse);
+            urlParams.forEach((value, key) => {
+              body[key] = value;
+            });
+          }
+        }
+      }
+    } catch (parseError) {
+      console.error('[API] Error parsing request body:', parseError);
+    }
+    
+    // URL fallback parameters
+    req.nextUrl.searchParams.forEach((value, key) => {
+      if (!body[key]) body[key] = value;
+    });
 
     if (!body.apiKey) {
       return NextResponse.json({ error: 'Falta apiKey' }, { status: 400 });

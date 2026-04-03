@@ -70,10 +70,17 @@ export function LeadCard({ lead, isDragging, onSelect, onMove }: LeadCardProps) 
                 <MoreVertical className="h-4 w-4" />
               </button>
             </div>
-            <div className="mt-1.5 flex items-center gap-3 text-[11px] text-text-muted font-body">
-              {lead.fuente && <span className="truncate max-w-[100px]">{lead.fuente}</span>}
-              <span className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />{formatDate(lead.fechaEntrada)}
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-text-muted font-mono">
+              {lead.fuente && (
+                <span 
+                  className="inline-flex items-center rounded bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 text-indigo-400/90 truncate max-w-[130px]" 
+                  title={lead.fuente}
+                >
+                  {lead.fuente}
+                </span>
+              )}
+              <span className="flex items-center gap-1 ml-auto">
+                <Clock className="h-[10px] w-[10px]" />{formatDate(lead.fechaEntrada)}
               </span>
             </div>
           </div>
